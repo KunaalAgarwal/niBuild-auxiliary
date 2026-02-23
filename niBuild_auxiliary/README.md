@@ -1,0 +1,1 @@
+Auxiliary files for the [niBuild](https://github.com/KunaalAgarwal/niBuild) project. 
