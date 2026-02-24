@@ -1,0 +1,77 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{minted}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage[T1]{fontenc}
+
+% Light background for code blocks
+\definecolor{codebg}{HTML}{F8F8F4}
+\definecolor{frame}{HTML}{CCCCCC}
+
+\begin{document}
+
+\begin{mdframed}[
+  backgroundcolor=codebg,
+  linecolor=frame,
+  linewidth=0.5pt,
+  roundcorner=3pt,
+  innerleftmargin=8pt,
+  innertopmargin=8pt,
+  innerbottommargin=8pt
+]
+\begin{minted}[
+  fontsize=\footnotesize,
+  linenos,
+  numbersep=8pt,
+  xleftmargin=20pt,
+  breaklines
+]{yaml}
+#!/usr/bin/env cwl-runner
+cwlVersion: v1.2
+class: Workflow
+
+requirements:
+  ScatterFeatureRequirement: {}
+  InlineJavascriptRequirement: {}
+
+inputs:
+  t1w_images: File[]
+  mni_reference: File
+
+outputs:
+  registered_brains:
+    type: File[]
+    outputSource: flirt/registered_image
+
+steps:
+  bet:
+    run: bet.cwl
+    scatter: input
+    in:
+      input: t1w_images
+      frac: { default: 0.5 }
+      mask: { default: true }
+    out: [brain_extraction, brain_mask]
+
+  mcflirt:
+    run: mcflirt.cwl
+    scatter: input
+    when: $(inputs.input != null)
+    in:
+      input: t1w_images
+      mean_vol: { default: true }
+    out: [motion_corrected, motion_parameters]
+
+  flirt:
+    run: flirt.cwl
+    scatter: input
+    in:
+      input: bet/brain_extraction
+      reference: mni_reference
+      dof: { default: 12 }
+      cost: { default: "corratio" }
+    out: [registered_image, transformation_matrix]
+\end{minted}
+\end{mdframed}
+
+\end{document}

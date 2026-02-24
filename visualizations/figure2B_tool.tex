@@ -1,0 +1,80 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{minted}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage[T1]{fontenc}
+
+% Light background for code blocks
+\definecolor{codebg}{HTML}{F8F8F4}
+\definecolor{frame}{HTML}{CCCCCC}
+
+\begin{document}
+
+\begin{mdframed}[
+  backgroundcolor=codebg,
+  linecolor=frame,
+  linewidth=0.5pt,
+  roundcorner=3pt,
+  innerleftmargin=8pt,
+  innertopmargin=8pt,
+  innerbottommargin=8pt
+]
+\begin{minted}[
+  fontsize=\footnotesize,
+  linenos,
+  numbersep=8pt,
+  xleftmargin=20pt,
+  breaklines
+]{yaml}
+#!/usr/bin/env cwl-runner
+cwlVersion: v1.2
+class: CommandLineTool
+baseCommand: bet
+
+requirements:
+  InlineJavascriptRequirement: {}
+
+hints:
+  DockerRequirement:
+    dockerPull: brainlife/fsl:6.0.7
+  ResourceRequirement:
+    ramMin: 4096
+    coresMin: 2
+
+inputs:
+  input:
+    type: File
+    label: Input T1-weighted image
+    inputBinding: { position: 1 }
+  output:
+    type: string
+    label: Output brain-extracted filename
+    inputBinding:
+      position: 2
+      valueFrom: $(self)_brain.nii.gz
+  frac:
+    type: ['null', double]
+    label: Fractional intensity threshold (0-1)
+    inputBinding: { prefix: -f }
+  mask:
+    type: ['null', boolean]
+    label: Generate binary brain mask
+    inputBinding: { prefix: -m }
+  robust:
+    type: ['null', boolean]
+    label: Robust brain centre estimation
+    inputBinding: { prefix: -R }
+
+outputs:
+  brain_extraction:
+    type: File
+    outputBinding:
+      glob: $(inputs.output)_brain.nii.gz
+  brain_mask:
+    type: ['null', File]
+    outputBinding:
+      glob: $(inputs.output)_brain_mask.nii.gz
+\end{minted}
+\end{mdframed}
+
+\end{document}
