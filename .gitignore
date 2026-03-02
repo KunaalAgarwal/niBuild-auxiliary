@@ -4,5 +4,6 @@ aux_env/
 validation/vbm_schizophrenia/
 
 validation/vbm_alzheimers/data
+validation/vbm_alzheimers/vbm_alzheimers_crate/
 
 validation/flanker/ds000102
