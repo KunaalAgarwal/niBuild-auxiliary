@@ -22,18 +22,18 @@ datalad get sub-*/anat/ sub-*/func/
 
 ## Pipeline Overview
 
-The workflow chains nine FSL tools into a complete preprocessing → registration → statistics pipeline. An fslmerge step gathers per-subject first-level results into 4D volumes before group analysis:
+The workflow chains twelve FSL tools into a complete preprocessing → registration → statistics pipeline. It includes high-pass temporal filtering to remove scanner drift, affine initialization for nonlinear registration, and processes both runs per subject for maximum statistical power. An fslmerge step gathers per-subject-run first-level results into 4D volumes before group analysis:
 
 ```
 BIDS Dataset
-  ├─ t1w ──> BET ──────────────────────────────────────> FLIRT (reference)
-  │            └──────────────────────────────────────────> FNIRT (input)
-  │                                                            │
-  └─ bold ─> MCFLIRT ─> slicetimer ─> SUSAN ──────> FLIRT ─> applywarp ─> film_gls ─> fslmerge ─> flameo
-                                                       │                      ↑                      ↑
-                                               MNI152 ─┤─> FNIRT (ref)  design.mat[]          design.mat
-                                                       │                 contrast.con          contrast.con
-                                                       └─> applywarp (ref)                    cov_split.grp
+  ├─ t1w ──> BET ──> FLIRT(struct2mni, 12-DOF) ──> FNIRT(affine) ──────────────────────────────┐
+  │            └─────────────────────────────────────> FLIRT(func2struct, reference)               │
+  │                                                                                                │
+  └─ bold ─> MCFLIRT ─> slicetimer ─> SUSAN ─> fslmaths(bptf) ──> FLIRT ─> applywarp ─> film_gls ─> fslmerge ─> flameo
+                                                                     │                      ↑                      ↑
+                                                             MNI152 ─┤─> FNIRT (ref)  design.mat[]          design.mat
+                                                                     │                 contrast.con          contrast.con
+                                                                     └─> applywarp (ref)                    cov_split.grp
 ```
 
 | Step | Tool | Purpose |
@@ -42,12 +42,14 @@ BIDS Dataset
 | 2 | MCFLIRT | Correct head motion in the BOLD time series |
 | 3 | slicetimer | Correct inter-slice acquisition timing |
 | 4 | SUSAN | Spatially smooth the functional data |
-| 5 | FLIRT | Register functional data to the structural image (linear, 6-DOF) |
-| 6 | FNIRT | Register structural image to MNI152 template (nonlinear) |
-| 7 | applywarp | Apply combined func→struct→MNI transform to functional data |
-| 8 | film_gls | Fit the first-level GLM with prewhitening (per-subject statistics) |
-| 9 | fslmerge | Concatenate per-subject COPEs/VARCOPEs into 4D volumes for group analysis |
-| 10 | flameo | Group-level mixed-effects analysis across subjects |
+| 5 | fslmaths | High-pass temporal filtering to remove scanner drift |
+| 6 | FLIRT (struct→MNI) | 12-DOF affine registration of structural to MNI (initializes FNIRT) |
+| 7 | FLIRT (func→struct) | Register functional data to the structural image (linear, 6-DOF) |
+| 8 | FNIRT | Register structural image to MNI152 template (nonlinear, with affine init) |
+| 9 | applywarp | Apply combined func→struct→MNI transform to functional data |
+| 10 | film_gls | Fit the first-level GLM with prewhitening (per-subject-run statistics) |
+| 11 | fslmerge | Concatenate per-subject-run COPEs/VARCOPEs into 4D volumes for group analysis |
+| 12 | flameo | Group-level mixed-effects analysis across subjects |
 
 ---
 
@@ -65,20 +67,20 @@ The BIDS modal opens with three areas:
 - Use "Select all" to include the full cohort.
 
 **Data type selection (top-right chips):**
-- Click the **func** chip and the **anat** chip so both are checked.
+- Click the **func** chip and the **anat** chip so both are included.
 
 **Output group configuration (bottom-right):**
 
 Create two output groups by clicking the **Add output** button:
 
-| Output label | Datatype | Suffix | Task filter |
-|--------------|----------|--------|-------------|
-| `bold` | func | bold | flanker |
-| `t1w` | anat | T1w | — |
+| Output label | Datatype | Suffix | Task filter | Run filter |
+|--------------|----------|--------|-------------|------------|
+| `bold` | func | bold | flanker | all (run-1 and run-2) |
+| `t1w` | anat | T1w | — | — |
 
-For the `bold` output, check **Include events** if you want the events TSV files bundled alongside the BOLD data.
+For the `bold` output, check **Include events** if you want the events TSV files bundled alongside the BOLD data. Make sure **both runs** are selected — ds000102 contains two runs per subject, and including both doubles the within-subject trial count from 24 to 48, substantially boosting statistical power.
 
-Click **Save**. The BIDS node now appears on the canvas with two output ports: `bold` and `t1w`. Scatter is automatically enabled because BIDS outputs are file arrays (one file per subject).
+Click **Save**. The BIDS node now appears on the canvas with two output ports: `bold` and `t1w`. Scatter is automatically enabled because BIDS outputs are file arrays. The `bold` array will contain 52 files (26 subjects × 2 runs), and the `t1w` array will contain 52 entries (each subject's T1w is duplicated to match the bold array length).
 
 ---
 
@@ -90,13 +92,13 @@ In addition to BIDS data, the pipeline needs several external files. Drag **Inpu
 |-------------|---------|----------------------------------|
 | `MNI152` | Standard space template for registration | `$FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz` |
 | `MNI_mask` | Brain mask in standard space for group analysis | `$FSLDIR/data/standard/MNI152_T1_2mm_brain_mask.nii.gz` |
-| `design_matrices` | Per-subject first-level GLM design matrices (File[]) | Generated from events.tsv (see Step 9) |
-| `contrasts` | First-level contrast definitions | Custom `.con` file (see Step 9) |
-| `group_design` | Group-level design matrix | Simple one-column design (see Step 11) |
-| `group_contrasts` | Group-level contrasts | Simple mean contrast (see Step 11) |
-| `group_covariance` | Group-level covariance structure | `.grp` file (see Step 11) |
+| `design_matrices` | Per-subject-run first-level GLM design matrices (File[]) | Generated from events.tsv (see Step 11) |
+| `contrasts` | First-level contrast definitions | Custom `.con` file (see Step 11) |
+| `group_design` | Group-level design matrix | Paired repeated-measures design (see Step 13) |
+| `group_contrasts` | Group-level contrasts | Mean contrast across subjects (see Step 13) |
+| `group_covariance` | Group-level covariance structure | `.grp` file with subject grouping (see Step 13) |
 
-> **Note:** The `design_matrices` input is a **File array** — one design matrix per subject — because ds000102 uses pseudorandom trial ordering and each subject has different congruent/incongruent onset times. This input is scattered alongside the BOLD data via dotproduct.
+> **Note:** The `design_matrices` input is a **File array** — one design matrix per subject-run (52 total) — because ds000102 uses pseudorandom trial ordering and each subject-run has different congruent/incongruent onset times. This input is scattered alongside the BOLD data via dotproduct.
 
 ---
 
@@ -112,7 +114,7 @@ Drag **bet** onto the canvas. Double-click the node to open its parameter modal 
 | `frac` | `0.5` | Fractional intensity threshold (default; lower values include more tissue) |
 | `mask` | `true` | Also generate a binary brain mask |
 
-BET operates on the T1w structural image. The skull-stripped brain serves as the reference for functional-to-structural registration (FLIRT) and as the input for structural-to-MNI registration (FNIRT).
+BET operates on the T1w structural image. The skull-stripped brain serves as the reference for functional-to-structural registration (FLIRT), as the input for structural-to-MNI registration (both linear FLIRT and nonlinear FNIRT).
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
@@ -166,13 +168,61 @@ The defaults for `dimension` (3), `use_median` (1), and `n_usans` (0) are approp
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
 | 4 | slicetimer | `slice_time_corrected` | SUSAN | `input` |
+
 ---
 
-## Step 5: Registration — Functional to Structural
+## Step 5: Preprocessing — Temporal Filtering
 
-### FLIRT (Linear Registration)
+### fslmaths (High-Pass Filter)
 
-Drag **flirt** onto the canvas. Double-click and set:
+Drag **fslmaths** onto the canvas. Double-click and set:
+
+| Parameter | Value | Why |
+|-----------|-------|-----|
+| `bptf` | `25 -1` | High-pass filter with sigma = 25 volumes; no low-pass (-1) |
+| `output` | `bold_filtered` | Output filename stem |
+
+The `bptf` parameter performs bandpass temporal filtering. The two values are `hp_sigma` and `lp_sigma` in units of volumes (not seconds). The high-pass sigma is calculated as:
+
+```
+sigma = cutoff_period / (2 × TR) = 100 / (2 × 2) = 25 volumes
+```
+
+This applies a ~100s high-pass filter, which is the FSL default. Setting lp_sigma to `-1` disables low-pass filtering. High-pass filtering removes low-frequency scanner drift that inflates noise variance and reduces t/z-statistics. This is especially important for ds000102's slow event-related design (ITI = 8–14s), where task-related frequencies are relatively close to drift frequencies.
+
+| # | Source node | Source output | Target node | Target input |
+|---|-------------|---------------|-------------|--------------|
+| 5 | SUSAN | `smoothed_image` | fslmaths | `input` |
+
+---
+
+## Step 6: Registration — Structural to MNI (Linear)
+
+### FLIRT (12-DOF Affine, Structural → MNI)
+
+Drag a **flirt** node onto the canvas. This is a separate FLIRT step from the functional-to-structural registration in Step 7. Double-click and set:
+
+| Parameter | Value | Why |
+|-----------|-------|-----|
+| `output` | `struct2mni_linear` | Output filename stem |
+| `output_matrix` | `struct2mni.mat` | Save the 12-DOF affine matrix — used to initialize FNIRT |
+| `dof` | `12` | Full affine (translation + rotation + scaling + skew) for inter-subject registration |
+| `cost` | `corratio` | Correlation ratio — robust for T1-to-T1 registration |
+
+This step computes a linear approximation of the structural-to-MNI mapping. The resulting affine matrix is passed to FNIRT as initialization, which helps FNIRT converge to a better nonlinear solution — particularly for subjects whose brains differ substantially from the template.
+
+| # | Source node | Source output | Target node | Target input |
+|---|-------------|---------------|-------------|--------------|
+| 6 | BET | `brain_extraction` | FLIRT (struct→MNI) | `input` |
+| 7 | Input (`MNI152`) | output | FLIRT (struct→MNI) | `reference` |
+
+---
+
+## Step 7: Registration — Functional to Structural
+
+### FLIRT (6-DOF Rigid, Functional → Structural)
+
+Drag another **flirt** node onto the canvas. Double-click and set:
 
 | Parameter | Value | Why |
 |-----------|-------|-----|
@@ -181,16 +231,16 @@ Drag **flirt** onto the canvas. Double-click and set:
 | `output_matrix` | `func2struct.mat` | Save the transformation matrix — needed by applywarp |
 | `cost` | `corratio` | Correlation ratio — robust for EPI-to-T1 registration |
 
-FLIRT takes the smoothed BOLD as `input` and the skull-stripped T1w (from BET) as `reference`.
+FLIRT takes the temporally filtered BOLD (from fslmaths) as `input` and the skull-stripped T1w (from BET) as `reference`.
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 5 | SUSAN | `smoothed_image` | FLIRT | `input` |
-| 6 | BET | `brain_extraction` | FLIRT | `reference` |
+| 8 | fslmaths | `output_image` | FLIRT (func→struct) | `input` |
+| 9 | BET | `brain_extraction` | FLIRT (func→struct) | `reference` |
 
 ---
 
-## Step 6: Registration — Structural to MNI
+## Step 8: Registration — Structural to MNI (Nonlinear)
 
 ### FNIRT (Nonlinear Registration)
 
@@ -201,18 +251,17 @@ Drag **fnirt** onto the canvas. Double-click and set:
 | `cout` | `struct2mni_warp` | Output warp coefficients filename |
 | `iout` | `struct2mni` | Warped output image filename |
 
-FNIRT takes the skull-stripped T1w (from BET) as `input` and the MNI152 template (from the Input node) as `reference`. It produces a nonlinear warp field that maps structural space to MNI space.
-
-> **Note:** FNIRT expects an affine initialization. If needed, run a 12-DOF FLIRT (structural → MNI) first and provide the resulting matrix via FNIRT's `affine` parameter. For many datasets, FNIRT's internal initialization is sufficient.
+FNIRT takes the skull-stripped T1w (from BET) as `input`, the MNI152 template as `reference`, and the 12-DOF affine matrix from Step 6 as `affine` initialization. It produces a nonlinear warp field that maps structural space to MNI space.
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 7 | BET | `brain_extraction` | FNIRT | `input` |
-| 8 | Input (`MNI152`) | output | FNIRT | `reference` |
+| 10 | BET | `brain_extraction` | FNIRT | `input` |
+| 11 | Input (`MNI152`) | output | FNIRT | `reference` |
+| 12 | FLIRT (struct→MNI) | `transformation_matrix` | FNIRT | `affine` |
 
 ---
 
-## Step 7: Transform to Standard Space
+## Step 9: Transform to Standard Space
 
 ### applywarp (Apply Combined Transform)
 
@@ -225,23 +274,23 @@ Drag **applywarp** onto the canvas. Double-click and set:
 
 applywarp combines the linear (FLIRT) and nonlinear (FNIRT) transforms in a single resampling step, avoiding double interpolation:
 
-- `input`: Smoothed BOLD (from SUSAN)
+- `input`: Temporally filtered BOLD (from fslmaths)
 - `reference`: MNI152 template
 - `warp`: Warp field from FNIRT
-- `premat`: Transformation matrix from FLIRT (`func2struct.mat`)
+- `premat`: Transformation matrix from FLIRT func→struct (`func2struct.mat`)
 
 This brings all subjects' functional data into the same standard space, which is required for group-level analysis.
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 9 | SUSAN | `smoothed_image` | applywarp | `input` |
-| 10 | Input (`MNI152`) | output | applywarp | `reference` |
-| 11 | FNIRT | `warp_coefficients` | applywarp | `warp` |
-| 12 | FLIRT | `transformation_matrix` | applywarp | `premat` |
+| 13 | fslmaths | `output_image` | applywarp | `input` |
+| 14 | Input (`MNI152`) | output | applywarp | `reference` |
+| 15 | FNIRT | `warp_coefficients` | applywarp | `warp` |
+| 16 | FLIRT (func→struct) | `transformation_matrix` | applywarp | `premat` |
 
 ---
 
-## Step 8: First-Level Statistics
+## Step 10: First-Level Statistics
 
 ### film_gls (General Linear Model)
 
@@ -249,36 +298,37 @@ Drag **film_gls** from **Functional MRI > FSL > Statistical Analysis** onto the 
 
 | Parameter | Value | Why |
 |-----------|-------|-----|
-| `threshold` | `1000` | Default FILM estimation threshold |
+| `threshold` | `10` | Low threshold |
 | `results_dir` | `stats` | Name for the output results directory |
 | `smooth_autocorr` | `true` | Smooth autocorrelation estimates for stable prewhitening |
 
 film_gls takes the MNI-space BOLD (from applywarp) as `input`, plus two external files:
 
-1. **Design matrix** (`.mat` file) — encodes the GLM regressors (one per subject)
-2. **Contrast file** (`.con` file) — defines the contrast of interest (shared across subjects)
+1. **Design matrix** (`.mat` file) — encodes the GLM regressors (one per subject-run)
+2. **Contrast file** (`.con` file) — defines the contrast of interest (shared across all subject-runs)
 
-film_gls scatters on both `input` and `design_file` using **dotproduct**, so each subject receives its own BOLD data paired with its own design matrix. The contrast file is broadcast to all subjects.
+film_gls scatters on both `input` and `design_file` using **dotproduct**, so each subject-run receives its own BOLD data paired with its own design matrix. The contrast file is broadcast to all subject-runs.
 
-film_gls produces per-subject COPEs (contrast of parameter estimates), VARCOPEs (variance estimates), and t/z-statistic maps.
+film_gls produces per-subject-run COPEs (contrast of parameter estimates), VARCOPEs (variance estimates), and t/z-statistic maps.
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 13 | applywarp | `warped_image` | film_gls | `input` |
-| 14 | Input (`design_matrices`) | output | film_gls | `design_file` |
-| 15 | Input (`contrasts`) | output | film_gls | `contrast_file` |
+| 17 | applywarp | `warped_image` | film_gls | `input` |
+| 18 | Input (`design_matrices`) | output | film_gls | `design_file` |
+| 19 | Input (`contrasts`) | output | film_gls | `contrast_file` |
 
 ---
 
-## Step 9: Preparing the First-Level Design
+## Step 11: Preparing the First-Level Design
 
-The first-level design matrix encodes the experimental conditions for each subject. Because ds000102 uses pseudorandom trial ordering (each subject sees a different sequence of congruent and incongruent trials), **each subject needs its own design matrix**.
+The first-level design matrix encodes the experimental conditions for each subject-run. Because ds000102 uses pseudorandom trial ordering (each subject sees a different sequence of congruent and incongruent trials), **each subject-run needs its own design matrix**.
 
 **Event structure (ds000102):**
-- 24 trials per run (12 congruent, 12 incongruent)
+- 2 runs per subject (run-1 and run-2)
+- 24 trials per run (12 congruent, 12 incongruent) — 48 trials total per subject
 - 2-second stimulus duration
 - Variable inter-trial interval (8–14 s, mean 12 s)
-- TR = 2.0 s, ~150 volumes per run
+- TR = 2.0 s, ~146 volumes per run
 
 **Regressors (2 columns):**
 1. Congruent trials — onsets and durations convolved with a double-gamma HRF
@@ -286,7 +336,7 @@ The first-level design matrix encodes the experimental conditions for each subje
 
 **Contrast (incongruent > congruent):**
 
-Use a single contrast to keep the pipeline straightforward. With one contrast, film_gls produces exactly one COPE and one VARCOPE per subject, which simplifies the downstream merge into 4D volumes.
+Use a single contrast to keep the pipeline straightforward. With one contrast, film_gls produces exactly one COPE and one VARCOPE per subject-run, which simplifies the downstream merge into 4D volumes.
 
 ```
 /NumWaves 2
@@ -301,30 +351,26 @@ This contrast tests for greater activation during incongruent relative to congru
 
 Option A: Use FSL's `Glm` GUI to design the matrix interactively.
 
-Option B: Use a script to generate subject-specific designs from the BIDS events.tsv files:
+Option B: Use a script to generate subject-specific designs from the BIDS events.tsv files. Generate designs for both runs:
 
-```python
-# Pseudocode for generating per-subject designs from BIDS events
-import pandas as pd
-import numpy as np
-
-events = pd.read_csv('sub-01_task-flanker_run-1_events.tsv', sep='\t')
-incongruent = events[events['Stimulus'] == 'incongruent']
-congruent = events[events['Stimulus'] == 'congruent']
-
-# Create onset vectors, convolve with double-gamma HRF, sample at TR=2.0s
-# Repeat for each subject, output as FSL .mat format (VEST)
+```bash
+python generate_designs.py --bids-dir /path/to/ds000102 --run run-1 --output-dir designs
+python generate_designs.py --bids-dir /path/to/ds000102 --run run-2 --output-dir designs
 ```
 
-The script should produce one `.mat` file per subject (26 total). These are provided as a File array to the `design_matrices` input.
+This produces 52 design files total:
+- 26 files for run-1: `sub-01_run-1_design.mat` through `sub-26_run-1_design.mat`
+- 26 files for run-2: `sub-01_run-2_design.mat` through `sub-26_run-2_design.mat`
+
+These are provided as a File array to the `design_matrices` input. The array must be ordered to match the `bold` array — all run-1 subjects first, then all run-2 subjects (or whichever order the BIDS node produces).
 
 ---
 
-## Step 10: Merge Per-Subject Results
+## Step 12: Merge Per-Subject-Run Results
 
 ### fslmerge (Concatenate 4D Volumes)
 
-After film_gls completes for all subjects, the per-subject COPEs and VARCOPEs must be concatenated into single 4D volumes for group analysis. This requires **two fslmerge nodes** — one for COPEs and one for VARCOPEs.
+After film_gls completes for all subject-runs, the per-subject-run COPEs and VARCOPEs must be concatenated into single 4D volumes for group analysis. This requires **two fslmerge nodes** — one for COPEs and one for VARCOPEs.
 
 Drag **fslmerge** onto the canvas twice. Double-click each and set:
 
@@ -342,18 +388,18 @@ Drag **fslmerge** onto the canvas twice. Double-click each and set:
 | `dimension` | `t` | Concatenate along the time/4th dimension |
 | `output` | `all_varcopes` | Output filename for merged VARCOPE volume |
 
-The fslmerge inputs receive the scattered film_gls outputs. Because film_gls was scattered across subjects, its `cope` and `varcope` outputs are nested arrays (`File[][]`). The edge connection flattens these with `$(self.flat())` into a single `File[]` that fslmerge concatenates into a 4D volume.
+The fslmerge inputs receive the scattered film_gls outputs. Because film_gls was scattered across subject-runs, its `cope` and `varcope` outputs are nested arrays (`File[][]`). The edge connection flattens these with `$(self.flat())` into a single `File[]` that fslmerge concatenates into a 4D volume.
 
-With a single first-level contrast, each subject contributes one COPE and one VARCOPE, so the merged 4D volumes have 26 volumes (one per subject) — exactly what flameo expects.
+With a single first-level contrast and two runs per subject, each subject contributes two COPEs and two VARCOPEs, so the merged 4D volumes have 52 volumes (2 per subject × 26 subjects).
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 16 | film_gls | `cope` | fslmerge (COPEs) | `input_files` |
-| 17 | film_gls | `varcope` | fslmerge (VARCOPEs) | `input_files` |
+| 20 | film_gls | `cope` | fslmerge (COPEs) | `input_files` |
+| 21 | film_gls | `varcope` | fslmerge (VARCOPEs) | `input_files` |
 
 ---
 
-## Step 11: Group-Level Statistics
+## Step 13: Group-Level Statistics
 
 ### flameo (FMRIB's Local Analysis of Mixed Effects)
 
@@ -365,8 +411,8 @@ Drag **flameo** from **Functional MRI > FSL > Statistical Analysis** onto the ca
 
 flameo takes the following inputs:
 
-- `cope_file`: The merged 4D COPE volume from fslmerge (all subjects' COPEs concatenated)
-- `var_cope_file`: The merged 4D VARCOPE volume from fslmerge (all subjects' VARCOPEs concatenated)
+- `cope_file`: The merged 4D COPE volume from fslmerge (52 subject-run COPEs concatenated)
+- `var_cope_file`: The merged 4D VARCOPE volume from fslmerge (52 subject-run VARCOPEs concatenated)
 - `design_file`: Group-level design matrix
 - `t_con_file`: Group-level contrast file
 - `cov_split_file`: Group-level covariance structure (`.grp` file)
@@ -376,57 +422,73 @@ flameo does **not** scatter — it receives pre-merged 4D volumes and performs g
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 18 | fslmerge (COPEs) | `merged_image` | flameo | `cope_file` |
-| 19 | fslmerge (VARCOPEs) | `merged_image` | flameo | `var_cope_file` |
-| 20 | Input (`group_design`) | output | flameo | `design_file` |
-| 21 | Input (`group_contrasts`) | output | flameo | `t_con_file` |
-| 22 | Input (`group_covariance`) | output | flameo | `cov_split_file` |
-| 23 | Input (`MNI_mask`) | output | flameo | `mask_file` |
+| 22 | fslmerge (COPEs) | `merged_image` | flameo | `cope_file` |
+| 23 | fslmerge (VARCOPEs) | `merged_image` | flameo | `var_cope_file` |
+| 24 | Input (`group_design`) | output | flameo | `design_file` |
+| 25 | Input (`group_contrasts`) | output | flameo | `t_con_file` |
+| 26 | Input (`group_covariance`) | output | flameo | `cov_split_file` |
+| 27 | Input (`MNI_mask`) | output | flameo | `mask_file` |
 
 Wire the `group_design`, `group_contrasts`, `group_covariance`, and `MNI_mask` Input nodes to flameo.
 
-**Group-level design for a one-sample t-test (group mean activation):**
+**Group-level design for a repeated-measures analysis (52 observations, 26 subjects):**
 
-For 26 subjects, the design matrix is simply a column of ones:
+Because each subject contributes two runs, the group-level design must account for the within-subject correlation. Use a 52×26 subject indicator matrix where each column represents one subject, with 1s in the two rows corresponding to that subject's runs:
 
 ```
-/NumWaves 1
-/NumPoints 26
+/NumWaves 26
+/NumPoints 52
 /Matrix
-1
-1
-1
-... (26 rows)
+1 0 0 0 ... 0    ← sub-01 run-1
+0 1 0 0 ... 0    ← sub-02 run-1
+0 0 1 0 ... 0    ← sub-03 run-1
+...               (rows 4–26 for remaining run-1 subjects)
+1 0 0 0 ... 0    ← sub-01 run-2
+0 1 0 0 ... 0    ← sub-02 run-2
+0 0 1 0 ... 0    ← sub-03 run-2
+...               (rows 30–52 for remaining run-2 subjects)
 ```
 
 **Group contrast:**
+
+Test the mean activation across all 26 subjects:
+
 ```
-/NumWaves 1
+/NumWaves 26
 /NumContrasts 1
 /Matrix
-1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 ```
 
 **Covariance structure (`.grp` file):**
+
+The `.grp` file tells FLAMEO which observations come from the same subject, so it can model within-subject variance separately from between-subject variance:
+
 ```
 /NumWaves 1
-/NumPoints 26
+/NumPoints 52
 /Matrix
-1
-1
-1
-... (26 rows)
+1     ← sub-01 run-1
+2     ← sub-02 run-1
+3     ← sub-03 run-1
+...   (values 4–26 for remaining run-1 subjects)
+1     ← sub-01 run-2
+2     ← sub-02 run-2
+3     ← sub-03 run-2
+...   (values 4–26 for remaining run-2 subjects)
 ```
+
+Each value (1–26) identifies the subject. Rows with the same value are treated as repeated measures from the same subject.
 
 flameo produces group-level t-statistic and z-statistic maps. The z-statistic map is what you threshold and visualize.
 
 ---
 
-> **Scatter propagation:** Because the BIDS node has scatter enabled, scatter automatically propagates downstream through all connected nodes from BET through film_gls. Each subject is preprocessed and analyzed independently. At the fslmerge step, the per-subject COPEs and VARCOPEs are flattened and concatenated into 4D volumes that flameo uses for group analysis.
+> **Scatter propagation:** Because the BIDS node has scatter enabled, scatter automatically propagates downstream through all connected nodes from BET through film_gls. Each subject-run is preprocessed and analyzed independently. When using `--cachedir` with cwltool, duplicate T1w processing (BET, FLIRT struct→MNI, FNIRT) is automatically cached — the second run reuses the first run's structural results. At the fslmerge step, the per-subject-run COPEs and VARCOPEs are flattened and concatenated into 4D volumes that flameo uses for group analysis.
 
 ---
 
-## Step 12: Pin Docker Versions
+## Step 14: Pin Docker Versions
 
 For reproducibility, pin a specific FSL version rather than using `latest`.
 
@@ -439,7 +501,7 @@ All FSL tools use the `brainlife/fsl` Docker image, so they share the same versi
 
 ---
 
-## Step 13: Name and Export
+## Step 15: Name and Export
 
 1. In the top bar, set the **Output** name to `flanker_pipeline` (or any name you prefer).
 2. Click the **Generate Workflow** button in the actions bar.
@@ -458,6 +520,7 @@ flanker_pipeline.crate.zip/
 │       ├── mcflirt.cwl
 │       ├── slicetimer.cwl
 │       ├── susan.cwl
+│       ├── fslmaths.cwl
 │       ├── flirt.cwl
 │       ├── fnirt.cwl
 │       ├── applywarp.cwl
@@ -478,7 +541,7 @@ flanker_pipeline.crate.zip/
 
 ---
 
-## Step 14: Run the Workflow
+## Step 16: Run the Workflow
 
 Unzip the bundle and edit the job file before running.
 
@@ -488,21 +551,41 @@ Open `workflows/flanker_pipeline_job.yml`. Replace placeholder paths with actual
 
 ```yaml
 # BIDS-resolved inputs (filled by resolve_bids.py or manually)
+# 52 entries: 26 subjects × 2 runs (run-1 first, then run-2)
 bold:
+  # --- run-1 ---
   - class: File
     path: /data/sub-01/func/sub-01_task-flanker_run-1_bold.nii.gz
   - class: File
     path: /data/sub-02/func/sub-02_task-flanker_run-1_bold.nii.gz
-  # ... one per subject
+  # ... (sub-03 through sub-26 run-1)
+  # --- run-2 ---
+  - class: File
+    path: /data/sub-01/func/sub-01_task-flanker_run-2_bold.nii.gz
+  - class: File
+    path: /data/sub-02/func/sub-02_task-flanker_run-2_bold.nii.gz
+  # ... (sub-03 through sub-26 run-2)
+
+# T1w images: duplicated so each run is paired with its subject's T1w
 t1w:
+  # --- run-1 (same T1w as run-2) ---
   - class: File
     path: /data/sub-01/anat/sub-01_T1w.nii.gz
   - class: File
     path: /data/sub-02/anat/sub-02_T1w.nii.gz
-  # ... one per subject
+  # ... (sub-03 through sub-26)
+  # --- run-2 (duplicate entries) ---
+  - class: File
+    path: /data/sub-01/anat/sub-01_T1w.nii.gz
+  - class: File
+    path: /data/sub-02/anat/sub-02_T1w.nii.gz
+  # ... (sub-03 through sub-26)
 
 # MNI template and mask
 fnirt_reference:
+  class: File
+  path: /data/additional_inputs/MNI152_T1_2mm.nii.gz
+flirt_struct2mni_reference:
   class: File
   path: /data/additional_inputs/MNI152_T1_2mm.nii.gz
 applywarp_reference:
@@ -512,18 +595,25 @@ flameo_mask_file:
   class: File
   path: /data/additional_inputs/MNI152_T1_2mm_brain_mask.nii.gz
 
-# Per-subject first-level design files (one per subject, same order as bold)
+# Per-subject-run first-level design files (52 total, same order as bold)
 film_gls_design_file:
+  # --- run-1 ---
   - class: File
-    path: /data/additional_inputs/designs/sub-01_design.mat
+    path: /data/additional_inputs/designs/sub-01_run-1_design.mat
   - class: File
-    path: /data/additional_inputs/designs/sub-02_design.mat
-  # ... one per subject
+    path: /data/additional_inputs/designs/sub-02_run-1_design.mat
+  # ... (sub-03 through sub-26 run-1)
+  # --- run-2 ---
+  - class: File
+    path: /data/additional_inputs/designs/sub-01_run-2_design.mat
+  - class: File
+    path: /data/additional_inputs/designs/sub-02_run-2_design.mat
+  # ... (sub-03 through sub-26 run-2)
 film_gls_contrast_file:
   class: File
   path: /data/additional_inputs/first_level_design.con
 
-# Group-level design files
+# Group-level design files (52 observations, 26 subjects)
 flameo_design_file:
   class: File
   path: /data/additional_inputs/group_design.mat
@@ -538,6 +628,12 @@ flameo_cov_split_file:
 bet_output: brain
 bet_frac: 0.5
 mcflirt_output: bold_mc
+fslmaths_bptf: "25 -1"
+fslmaths_output: bold_filtered
+flirt_struct2mni_output: struct2mni_linear
+flirt_struct2mni_output_matrix: struct2mni.mat
+flirt_struct2mni_dof: 12
+flirt_struct2mni_cost: corratio
 # ... remaining parameters
 ```
 
@@ -573,8 +669,11 @@ The `-v /var/run/docker.sock:/var/run/docker.sock` mount is required because cwl
 ```bash
 pip install cwltool
 cd flanker_pipeline
-cwltool workflows/flanker_pipeline.cwl workflows/flanker_pipeline_job.yml
+cwltool --parallel --cachedir cache \
+  workflows/flanker_pipeline.cwl workflows/flanker_pipeline_job.yml
 ```
+
+> **Note:** `--parallel` enables concurrent execution of scattered subject-runs — without it, cwltool processes each sequentially even when scatter is specified. `--cachedir cache` caches completed step outputs so that if the workflow is interrupted, re-running it skips already-finished jobs. With both runs included, caching also avoids redundant BET/FLIRT/FNIRT computation on duplicate T1w inputs.
 
 This requires Docker to be running, as cwltool pulls the `brainlife/fsl` image to execute each step.
 
@@ -600,9 +699,9 @@ singularity run \
 
 ## Expected Outputs
 
-### First-level (film_gls) — per subject
+### First-level (film_gls) — per subject-run
 
-film_gls produces a results directory (named `stats` per the configuration above) for each subject:
+film_gls produces a results directory (named `stats` per the configuration above) for each subject-run (52 total):
 
 | File | Description |
 |------|-------------|
@@ -620,8 +719,8 @@ fslmerge produces two 4D volumes:
 
 | File | Description |
 |------|-------------|
-| `all_copes.nii.gz` | 4D volume containing all 26 subjects' COPE maps |
-| `all_varcopes.nii.gz` | 4D volume containing all 26 subjects' VARCOPE maps |
+| `all_copes.nii.gz` | 4D volume containing all 52 subject-run COPE maps (2 runs × 26 subjects) |
+| `all_varcopes.nii.gz` | 4D volume containing all 52 subject-run VARCOPE maps |
 
 ### Group-level (flameo) — across subjects
 
@@ -653,12 +752,12 @@ randomise -i cope1.nii.gz -o group_tfce -d design.mat -t design.con \
 
 For the flanker task (incongruent > congruent), the group activation map should show significant clusters in:
 
-- **Anterior cingulate cortex (ACC)** — conflict monitoring
-- **Dorsolateral prefrontal cortex (DLPFC)** — cognitive control
-- **Pre-supplementary motor area (pre-SMA)** — response selection
-- **Inferior frontal junction** — attentional control
+- **Anterior cingulate cortex (ACC)** — conflict monitoring (~MNI 0, 20, 40)
+- **Dorsolateral prefrontal cortex (DLPFC)** — cognitive control (~MNI ±42, 30, 26)
+- **Pre-supplementary motor area (pre-SMA)** — response selection (~MNI 0, 6, 52)
+- **Inferior frontal junction** — attentional control (~MNI ±44, 6, 30)
 
-Compare your results against Kelly et al. (2008) Figure 3 and published Flanker meta-analyses.
+With both runs, temporal filtering, and affine-initialized FNIRT, the group analysis should produce peak z-statistics of ~5–6+ with dominant clusters in ACC/pre-SMA. Compare your results against Kelly et al. (2008) Figure 3 and published Flanker meta-analyses.
 
 You can view these maps overlaid on the MNI152 template in FSLeyes, MRIcroGL, or any NIfTI viewer.
 
@@ -667,13 +766,16 @@ You can view these maps overlaid on the MNI152 template in FSLeyes, MRIcroGL, or
 ## Tips
 
 **Multi-subject processing with scatter:**
-Because BIDS outputs are arrays (one file per subject), scatter automatically parallelizes the entire pipeline across subjects. Each subject is processed independently through the full preprocessing and first-level chain. At the fslmerge step, the per-subject COPEs and VARCOPEs are flattened from nested arrays (`File[][]`) into flat arrays (`File[]`), then concatenated into 4D volumes for flameo.
+Because BIDS outputs are arrays (one file per subject-run), scatter automatically parallelizes the entire pipeline across subject-runs. Each subject-run is processed independently through the full preprocessing and first-level chain. At the fslmerge step, the per-subject-run COPEs and VARCOPEs are flattened from nested arrays (`File[][]`) into flat arrays (`File[]`), then concatenated into 4D volumes for flameo.
 
-**Per-subject design matrices:**
-Because ds000102 uses pseudorandom trial ordering, each subject's events.tsv has different onset times for congruent and incongruent conditions. The workflow scatters film_gls on both `input` and `design_file` using dotproduct, so the i-th BOLD file is always paired with the i-th design matrix. Ensure the `bold` and `film_gls_design_file` arrays are in the same subject order.
+**Caching duplicate structural processing:**
+When using `--cachedir`, cwltool detects that the same T1w file appears twice in the array (once for each run) and reuses the cached BET, FLIRT struct→MNI, and FNIRT outputs. This means structural processing only runs once per subject, not once per run.
+
+**Per-subject-run design matrices:**
+Because ds000102 uses pseudorandom trial ordering, each subject-run's events.tsv has different onset times for congruent and incongruent conditions. The workflow scatters film_gls on both `input` and `design_file` using dotproduct, so the i-th BOLD file is always paired with the i-th design matrix. Ensure the `bold` and `film_gls_design_file` arrays are in the same subject-run order.
 
 **Single first-level contrast:**
-Use a single contrast (incongruent > congruent) in the first-level design. With one contrast, each subject produces exactly one COPE and one VARCOPE. The fslmerge flattening step (`self.flat()`) then yields a clean array of 26 files — one per subject. Multiple contrasts would require separating COPEs by contrast index before merging, which adds complexity.
+Use a single contrast (incongruent > congruent) in the first-level design. With one contrast, each subject-run produces exactly one COPE and one VARCOPE. The fslmerge flattening step (`self.flat()`) then yields a clean array of 52 files — one per subject-run. Multiple contrasts would require separating COPEs by contrast index before merging, which adds complexity.
 
 **Save as a custom workflow:**
 To reuse this pipeline in other projects, type a name in the **Name** field (top bar) and click **Save Workflow**. The pipeline appears under **My Workflows** in the left menu and can be dragged onto any future canvas as a single composite node.
@@ -683,15 +785,6 @@ Before exporting, open the CWL Preview panel to inspect the generated CWL and jo
 
 **Alternative: FEAT for integrated analysis:**
 If you prefer FSL's integrated FEAT pipeline (which combines preprocessing and statistics in a single step), drag the **feat** node instead. It requires a pre-configured `.fsf` design file and the BOLD input. This is simpler but less modular than the step-by-step approach shown here.
-
-**Temporal filtering:**
-This tutorial does not include an explicit high-pass filtering step. If you need explicit high-pass filtering, add an **fslmaths** node between applywarp and film_gls and use the `-bptf` flag with the appropriate sigma value:
-
-```
-sigma = 1 / (2 × cutoff_frequency × TR)
-```
-
-For a 100s cutoff with TR = 2s: `sigma = 1 / (2 × 0.01 × 2) = 25`.
 
 **Motion QC:**
 Before proceeding to statistics, inspect the motion parameter plots from MCFLIRT. Consider excluding subjects with excessive motion (e.g., > 3mm translation or > 3° rotation). In a production pipeline, you would add a QC step here — niBuild includes MRIQC as a single-node option for automated quality assessment.
