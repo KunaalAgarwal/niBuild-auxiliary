@@ -22,18 +22,21 @@ datalad get sub-*/anat/ sub-*/func/
 
 ## Pipeline Overview
 
-The workflow chains twelve FSL tools into a complete preprocessing → registration → statistics pipeline. It includes high-pass temporal filtering to remove scanner drift, affine initialization for nonlinear registration, and processes both runs per subject for maximum statistical power. An fslmerge step gathers per-subject-run first-level results into 4D volumes before group analysis:
+The workflow chains fifteen FSL tools into a complete preprocessing → registration → statistics pipeline. It includes high-pass temporal filtering (with mean restoration) to remove scanner drift, affine initialization for nonlinear registration, and processes both runs per subject for maximum statistical power. An fslmerge step gathers per-subject-run first-level results into 4D volumes, an fslmaths step derives a group coverage mask from the merged VARCOPEs, and flameo performs group-level mixed-effects analysis:
 
 ```
 BIDS Dataset
-  ├─ t1w ──> BET ──> FLIRT(struct2mni, 12-DOF) ──> FNIRT(affine) ──────────────────────────────┐
-  │            └─────────────────────────────────────> FLIRT(func2struct, reference)               │
-  │                                                                                                │
-  └─ bold ─> MCFLIRT ─> slicetimer ─> SUSAN ─> fslmaths(bptf) ──> FLIRT ─> applywarp ─> film_gls ─> fslmerge ─> flameo
-                                                                     │                      ↑                      ↑
-                                                             MNI152 ─┤─> FNIRT (ref)  design.mat[]          design.mat
-                                                                     │                 contrast.con          contrast.con
-                                                                     └─> applywarp (ref)                    cov_split.grp
+  ├─ t1w ──> BET ──> FLIRT(struct2mni, 12-DOF) ──> FNIRT(affine) ──────────────────────────────────────────┐
+  │            └───────────────────────────────────────> FLIRT(func2struct, reference)                        │
+  │                                                        ↑                                                  │
+  └─ bold ─> MCFLIRT ─┬─ mean_image ─> FLIRT(func2struct)                                                    │
+                       │                                                                                       │
+                       └─ motion_corrected ─> slicetimer ─> SUSAN ─┬─> fslmaths(Tmean) ──────────────────┐    │
+                                                                   └─> fslmaths(bptf) ─> fslmaths(+mean) ┘─> applywarp ─> film_gls ─> fslmerge ─> fslmaths(mask) ─> flameo
+                                                                                              │                    ↑                      ↑                  │              ↑
+                                                                                      MNI152 ─┤─> FNIRT (ref) design.mat[]          design.mat[]      (varcope mask) design.mat
+                                                                                              │                contrast.con                                            contrast.con
+                                                                                              └─> applywarp (ref)                                                     cov_split.grp
 ```
 
 | Step | Tool | Purpose |
@@ -42,14 +45,17 @@ BIDS Dataset
 | 2 | MCFLIRT | Correct head motion in the BOLD time series |
 | 3 | slicetimer | Correct inter-slice acquisition timing |
 | 4 | SUSAN | Spatially smooth the functional data |
-| 5 | fslmaths | High-pass temporal filtering to remove scanner drift |
-| 6 | FLIRT (struct→MNI) | 12-DOF affine registration of structural to MNI (initializes FNIRT) |
-| 7 | FLIRT (func→struct) | Register functional data to the structural image (linear, 6-DOF) |
-| 8 | FNIRT | Register structural image to MNI152 template (nonlinear, with affine init) |
-| 9 | applywarp | Apply combined func→struct→MNI transform to functional data |
-| 10 | film_gls | Fit the first-level GLM with prewhitening (per-subject-run statistics) |
-| 11 | fslmerge | Concatenate per-subject-run COPEs/VARCOPEs into 4D volumes for group analysis |
-| 12 | flameo | Group-level mixed-effects analysis across subjects |
+| 5 | fslmaths (bptf) | High-pass temporal filtering to remove scanner drift |
+| 6 | fslmaths (Tmean) | Compute temporal mean of smoothed BOLD (before filtering removes it) |
+| 7 | fslmaths (add mean) | Add temporal mean back to filtered data (restores positive intensities) |
+| 8 | FLIRT (struct→MNI) | 12-DOF affine registration of structural to MNI (initializes FNIRT) |
+| 9 | FLIRT (func→struct) | Register functional data to the structural image (linear, 6-DOF) |
+| 10 | FNIRT | Register structural image to MNI152 template (nonlinear, with affine init) |
+| 11 | applywarp | Apply combined func→struct→MNI transform to functional data |
+| 12 | film_gls | Fit the first-level GLM with prewhitening (per-subject-run statistics) |
+| 13 | fslmerge | Concatenate per-subject-run COPEs/VARCOPEs into 4D volumes for group analysis |
+| 14 | fslmaths (mask) | Derive group coverage mask from merged VARCOPEs (`-bin -Tmin`) |
+| 15 | flameo | Group-level mixed-effects analysis across subjects |
 
 ---
 
@@ -91,12 +97,13 @@ In addition to BIDS data, the pipeline needs several external files. Drag **Inpu
 | Input label | Purpose | File you will provide at runtime |
 |-------------|---------|----------------------------------|
 | `MNI152` | Standard space template for registration | `$FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz` |
-| `MNI_mask` | Brain mask in standard space for group analysis | `$FSLDIR/data/standard/MNI152_T1_2mm_brain_mask.nii.gz` |
 | `design_matrices` | Per-subject-run first-level GLM design matrices (File[]) | Generated from events.tsv (see Step 11) |
 | `contrasts` | First-level contrast definitions | Custom `.con` file (see Step 11) |
-| `group_design` | Group-level design matrix | Paired repeated-measures design (see Step 13) |
-| `group_contrasts` | Group-level contrasts | Mean contrast across subjects (see Step 13) |
-| `group_covariance` | Group-level covariance structure | `.grp` file with subject grouping (see Step 13) |
+| `group_design` | Group-level design matrix | Paired repeated-measures design (see Step 15) |
+| `group_contrasts` | Group-level contrasts | Mean contrast across subjects (see Step 15) |
+| `group_covariance` | Group-level covariance structure | `.grp` file with subject grouping (see Step 15) |
+
+> **Note:** No external brain mask is needed for flameo. The pipeline derives a group coverage mask automatically from the merged VARCOPEs (Step 14), ensuring only voxels with valid data across all subject-runs are included in the group analysis.
 
 > **Note:** The `design_matrices` input is a **File array** — one design matrix per subject-run (52 total) — because ds000102 uses pseudorandom trial ordering and each subject-run has different congruent/incongruent onset times. This input is scattered alongside the BOLD data via dotproduct.
 
@@ -151,7 +158,7 @@ Drag **slicetimer** onto the canvas. Double-click and set:
 |---|-------------|---------------|-------------|--------------|
 | 3 | MCFLIRT | `motion_corrected` | slicetimer | `input` |
 
-> **Note:** Check your acquisition protocol. If unsure, inspect the `SliceTiming` field in the BOLD sidecar JSON (`sub-XX_task-flanker_bold.json`).
+> **Note:** ds000102 uses interleaved slice acquisition. The dataset predates widespread BIDS sidecar metadata adoption, so `SliceTiming` may not appear in the BOLD sidecar JSON. For other datasets, check the `SliceTiming` field in `sub-XX_task-*_bold.json` or consult the acquisition protocol.
 
 ### SUSAN (Spatial Smoothing)
 
@@ -180,7 +187,7 @@ Drag **fslmaths** onto the canvas. Double-click and set:
 | Parameter | Value | Why |
 |-----------|-------|-----|
 | `bptf` | `25 -1` | High-pass filter with sigma = 25 volumes; no low-pass (-1) |
-| `output` | `bold_filtered` | Output filename stem |
+| `output` | `bold_filtered_demeaned` | Output filename stem (demeaned — mean is restored in Step 7) |
 
 The `bptf` parameter performs bandpass temporal filtering. The two values are `hp_sigma` and `lp_sigma` in units of volumes (not seconds). The high-pass sigma is calculated as:
 
@@ -190,17 +197,60 @@ sigma = cutoff_period / (2 × TR) = 100 / (2 × 2) = 25 volumes
 
 This applies a ~100s high-pass filter, which is the FSL default. Setting lp_sigma to `-1` disables low-pass filtering. High-pass filtering removes low-frequency scanner drift that inflates noise variance and reduces t/z-statistics. This is especially important for ds000102's slow event-related design (ITI = 8–14s), where task-related frequencies are relatively close to drift frequencies.
 
+> **Important:** `bptf` removes the temporal mean as part of the high-pass filter, leaving the data zero-centered. This is a problem for downstream tools like `film_gls`, which uses mean intensity to distinguish brain from background — zero-centered data causes ~50% of brain voxels to be randomly masked out. Steps 6 and 7 fix this by computing the temporal mean before filtering and adding it back afterward (the standard FSL FEAT approach).
+
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 5 | SUSAN | `smoothed_image` | fslmaths | `input` |
+| 5 | SUSAN | `smoothed_image` | fslmaths (bptf) | `input` |
 
 ---
 
-## Step 6: Registration — Structural to MNI (Linear)
+## Step 6: Preprocessing — Compute Temporal Mean
+
+### fslmaths (Temporal Mean)
+
+This step computes the temporal mean of the SUSAN output — i.e., the mean intensity at each voxel across all timepoints. This 3D volume captures the baseline signal level that `bptf` removes. It will be added back to the filtered data in Step 7.
+
+Drag **fslmaths** onto the canvas (this is a second, separate fslmaths instance). Double-click and set:
+
+| Parameter | Value | Why |
+|-----------|-------|-----|
+| `Tmean` | `true` | Compute mean across the time dimension — produces a 3D volume |
+| `output` | `mean_func` | Output filename stem |
+
+Steps 5 (bptf) and 6 (Tmean) both take the SUSAN output as input and can run in parallel.
+
+| # | Source node | Source output | Target node | Target input |
+|---|-------------|---------------|-------------|--------------|
+| 5b | SUSAN | `smoothed_image` | fslmaths (Tmean) | `input` |
+
+---
+
+## Step 7: Preprocessing — Restore Temporal Mean
+
+### fslmaths (Add Mean Back)
+
+This step adds the temporal mean (from Step 6) back to the high-pass filtered data (from Step 5), restoring positive intensity values while keeping the temporal filtering. This is the standard approach used by FSL's FEAT pipeline.
+
+Drag **fslmaths** onto the canvas (a third fslmaths instance). Double-click and set:
+
+| Parameter | Value | Why |
+|-----------|-------|-----|
+| `add_file` | *(wired from Step 6)* | Add the mean_func image to each volume of the filtered data |
+| `output` | `bold_filtered` | Output filename stem — this is the final filtered BOLD |
+
+| # | Source node | Source output | Target node | Target input |
+|---|-------------|---------------|-------------|--------------|
+| 5c | fslmaths (bptf) | `output_image` | fslmaths (add mean) | `input` |
+| 5d | fslmaths (Tmean) | `output_image` | fslmaths (add mean) | `add_file` |
+
+---
+
+## Step 8: Registration — Structural to MNI (Linear)
 
 ### FLIRT (12-DOF Affine, Structural → MNI)
 
-Drag a **flirt** node onto the canvas. This is a separate FLIRT step from the functional-to-structural registration in Step 7. Double-click and set:
+Drag a **flirt** node onto the canvas. This is a separate FLIRT step from the functional-to-structural registration in Step 9. Double-click and set:
 
 | Parameter | Value | Why |
 |-----------|-------|-----|
@@ -218,7 +268,7 @@ This step computes a linear approximation of the structural-to-MNI mapping. The 
 
 ---
 
-## Step 7: Registration — Functional to Structural
+## Step 9: Registration — Functional to Structural
 
 ### FLIRT (6-DOF Rigid, Functional → Structural)
 
@@ -231,16 +281,16 @@ Drag another **flirt** node onto the canvas. Double-click and set:
 | `output_matrix` | `func2struct.mat` | Save the transformation matrix — needed by applywarp |
 | `cost` | `corratio` | Correlation ratio — robust for EPI-to-T1 registration |
 
-FLIRT takes the temporally filtered BOLD (from fslmaths) as `input` and the skull-stripped T1w (from BET) as `reference`.
+FLIRT takes the mean functional image (from MCFLIRT) as `input` and the skull-stripped T1w (from BET) as `reference`. Using the mean BOLD — rather than the full 4D timeseries — provides a single representative volume with good tissue contrast for registration. MCFLIRT's mean image is unsmoothed and unfiltered, which preserves the tissue boundary detail needed for accurate EPI-to-T1 alignment. The SUSAN-smoothed and bptf-filtered version would have reduced edge contrast, degrading registration quality.
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 8 | fslmaths | `output_image` | FLIRT (func→struct) | `input` |
+| 8 | MCFLIRT | `mean_image` | FLIRT (func→struct) | `input` |
 | 9 | BET | `brain_extraction` | FLIRT (func→struct) | `reference` |
 
 ---
 
-## Step 8: Registration — Structural to MNI (Nonlinear)
+## Step 10: Registration — Structural to MNI (Nonlinear)
 
 ### FNIRT (Nonlinear Registration)
 
@@ -251,7 +301,7 @@ Drag **fnirt** onto the canvas. Double-click and set:
 | `cout` | `struct2mni_warp` | Output warp coefficients filename |
 | `iout` | `struct2mni` | Warped output image filename |
 
-FNIRT takes the skull-stripped T1w (from BET) as `input`, the MNI152 template as `reference`, and the 12-DOF affine matrix from Step 6 as `affine` initialization. It produces a nonlinear warp field that maps structural space to MNI space.
+FNIRT takes the skull-stripped T1w (from BET) as `input`, the MNI152 template as `reference`, and the 12-DOF affine matrix from Step 8 as `affine` initialization. It produces a nonlinear warp field that maps structural space to MNI space.
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
@@ -259,9 +309,11 @@ FNIRT takes the skull-stripped T1w (from BET) as `input`, the MNI152 template as
 | 11 | Input (`MNI152`) | output | FNIRT | `reference` |
 | 12 | FLIRT (struct→MNI) | `transformation_matrix` | FNIRT | `affine` |
 
+> FLIRT (struct→MNI) is from Step 8.
+
 ---
 
-## Step 9: Transform to Standard Space
+## Step 11: Transform to Standard Space
 
 ### applywarp (Apply Combined Transform)
 
@@ -274,23 +326,23 @@ Drag **applywarp** onto the canvas. Double-click and set:
 
 applywarp combines the linear (FLIRT) and nonlinear (FNIRT) transforms in a single resampling step, avoiding double interpolation:
 
-- `input`: Temporally filtered BOLD (from fslmaths)
+- `input`: Temporally filtered BOLD with mean restored (from fslmaths add mean, Step 7)
 - `reference`: MNI152 template
-- `warp`: Warp field from FNIRT
-- `premat`: Transformation matrix from FLIRT func→struct (`func2struct.mat`)
+- `warp`: Warp field from FNIRT (Step 10)
+- `premat`: Transformation matrix from FLIRT func→struct (Step 9, `func2struct.mat`)
 
 This brings all subjects' functional data into the same standard space, which is required for group-level analysis.
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 13 | fslmaths | `output_image` | applywarp | `input` |
+| 13 | fslmaths (add mean) | `output_image` | applywarp | `input` |
 | 14 | Input (`MNI152`) | output | applywarp | `reference` |
 | 15 | FNIRT | `warp_coefficients` | applywarp | `warp` |
 | 16 | FLIRT (func→struct) | `transformation_matrix` | applywarp | `premat` |
 
 ---
 
-## Step 10: First-Level Statistics
+## Step 12: First-Level Statistics
 
 ### film_gls (General Linear Model)
 
@@ -298,7 +350,7 @@ Drag **film_gls** from **Functional MRI > FSL > Statistical Analysis** onto the 
 
 | Parameter | Value | Why |
 |-----------|-------|-----|
-| `threshold` | `10` | Low threshold |
+| `threshold` | `1000` | Default FSL threshold for brain/background separation; works correctly because the temporal mean was restored in Steps 6–7 |
 | `results_dir` | `stats` | Name for the output results directory |
 | `smooth_autocorr` | `true` | Smooth autocorrelation estimates for stable prewhitening |
 
@@ -319,7 +371,7 @@ film_gls produces per-subject-run COPEs (contrast of parameter estimates), VARCO
 
 ---
 
-## Step 11: Preparing the First-Level Design
+## Preparing the First-Level Design
 
 The first-level design matrix encodes the experimental conditions for each subject-run. Because ds000102 uses pseudorandom trial ordering (each subject sees a different sequence of congruent and incongruent trials), **each subject-run needs its own design matrix**.
 
@@ -366,7 +418,7 @@ These are provided as a File array to the `design_matrices` input. The array mus
 
 ---
 
-## Step 12: Merge Per-Subject-Run Results
+## Step 13: Merge Per-Subject-Run Results
 
 ### fslmerge (Concatenate 4D Volumes)
 
@@ -399,7 +451,53 @@ With a single first-level contrast and two runs per subject, each subject contri
 
 ---
 
-## Step 13: Group-Level Statistics
+## Step 14: Generate Group Coverage Mask
+
+### fslmaths (Data-Driven Mask from VARCOPEs)
+
+After registration to MNI space, each subject-run's functional data covers a slightly different region of the brain — voxels outside the original functional field-of-view remain zero after applywarp. With the temporal mean restored (Steps 6–7), most brain voxels (~90–95%) have valid non-zero values per subject-run, but edge voxels still vary across subjects due to differences in head positioning and FOV coverage. FLAMEO requires positive VARCOPE values at every voxel across all observations, so the data-driven mask ensures only voxels with complete coverage are analyzed.
+
+The solution is to derive a **group coverage mask** directly from the data: binarize the merged VARCOPE volume (non-zero → 1, zero → 0), then take the temporal minimum across all 52 volumes. A voxel is 1 in the final mask only if ALL subject-runs had non-zero variance there.
+
+Drag **fslmaths** onto the canvas. Double-click and set:
+
+| Parameter | Value | Why |
+|-----------|-------|-----|
+| `bin` | `true` | Binarize each volume (non-zero varcope → 1, zero → 0) |
+| `Tmin` | `true` | Take minimum across the 4th dimension — 1 only where ALL 52 volumes are non-zero |
+| `output` | `group_mask` | Output filename for the group coverage mask |
+
+| # | Source node | Source output | Target node | Target input |
+|---|-------------|---------------|-------------|--------------|
+| 22 | fslmerge (VARCOPEs) | `merged_image` | fslmaths (mask) | `input` |
+
+> **Why not use the MNI brain mask?** The MNI152 brain mask has ~228,000 voxels, but the ds000102 functional FOV (192×192×160mm) does not cover the full MNI brain extent (182×218×182mm). After applywarp, each subject-run has ~5–15% zero voxels at FOV edges, with the exact pattern depending on head positioning. The data-driven mask restricts analysis to voxels with consistent coverage.
+
+> **Fallback if the strict intersection is empty:** If the `-bin -Tmin` mask has zero non-zero voxels (check with `fslstats group_mask -V`), the functional FOV varies too much across subjects for a strict intersection. Replace the single fslmaths (mask) node with **two** fslmaths nodes to compute a coverage-threshold mask:
+>
+> **fslmaths node A (coverage fraction):**
+>
+> | Parameter | Value | Why |
+> |-----------|-------|-----|
+> | `bin` | `true` | Binarize each volume (non-zero → 1, zero → 0) |
+> | `Tmean` | `true` | Compute fraction of volumes with non-zero varcope at each voxel |
+> | `thr` | `0.8` | Keep voxels covered by ≥80% of volumes |
+> | `output` | `group_coverage` | Intermediate coverage map |
+>
+> **fslmaths node B (re-binarize):**
+>
+> | Parameter | Value | Why |
+> |-----------|-------|-----|
+> | `bin` | `true` | Convert the thresholded fraction map to a binary mask |
+> | `output` | `group_mask` | Final binary mask for flameo |
+>
+> Two nodes are required because the fslmaths CWL defines `bin` as a single boolean — it cannot be applied twice in one step (once before Tmean and once after thr). Wire `fslmerge (VARCOPEs) → node A → node B → flameo mask_file`.
+>
+> With a relaxed mask, some voxels will have zero varcopes in a minority of observations. FLAMEO handles this by excluding those specific voxels — it reports a warning but still produces valid results at voxels with complete coverage.
+
+---
+
+## Step 15: Group-Level Statistics
 
 ### flameo (FMRIB's Local Analysis of Mixed Effects)
 
@@ -416,48 +514,50 @@ flameo takes the following inputs:
 - `design_file`: Group-level design matrix
 - `t_con_file`: Group-level contrast file
 - `cov_split_file`: Group-level covariance structure (`.grp` file)
-- `mask_file`: An MNI-space brain mask
+- `mask_file`: The data-derived group coverage mask from fslmaths (Step 14)
 
 flameo does **not** scatter — it receives pre-merged 4D volumes and performs group-level inference across all subjects in a single step.
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 22 | fslmerge (COPEs) | `merged_image` | flameo | `cope_file` |
-| 23 | fslmerge (VARCOPEs) | `merged_image` | flameo | `var_cope_file` |
-| 24 | Input (`group_design`) | output | flameo | `design_file` |
-| 25 | Input (`group_contrasts`) | output | flameo | `t_con_file` |
-| 26 | Input (`group_covariance`) | output | flameo | `cov_split_file` |
-| 27 | Input (`MNI_mask`) | output | flameo | `mask_file` |
+| 23 | fslmerge (COPEs) | `merged_image` | flameo | `cope_file` |
+| 24 | fslmerge (VARCOPEs) | `merged_image` | flameo | `var_cope_file` |
+| 25 | Input (`group_design`) | output | flameo | `design_file` |
+| 26 | Input (`group_contrasts`) | output | flameo | `t_con_file` |
+| 27 | Input (`group_covariance`) | output | flameo | `cov_split_file` |
+| 28 | fslmaths (mask) | `output_image` | flameo | `mask_file` |
 
-Wire the `group_design`, `group_contrasts`, `group_covariance`, and `MNI_mask` Input nodes to flameo.
+Wire the `group_design`, `group_contrasts`, and `group_covariance` Input nodes to flameo. The mask comes from the fslmaths step, not an external input.
 
 **Group-level design for a repeated-measures analysis (52 observations, 26 subjects):**
 
-Because each subject contributes two runs, the group-level design must account for the within-subject correlation. Use a 52×26 subject indicator matrix where each column represents one subject, with 1s in the two rows corresponding to that subject's runs:
+The design matrix has a single column of 1s — it models the group mean activation. FLAME1 uses the `.grp` file (below) to identify which observations come from the same subject, automatically partitioning variance into within-subject and between-subject components. This is the standard FLAME1 repeated-measures approach.
+
+> **Why not a 26-column subject indicator matrix?** A subject-indicator design (one column per subject) absorbs between-subject variance as nuisance regressors rather than letting the mixed-effects model estimate it properly. FLAME1's strength is its ability to decompose within-subject and between-subject variance using the `.grp` file — a single mean column allows this to work correctly.
 
 ```
-/NumWaves 26
+/NumWaves 1
 /NumPoints 52
 /Matrix
-1 0 0 0 ... 0    ← sub-01 run-1
-0 1 0 0 ... 0    ← sub-02 run-1
-0 0 1 0 ... 0    ← sub-03 run-1
-...               (rows 4–26 for remaining run-1 subjects)
-1 0 0 0 ... 0    ← sub-01 run-2
-0 1 0 0 ... 0    ← sub-02 run-2
-0 0 1 0 ... 0    ← sub-03 run-2
-...               (rows 30–52 for remaining run-2 subjects)
+1    ← sub-01 run-1
+1    ← sub-02 run-1
+1    ← sub-03 run-1
+...  (all 1s through row 26)
+1    ← sub-01 run-2
+1    ← sub-02 run-2
+1    ← sub-03 run-2
+...  (all 1s through row 52)
 ```
 
 **Group contrast:**
 
-Test the mean activation across all 26 subjects:
+Test the mean activation across subjects:
 
 ```
-/NumWaves 26
+/NumWaves 1
 /NumContrasts 1
 /Matrix
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1
 ```
 
 **Covariance structure (`.grp` file):**
@@ -484,11 +584,11 @@ flameo produces group-level t-statistic and z-statistic maps. The z-statistic ma
 
 ---
 
-> **Scatter propagation:** Because the BIDS node has scatter enabled, scatter automatically propagates downstream through all connected nodes from BET through film_gls. Each subject-run is preprocessed and analyzed independently. When using `--cachedir` with cwltool, duplicate T1w processing (BET, FLIRT struct→MNI, FNIRT) is automatically cached — the second run reuses the first run's structural results. At the fslmerge step, the per-subject-run COPEs and VARCOPEs are flattened and concatenated into 4D volumes that flameo uses for group analysis.
+> **Scatter propagation:** Because the BIDS node has scatter enabled, scatter automatically propagates downstream through all connected nodes from BET through film_gls. Each subject-run is preprocessed and analyzed independently. When using `--cachedir` with cwltool, duplicate T1w processing (BET, FLIRT struct→MNI, FNIRT) is automatically cached — the second run reuses the first run's structural results. At the fslmerge step, the per-subject-run COPEs and VARCOPEs are flattened and concatenated into 4D volumes. The fslmaths mask step (Step 14) then derives a group coverage mask from the merged VARCOPEs, and flameo uses this mask for group analysis.
 
 ---
 
-## Step 14: Pin Docker Versions
+## Step 16: Pin Docker Versions
 
 For reproducibility, pin a specific FSL version rather than using `latest`.
 
@@ -501,7 +601,7 @@ All FSL tools use the `brainlife/fsl` Docker image, so they share the same versi
 
 ---
 
-## Step 15: Name and Export
+## Step 17: Name and Export
 
 1. In the top bar, set the **Output** name to `flanker_pipeline` (or any name you prefer).
 2. Click the **Generate Workflow** button in the actions bar.
@@ -541,7 +641,7 @@ flanker_pipeline.crate.zip/
 
 ---
 
-## Step 16: Run the Workflow
+## Step 18: Run the Workflow
 
 Unzip the bundle and edit the job file before running.
 
@@ -581,7 +681,7 @@ t1w:
     path: /data/sub-02/anat/sub-02_T1w.nii.gz
   # ... (sub-03 through sub-26)
 
-# MNI template and mask
+# MNI template (used by FLIRT, FNIRT, applywarp)
 fnirt_reference:
   class: File
   path: /data/additional_inputs/MNI152_T1_2mm.nii.gz
@@ -591,9 +691,9 @@ flirt_struct2mni_reference:
 applywarp_reference:
   class: File
   path: /data/additional_inputs/MNI152_T1_2mm.nii.gz
-flameo_mask_file:
-  class: File
-  path: /data/additional_inputs/MNI152_T1_2mm_brain_mask.nii.gz
+
+# Group coverage mask (derived from data — no external mask needed)
+fslmaths_mask_output: group_mask
 
 # Per-subject-run first-level design files (52 total, same order as bold)
 film_gls_design_file:
@@ -629,7 +729,14 @@ bet_output: brain
 bet_frac: 0.5
 mcflirt_output: bold_mc
 fslmaths_bptf: "25 -1"
-fslmaths_output: bold_filtered
+fslmaths_output: bold_filtered_demeaned
+# fslmaths (Tmean) — compute temporal mean before filtering
+fslmaths_2_Tmean: true
+fslmaths_2_output: mean_func
+# fslmaths (add mean) — restore temporal mean after filtering
+fslmaths_3_output: bold_filtered
+# add_file is wired from fslmaths_2 output via canvas connection
+film_gls_threshold: 1000
 flirt_struct2mni_output: struct2mni_linear
 flirt_struct2mni_output_matrix: struct2mni.mat
 flirt_struct2mni_dof: 12
@@ -766,7 +873,13 @@ You can view these maps overlaid on the MNI152 template in FSLeyes, MRIcroGL, or
 ## Tips
 
 **Multi-subject processing with scatter:**
-Because BIDS outputs are arrays (one file per subject-run), scatter automatically parallelizes the entire pipeline across subject-runs. Each subject-run is processed independently through the full preprocessing and first-level chain. At the fslmerge step, the per-subject-run COPEs and VARCOPEs are flattened from nested arrays (`File[][]`) into flat arrays (`File[]`), then concatenated into 4D volumes for flameo.
+Because BIDS outputs are arrays (one file per subject-run), scatter automatically parallelizes the entire pipeline across subject-runs. Each subject-run is processed independently through the full preprocessing and first-level chain. At the fslmerge step, the per-subject-run COPEs and VARCOPEs are flattened from nested arrays (`File[][]`) into flat arrays (`File[]`), then concatenated into 4D volumes. The fslmaths mask step computes the intersection of non-zero varcope coverage, and flameo uses this data-driven mask for group analysis.
+
+**Temporal filtering and mean restoration:**
+`fslmaths -bptf` removes the temporal mean as part of high-pass filtering, leaving the data zero-centered. If the mean is not restored, downstream tools like `film_gls` that use intensity-based thresholding will randomly mask ~50% of brain voxels. This is a common pitfall; FSL's FEAT handles it automatically by computing `-Tmean` before filtering and `-add`ing it back afterward. The pipeline includes three fslmaths steps (Steps 5–7) to replicate this pattern: compute the temporal mean, apply the high-pass filter, then add the mean back.
+
+**Group coverage mask (why not use the MNI brain mask?):**
+The ds000102 functional FOV (192×192×160mm) does not cover the full MNI brain extent (182×218×182mm). After applywarp, each subject-run has ~5–15% zero voxels at FOV edges, with the exact pattern depending on head positioning. FLAMEO excludes any voxel where the VARCOPE is zero or negative in any observation. The `fslmaths -bin -Tmin` step (Step 14) computes the strict intersection of all subjects' coverage. If the strict intersection is empty due to high FOV variability, use the coverage-threshold fallback described in Step 14 (two fslmaths nodes: `-bin -Tmean -thr 0.8` then `-bin`).
 
 **Caching duplicate structural processing:**
 When using `--cachedir`, cwltool detects that the same T1w file appears twice in the array (once for each run) and reuses the cached BET, FLIRT struct→MNI, and FNIRT outputs. This means structural processing only runs once per subject, not once per run.

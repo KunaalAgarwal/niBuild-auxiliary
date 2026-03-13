@@ -1,4 +1,4 @@
-# VBM Analysis: Alzheimer's Gray Matter Differences — End-to-End Tutorial
+# End-to-End tutorial of VBM Analysis: Alzheimer's Gray Matter Differences
 
 This tutorial walks through building a voxel-based morphometry (VBM) pipeline using niBuild to detect gray matter differences between cognitively normal controls and individuals with Alzheimer's-type dementia. Unlike the flanker fMRI tutorial (which uses BIDS-formatted input), this tutorial demonstrates how to use niBuild with **non-BIDS data** (providing input images directly as a file array). By the end, you will have a portable, reproducible workflow bundle that extracts the brain, segments tissue, registers to standard space, modulates gray matter maps, smooths, and runs non-parametric group-level statistics.
 
@@ -33,7 +33,7 @@ This script:
 - Filters subjects to those with CDR scores (excludes missing CDR and repeat MR2 scans)
 - Generates FSL design matrix (`design.mat`) and contrast (`design.con`) files
 
-**Resulting cohort:** 235 subjects — 135 controls (CDR = 0) and 100 demented (CDR >= 0.5: 70 very mild, 28 mild, 2 moderate). Mean age: 72.3 years (controls: 69.1, demented: 76.8). Covariates: age and sex.
+**Resulting cohort:** 235 subjects — 135 controls (CDR = 0) and 100 demented (CDR >= 0.5: 70 very mild, 28 mild, 2 moderate). Mean age: 72.3 years (controls: 69.1, demented: 76.8). Covariates are age and sex.
 
 ## Pipeline Overview
 
@@ -66,13 +66,12 @@ Input (T1w file array)
 
 ## Step 1: Load Input Data (Non-BIDS)
 
-Unlike the schizophrenia tutorial which uses a BIDS loader, this tutorial demonstrates niBuild's direct file input approach — useful for datasets that are not organized in BIDS format.
+Unlike the schizophrenia tutorial which uses a BIDS loader, this tutorial demonstrates niBuild's direct file input approach which is useful for older datasets that are not organized in BIDS format.
 
 1. Open niBuild in your browser.
 2. In the left-hand tool menu, expand the **I/O** section at the top.
 3. Drag an **Input** node onto the canvas. Double-click to open its configuration.
 4. Set the label to `t1w`.
-5. Set the type to **File array** — this tells niBuild that the input is a list of files (one per subject), which enables scatter-based parallel processing.
 
 When you export and run the workflow, you will populate this input in the job YAML file with the paths to your NIfTI images:
 
@@ -105,6 +104,8 @@ Drag **bet** from **Structural MRI > FSL > Bet (Brain Extraction)** onto the can
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
 | 1 | Input (`t1w`) | output | BET | `input` |
+
+In the BET parameter modal set the `input` parameter to scatter via pressing the circular arrow symbol. This allows for the array of inputs to efficiently be processed by the workflow.
 
 > **Tip:** For VBM, it is better to err on the side of a slightly liberal extraction. Residual non-brain tissue will be classified as non-GM by FAST, but missing gray matter cannot be recovered.
 
@@ -152,23 +153,43 @@ Double-click the FLIRT node and set:
 | 3 | FAST | `segmented_files` | FLIRT | `input` |
 | 4 | Input (`MNI152_template`) | output | FLIRT | `reference` |
 
+- FAST outputs `segmented_files` as a File array containing the PVE maps. In the edge mapping modal, map this to FLIRT's `input`. The gray matter PVE (typically `_pve_1`) is the file of interest. Thus you need to add an expression for the FLIRT input parameter. Open the FLIRT parameter modal, locate the `input` parameter, press the expression (f(x)) button, and paste the following: `self.filter(function(f) { return f.basename.indexOf('pve_1') !== -1; })[0]`, finally press save.
+ 
 ### FNIRT (Non-linear Registration)
 
 Drag **fnirt** from **Structural MRI > FSL > Registration** onto the canvas. Double-click and set:
 
 | Parameter | Value | Why |
 |-----------|-------|-----|
+| `config` | *(see below)* | FSL-tuned configuration for T1-to-MNI registration |
 | `iout` | `gm_nonlinear` | Output warped image filename |
 | `cout` | `struct2mni_warp` | Output warp coefficients (needed for applywarp) |
 | `jout` | `jacobian` | Output Jacobian determinant map — needed for modulation |
+
+> **Important — FNIRT config file:** FNIRT's default parameters are generic and can produce poorly regularized warp fields (extreme Jacobian values including negative determinants, which indicate warp folding). FSL ships a config file tuned specifically for T1-to-MNI152 registration that sets appropriate subsampling schedules, warp resolution, smoothing kernels, and regularization strength. You must extract this file from the FSL Docker image and provide it as an input:
+>
+> ```bash
+> docker run --rm brainlife/fsl:6.0.4-patched2 \
+>   cat /usr/local/fsl/etc/flirtsch/T1_2_MNI152_2mm.cnf \
+>   > additional_inputs/T1_2_MNI152_2mm.cnf
+> ```
+>
+> Then drag an **Input** node onto the canvas, label it `fnirt_config`, and wire it to FNIRT's `config` input. In your job YAML, set:
+>
+> ```yaml
+> fnirt_config:
+>   class: File
+>   path: /path/to/additional_inputs/T1_2_MNI152_2mm.cnf
+> ```
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
 | 5 | FLIRT | `transformation_matrix` | FNIRT | `affine` |
 | 6 | BET | `brain_extraction` | FNIRT | `input` |
 | 7 | Input (`MNI152_template`) | output | FNIRT | `reference` |
+| 8 | Input (`fnirt_config`) | output | FNIRT | `config` |
 
-The `affine` input will receive the affine matrix from FLIRT, and `reference` will receive the MNI152 template. This initializes FNIRT with the affine solution for faster convergence.
+The `affine` input will receive the affine matrix from FLIRT, and `reference` will receive the MNI152 template. This initializes FNIRT with the affine solution for faster convergence. The `config` input provides the `T1_2_MNI152_2mm.cnf` file which constrains FNIRT's optimization to produce well-behaved warp fields suitable for VBM.
 
 ---
 
@@ -187,8 +208,8 @@ This node will receive the registered gray matter map as its `input` and the Jac
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 8 | FLIRT | `registered_image` | fslmaths (modulation) | `input` |
-| 9 | FNIRT | `jacobian_map` | fslmaths (modulation) | `mul_file` |
+| 9 | FLIRT | `registered_image` | fslmaths (modulation) | `input` |
+| 10 | FNIRT | `jacobian_map` | fslmaths (modulation) | `mul_file` |
 
 ---
 
@@ -205,7 +226,7 @@ Drag a second **fslmaths** onto the canvas. Double-click and set:
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 10 | fslmaths (modulation) | `output_image` | fslmaths (smoothing) | `input` |
+| 11 | fslmaths (modulation) | `output_image` | fslmaths (smoothing) | `input` |
 
 ---
 
@@ -224,7 +245,7 @@ This node gathers the scattered per-subject smoothed images into a single 4D fil
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 11 | fslmaths (smoothing) | `output_image` | fslmerge | `input_files` |
+| 12 | fslmaths (smoothing) | `output_image` | fslmerge | `input_files` |
 
 ---
 
@@ -256,29 +277,18 @@ Drag three **Input** nodes from the I/O section onto the canvas. Double-click ea
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 12 | fslmerge | `merged_image` | randomise | `input` |
-| 13 | Input (`design_matrix`) | output | randomise | `design_mat` |
-| 14 | Input (`contrasts`) | output | randomise | `tcon` |
-| 15 | Input (`gm_mask`) | output | randomise | `mask` |
-
+| 13 | fslmerge | `merged_image` | randomise | `input` |
+| 14 | Input (`design_matrix`) | output | randomise | `design_mat` |
+| 15 | Input (`contrasts`) | output | randomise | `tcon` |
+| 16 | Input (`gm_mask`) | output | randomise | `mask` |
 
 ---
 
-**Notes on wiring:**
+**Additional notes**
 
-- **Row 1:** Unlike the BIDS flanker fMRI tutorial, the `t1w` Input node doesn't directly turn on scatter to process an array of images in parallel. Thus to handle the input efficiently open the parameter modal of your BET node and press the cycle symbol on the input parameter. This signals to niBuild that the workflow should expect a file[] and process all elements in parallel. 
+- **Rows 9–10:** The modulation fslmaths node multiplies the affine-registered gray matter map (from FLIRT) by the Jacobian determinant (from FNIRT). This preserves volume information that would otherwise be lost during registration.
 
-- **Row 3:** FAST outputs `segmented_files` as a File array containing the PVE maps. In the edge mapping modal, map this to FLIRT's `input`. The gray matter PVE (typically `_pve_1`) is the file of interest. Depending on how you wish to handle FAST's multi-file output, you may need an intermediate fslmaths step to extract the gray matter PVE specifically, or use an expression to select the correct file.
-
-- **Row 5:** FLIRT's `transformation_matrix` output provides the affine matrix that initializes FNIRT. This is the `.mat` file, not the registered image.
-
-- **Row 6:** FNIRT receives the original brain-extracted image (from BET), not the FAST output. FNIRT performs its own non-linear registration from native to standard space.
-
-- **Rows 8–9:** The modulation fslmaths node multiplies the affine-registered gray matter map (from FLIRT) by the Jacobian determinant (from FNIRT). This preserves volume information that would otherwise be lost during registration.
-
-- **Rows 11–12:** The scattered per-subject smoothed images feed into fslmerge, which gathers them into a single 4D stack. randomise then operates on this 4D image.
-
-After wiring, your canvas should show animated edges between all connected node pairs. Wired input ports turn a different color from unwired ones for visual verification.
+- **Rows 12–13:** The scattered per-subject smoothed images feed into fslmerge, which gathers them into a single 4D stack. randomise then operates on this 4D image.
 
 > **Scatter propagation:** Because the `t1w` Input provides a file array, scatter automatically propagates through BET, FAST, FLIRT, FNIRT, and both fslmaths nodes. Each subject is processed independently. fslmerge gathers the scattered outputs into a single 4D image for randomise.
 
@@ -356,6 +366,11 @@ fnirt_reference:
   class: File
   path: /path/to/additional_inputs/MNI152_T1_2mm.nii.gz
 
+# FNIRT config (extracted from FSL Docker image)
+fnirt_config:
+  class: File
+  path: /path/to/additional_inputs/T1_2_MNI152_2mm.cnf
+
 # Group design files (generated by prepare_data.py)
 randomise_design_mat:
   class: File
@@ -413,8 +428,11 @@ The `-v /var/run/docker.sock:/var/run/docker.sock` mount is required because cwl
 ```bash
 pip install cwltool
 cd vbm_alzheimers
-cwltool workflows/vbm_alzheimers.cwl workflows/vbm_alzheimers_job.yml
+cwltool --parallel --cachedir cache \
+  workflows/vbm_alzheimers.cwl workflows/vbm_alzheimers_job.yml
 ```
+
+> **Note:** `--parallel` enables concurrent execution of scattered subjects — without it, cwltool processes each subject sequentially even when scatter is specified. `--cachedir cache` caches completed step outputs so that if the workflow is interrupted, re-running it skips already-finished jobs.
 
 ### Option C: Run with Singularity (HPC)
 

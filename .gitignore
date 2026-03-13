@@ -5,6 +5,9 @@ validation/vbm_schizophrenia/
 
 validation/vbm_alzheimers/data
 validation/vbm_alzheimers/vbm_alzheimers_crate/
+validation/vbm_alzheimers/output/
 
 validation/flanker/ds000102
 validation/flanker/fmri_flanker_crate/
+validation/flanker/fmri_flanker_crate_v2/
+validation/flanker/output/
