@@ -97,6 +97,7 @@ In addition to BIDS data, the pipeline needs several external files. Drag **Inpu
 | Input label | Purpose | File you will provide at runtime |
 |-------------|---------|----------------------------------|
 | `MNI152` | Standard space template for registration | `$FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz` |
+| `T1_2_MNI152_2mm.cnf` | FNIRT config for T1→MNI152 2mm registration | `$FSLDIR/etc/flirtsch/T1_2_MNI152_2mm.cnf` |
 | `design_matrices` | Per-subject-run first-level GLM design matrices (File[]) | Generated from events.tsv (see Step 11) |
 | `contrasts` | First-level contrast definitions | Custom `.con` file (see Step 11) |
 | `group_design` | Group-level design matrix | Paired repeated-measures design (see Step 15) |
@@ -298,16 +299,18 @@ Drag **fnirt** onto the canvas. Double-click and set:
 
 | Parameter | Value | Why |
 |-----------|-------|-----|
+| `config` | `T1_2_MNI152_2mm.cnf` | FSL standard config for T1→MNI152 2mm; sets optimized warp resolution, subsampling, regularization, and intensity model |
 | `cout` | `struct2mni_warp` | Output warp coefficients filename |
 | `iout` | `struct2mni` | Warped output image filename |
 
-FNIRT takes the skull-stripped T1w (from BET) as `input`, the MNI152 template as `reference`, and the 12-DOF affine matrix from Step 8 as `affine` initialization. It produces a nonlinear warp field that maps structural space to MNI space.
+FNIRT takes the skull-stripped T1w (from BET) as `input`, the MNI152 template as `reference`, and the 12-DOF affine matrix from Step 8 as `affine` initialization. The `config` parameter points to FSL's standard configuration file for T1-to-MNI152 2mm registration. It overrides FNIRT's generic defaults with settings tuned for this specific registration: 10mm→2mm warp resolution schedule, appropriate subsampling levels, and regularization that balances anatomical detail against overfitting. Without it, FNIRT uses conservative defaults that may under-warp cortical folds.
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
 | 10 | BET | `brain_extraction` | FNIRT | `input` |
 | 11 | Input (`MNI152`) | output | FNIRT | `reference` |
 | 12 | FLIRT (struct→MNI) | `transformation_matrix` | FNIRT | `affine` |
+| 13 | Input (`T1_2_MNI152_2mm.cnf`) | output | FNIRT | `config` |
 
 > FLIRT (struct→MNI) is from Step 8.
 
@@ -335,10 +338,10 @@ This brings all subjects' functional data into the same standard space, which is
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 13 | fslmaths (add mean) | `output_image` | applywarp | `input` |
-| 14 | Input (`MNI152`) | output | applywarp | `reference` |
-| 15 | FNIRT | `warp_coefficients` | applywarp | `warp` |
-| 16 | FLIRT (func→struct) | `transformation_matrix` | applywarp | `premat` |
+| 14 | fslmaths (add mean) | `output_image` | applywarp | `input` |
+| 15 | Input (`MNI152`) | output | applywarp | `reference` |
+| 16 | FNIRT | `warp_coefficients` | applywarp | `warp` |
+| 17 | FLIRT (func→struct) | `transformation_matrix` | applywarp | `premat` |
 
 ---
 
@@ -365,9 +368,9 @@ film_gls produces per-subject-run COPEs (contrast of parameter estimates), VARCO
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 17 | applywarp | `warped_image` | film_gls | `input` |
-| 18 | Input (`design_matrices`) | output | film_gls | `design_file` |
-| 19 | Input (`contrasts`) | output | film_gls | `contrast_file` |
+| 18 | applywarp | `warped_image` | film_gls | `input` |
+| 19 | Input (`design_matrices`) | output | film_gls | `design_file` |
+| 20 | Input (`contrasts`) | output | film_gls | `contrast_file` |
 
 ---
 
@@ -446,8 +449,8 @@ With a single first-level contrast and two runs per subject, each subject contri
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 20 | film_gls | `cope` | fslmerge (COPEs) | `input_files` |
-| 21 | film_gls | `varcope` | fslmerge (VARCOPEs) | `input_files` |
+| 21 | film_gls | `cope` | fslmerge (COPEs) | `input_files` |
+| 22 | film_gls | `varcope` | fslmerge (VARCOPEs) | `input_files` |
 
 ---
 
@@ -469,7 +472,7 @@ Drag **fslmaths** onto the canvas. Double-click and set:
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 22 | fslmerge (VARCOPEs) | `merged_image` | fslmaths (mask) | `input` |
+| 23 | fslmerge (VARCOPEs) | `merged_image` | fslmaths (mask) | `input` |
 
 > **Why not use the MNI brain mask?** The MNI152 brain mask has ~228,000 voxels, but the ds000102 functional FOV (192×192×160mm) does not cover the full MNI brain extent (182×218×182mm). After applywarp, each subject-run has ~5–15% zero voxels at FOV edges, with the exact pattern depending on head positioning. The data-driven mask restricts analysis to voxels with consistent coverage.
 
@@ -491,7 +494,20 @@ Drag **fslmaths** onto the canvas. Double-click and set:
 > | `bin` | `true` | Convert the thresholded fraction map to a binary mask |
 > | `output` | `group_mask` | Final binary mask for flameo |
 >
-> Two nodes are required because the fslmaths CWL defines `bin` as a single boolean — it cannot be applied twice in one step (once before Tmean and once after thr). Wire `fslmerge (VARCOPEs) → node A → node B → flameo mask_file`.
+> Two nodes are required because the fslmaths CWL defines `bin` as a single boolean — it cannot be applied twice in one step (once before Tmean and once after thr).
+>
+> **Fallback connections (replace connection 23 and update connection 29):**
+>
+> | # | Source node | Source output | Target node | Target input |
+> |---|-------------|---------------|-------------|--------------|
+> | 23a | fslmerge (VARCOPEs) | `merged_image` | fslmaths node A (coverage) | `input` |
+> | 23b | fslmaths node A (coverage) | `output_image` | fslmaths node B (re-binarize) | `input` |
+>
+> Then update flameo's mask connection (connection 29) to source from **fslmaths node B** instead of the original single fslmaths (mask):
+>
+> | # | Source node | Source output | Target node | Target input |
+> |---|-------------|---------------|-------------|--------------|
+> | 29 | fslmaths node B (re-binarize) | `output_image` | flameo | `mask_file` |
 >
 > With a relaxed mask, some voxels will have zero varcopes in a minority of observations. FLAMEO handles this by excluding those specific voxels — it reports a warning but still produces valid results at voxels with complete coverage.
 
@@ -520,12 +536,12 @@ flameo does **not** scatter — it receives pre-merged 4D volumes and performs g
 
 | # | Source node | Source output | Target node | Target input |
 |---|-------------|---------------|-------------|--------------|
-| 23 | fslmerge (COPEs) | `merged_image` | flameo | `cope_file` |
-| 24 | fslmerge (VARCOPEs) | `merged_image` | flameo | `var_cope_file` |
-| 25 | Input (`group_design`) | output | flameo | `design_file` |
-| 26 | Input (`group_contrasts`) | output | flameo | `t_con_file` |
-| 27 | Input (`group_covariance`) | output | flameo | `cov_split_file` |
-| 28 | fslmaths (mask) | `output_image` | flameo | `mask_file` |
+| 24 | fslmerge (COPEs) | `merged_image` | flameo | `cope_file` |
+| 25 | fslmerge (VARCOPEs) | `merged_image` | flameo | `var_cope_file` |
+| 26 | Input (`group_design`) | output | flameo | `design_file` |
+| 27 | Input (`group_contrasts`) | output | flameo | `t_con_file` |
+| 28 | Input (`group_covariance`) | output | flameo | `cov_split_file` |
+| 29 | fslmaths (mask) | `output_image` | flameo | `mask_file` |
 
 Wire the `group_design`, `group_contrasts`, and `group_covariance` Input nodes to flameo. The mask comes from the fslmaths step, not an external input.
 
@@ -680,6 +696,11 @@ t1w:
   - class: File
     path: /data/sub-02/anat/sub-02_T1w.nii.gz
   # ... (sub-03 through sub-26)
+
+# FNIRT config for T1→MNI152 2mm
+fnirt_config:
+  class: File
+  path: /data/additional_inputs/T1_2_MNI152_2mm.cnf
 
 # MNI template (used by FLIRT, FNIRT, applywarp)
 fnirt_reference:
