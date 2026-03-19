@@ -56,7 +56,6 @@ extra:
   generator: false
 
 nav:
-  - Home: index.md
   - Workflow Construction:
     - construction/index.md
     - CWL Basics: construction/cwl-basics.md
