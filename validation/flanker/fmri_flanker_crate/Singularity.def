@@ -1,0 +1,20 @@
+Bootstrap: docker
+From: python:3.11-slim
+
+%labels
+    Author niBuild
+    Description Orchestration container for Singularity/Apptainer-based CWL workflow execution
+
+%post
+    pip install --no-cache-dir cwltool==3.1.20240508115724
+
+%files
+    workflows/ /workflow/workflows/
+    cwl/ /workflow/cwl/
+    workflows/fmri_flanker_job.yml /workflow/job.yml
+    run_singularity.sh /workflow/run_singularity.sh
+
+%runscript
+    cd /workflow
+    chmod +x run_singularity.sh
+    exec ./run_singularity.sh "$@"

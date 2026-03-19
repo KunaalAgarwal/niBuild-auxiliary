@@ -1,0 +1,106 @@
+site_name: niBuild Documentation
+site_url: https://kunaalagarwal.github.io/niBuild-auxiliary/
+site_description: Documentation for niBuild — a no-code, browser-based GUI for building neuroimaging analysis workflows.
+repo_url: https://github.com/KunaalAgarwal/niBuild
+repo_name: KunaalAgarwal/niBuild
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: blue
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: blue
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - tables
+  - toc:
+      permalink: true
+  - attr_list
+  - md_in_html
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/KunaalAgarwal/niBuild
+  generator: false
+
+nav:
+  - Home: index.md
+  - Workflow Construction:
+    - construction/index.md
+    - CWL Basics: construction/cwl-basics.md
+    - Tool Menu & Search: construction/tool-menu.md
+    - Building a Workflow: construction/building-workflows.md
+    - Connecting Nodes: construction/connecting-nodes.md
+    - Configuring Parameters: construction/configuring-parameters.md
+    - Scatter, Conditions & Expressions: construction/scatter-conditions.md
+    - BIDS Integration: construction/bids-integration.md
+    - Custom Workflows: construction/custom-workflows.md
+    - CWL Preview Panel: construction/cwl-preview.md
+    - Workspaces & Export: construction/workspaces-export.md
+  - Workflow Execution:
+    - execution/index.md
+    - Docker: execution/docker.md
+    - Singularity / HPC: execution/singularity.md
+    - cwltool Direct: execution/cwltool-direct.md
+    - BIDS Runtime: execution/bids-runtime.md
+  - Tool Library:
+    - tools/index.md
+    - Structural MRI:
+      - tools/structural-mri/index.md
+    - Functional MRI:
+      - tools/functional-mri/index.md
+    - Diffusion MRI:
+      - tools/diffusion-mri/index.md
+    - Arterial Spin Labeling:
+      - tools/arterial-spin-labeling/index.md
+    - PET:
+      - tools/pet/index.md
+    - Multimodal:
+      - tools/multimodal/index.md
+    - Utilities:
+      - tools/utilities/index.md
+    - Pipelines:
+      - tools/pipelines/index.md
+  - Examples & Tutorials:
+    - tutorials/index.md
+    - Flanker fMRI: tutorials/flanker-fmri.md
+    - VBM Alzheimer's: tutorials/vbm-alzheimers.md
+  - Developer Documentation:
+    - developer/index.md
+    - Local Setup: developer/local-setup.md
+    - Adding a Tool: developer/adding-a-tool.md
+    - Adding a Library: developer/adding-a-library.md
+    - Architecture: developer/architecture.md
+    - Testing CWL Tools: developer/testing-cwl.md

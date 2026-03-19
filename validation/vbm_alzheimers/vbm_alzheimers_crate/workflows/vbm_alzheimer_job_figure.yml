@@ -1,0 +1,218 @@
+bet_input:
+  - class: File
+    path: ../../data/nifti/OAS1_0074_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0367_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0358_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0177_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0086_MR1.nii.gz
+bet_output: brain
+bet_overlay: null
+bet_mask: true
+bet_skull: null
+bet_ngenerate: null
+bet_frac: 0.3
+bet_vert_frac: null
+bet_radius: null
+bet_cog: null
+bet_threshold: null
+bet_mesh: null
+bet_exclusive: null
+fast_output: tissue
+fast_nclass: 3
+fast_iterations: null
+fast_lowpass: null
+fast_image_type: 1
+fast_fhard: null
+fast_segments: true
+fast_bias_field: null
+fast_bias_corrected_image: true
+fast_nobias: null
+fast_channels: null
+fast_initialization_iterations: null
+fast_mixel: null
+fast_fixed: null
+fast_hyper: null
+fast_manualseg: null  # {class: File, path: <your/file/path>}
+fast_probability_maps: null
+fast_priors: null
+flirt_reference:
+  class: File
+  path: ../additional_inputs/MNI152_T1_2mm.nii.gz
+flirt_output: gm_affine
+flirt_output_matrix: struct2mni_affine.mat
+flirt_dof: 12
+flirt_init_matrix: null  # {class: File, path: <your/file/path>}
+flirt_apply_xfm: null
+flirt_apply_isoxfm: null
+flirt_uses_qform: null
+flirt_rigid2D: null
+flirt_cost: corratio
+flirt_search_cost: null
+flirt_searchr_x: null
+flirt_searchr_y: null
+flirt_searchr_z: null
+flirt_no_search: null
+flirt_coarse_search: null
+flirt_fine_search: null
+flirt_interp: null
+flirt_sinc_width: null
+flirt_sinc_window: null
+flirt_in_weight: null  # {class: File, path: <your/file/path>}
+flirt_ref_weight: null  # {class: File, path: <your/file/path>}
+flirt_bins: null
+flirt_min_sampling: null
+flirt_no_clamp: null
+flirt_no_resample: null
+flirt_padding_size: null
+flirt_datatype: null
+flirt_verbose: null
+flirt_wm_seg: null  # {class: File, path: <your/file/path>}
+flirt_bbrslope: null
+flirt_bbrtype: null
+flirt_fieldmap: null  # {class: File, path: <your/file/path>}
+flirt_fieldmapmask: null  # {class: File, path: <your/file/path>}
+flirt_echospacing: null
+flirt_pedir: null
+flirt_schedule: null  # {class: File, path: <your/file/path>}
+fnirt_reference:
+  class: File
+  path: ../additional_inputs/MNI152_T1_2mm.nii.gz
+fnirt_inwarp: null  # {class: File, path: <your/file/path>}
+fnirt_intin: null  # {class: File, path: <your/file/path>}
+fnirt_config:
+  class: File
+  path: ../additional_inputs/T1_2_MNI152_2mm.cnf
+fnirt_refmask: null  # {class: File, path: <your/file/path>}
+fnirt_inmask: null  # {class: File, path: <your/file/path>}
+fnirt_cout: struct2mni_warp
+fnirt_iout: gm_nonlinear
+fnirt_fout: null
+fnirt_jout: jacobian
+fnirt_refout: null
+fnirt_intout: null
+fnirt_logout: null
+fnirt_warpres: null
+fnirt_splineorder: null
+fnirt_regmod: null
+fnirt_intmod: null
+fnirt_intorder: null
+fnirt_subsamp: null
+fnirt_miter: null
+fnirt_infwhm: null
+fnirt_reffwhm: null
+fnirt_lambda_: null
+fnirt_ssqlambda: null
+fnirt_jacrange: null
+fnirt_biasres: null
+fnirt_biaslambda: null
+fnirt_numprec: null
+fnirt_verbose: null
+fslmaths_1_output: gm_modulated
+fslmaths_1_abs: null
+fslmaths_1_bin: null
+fslmaths_1_binv: null
+fslmaths_1_recip: null
+fslmaths_1_sqrt: null
+fslmaths_1_sqr: null
+fslmaths_1_exp: null
+fslmaths_1_log: null
+fslmaths_1_nan: null
+fslmaths_1_nanm: null
+fslmaths_1_fillh: null
+fslmaths_1_fillh26: null
+fslmaths_1_edge: null
+fslmaths_1_add_value: null
+fslmaths_1_sub_value: null
+fslmaths_1_mul_value: null
+fslmaths_1_div_value: null
+fslmaths_1_rem_value: null
+fslmaths_1_thr: null
+fslmaths_1_thrp: null
+fslmaths_1_thrP: null
+fslmaths_1_uthr: null
+fslmaths_1_uthrp: null
+fslmaths_1_uthrP: null
+fslmaths_1_add_file: null  # {class: File, path: <your/file/path>}
+fslmaths_1_sub_file: null  # {class: File, path: <your/file/path>}
+fslmaths_1_div_file: null  # {class: File, path: <your/file/path>}
+fslmaths_1_mas: null  # {class: File, path: <your/file/path>}
+fslmaths_1_max_file: null  # {class: File, path: <your/file/path>}
+fslmaths_1_min_file: null  # {class: File, path: <your/file/path>}
+fslmaths_1_s: null
+fslmaths_1_kernel_type: null
+fslmaths_1_kernel_size: null
+fslmaths_1_dilM: null
+fslmaths_1_dilD: null
+fslmaths_1_dilF: null
+fslmaths_1_dilall: null
+fslmaths_1_ero: null
+fslmaths_1_eroF: null
+fslmaths_1_fmedian: null
+fslmaths_1_fmean: null
+fslmaths_1_fmeanu: null
+fslmaths_1_Tmean: null
+fslmaths_1_Tstd: null
+fslmaths_1_Tmax: null
+fslmaths_1_Tmaxn: null
+fslmaths_1_Tmin: null
+fslmaths_1_Tmedian: null
+fslmaths_1_Tar1: null
+fslmaths_1_bptf: null
+fslmaths_1_odt: null
+fslmaths_2_output: gm_smooth
+fslmaths_2_abs: null
+fslmaths_2_bin: null
+fslmaths_2_binv: null
+fslmaths_2_recip: null
+fslmaths_2_sqrt: null
+fslmaths_2_sqr: null
+fslmaths_2_exp: null
+fslmaths_2_log: null
+fslmaths_2_nan: null
+fslmaths_2_nanm: null
+fslmaths_2_fillh: null
+fslmaths_2_fillh26: null
+fslmaths_2_edge: null
+fslmaths_2_add_value: null
+fslmaths_2_sub_value: null
+fslmaths_2_mul_value: null
+fslmaths_2_div_value: null
+fslmaths_2_rem_value: null
+fslmaths_2_thr: null
+fslmaths_2_thrp: null
+fslmaths_2_thrP: null
+fslmaths_2_uthr: null
+fslmaths_2_uthrp: null
+fslmaths_2_uthrP: null
+fslmaths_2_add_file: null  # {class: File, path: <your/file/path>}
+fslmaths_2_sub_file: null  # {class: File, path: <your/file/path>}
+fslmaths_2_mul_file: null  # {class: File, path: <your/file/path>}
+fslmaths_2_div_file: null  # {class: File, path: <your/file/path>}
+fslmaths_2_mas: null  # {class: File, path: <your/file/path>}
+fslmaths_2_max_file: null  # {class: File, path: <your/file/path>}
+fslmaths_2_min_file: null  # {class: File, path: <your/file/path>}
+fslmaths_2_s: 3
+fslmaths_2_kernel_type: null
+fslmaths_2_kernel_size: null
+fslmaths_2_dilM: null
+fslmaths_2_dilD: null
+fslmaths_2_dilF: null
+fslmaths_2_dilall: null
+fslmaths_2_ero: null
+fslmaths_2_eroF: null
+fslmaths_2_fmedian: null
+fslmaths_2_fmean: null
+fslmaths_2_fmeanu: null
+fslmaths_2_Tmean: null
+fslmaths_2_Tstd: null
+fslmaths_2_Tmax: null
+fslmaths_2_Tmaxn: null
+fslmaths_2_Tmin: null
+fslmaths_2_Tmedian: null
+fslmaths_2_Tar1: null
+fslmaths_2_bptf: null
+fslmaths_2_odt: null

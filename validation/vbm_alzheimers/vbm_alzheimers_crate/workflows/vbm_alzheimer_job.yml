@@ -1,0 +1,678 @@
+bet_input:
+  - class: File
+    path: ../../data/nifti/OAS1_0001_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0002_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0003_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0010_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0011_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0013_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0015_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0016_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0018_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0019_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0020_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0021_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0022_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0023_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0026_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0028_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0030_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0031_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0032_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0033_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0034_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0035_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0039_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0041_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0042_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0044_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0046_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0052_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0053_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0056_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0058_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0060_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0062_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0064_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0065_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0066_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0067_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0068_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0069_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0070_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0071_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0072_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0073_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0074_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0075_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0078_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0082_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0083_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0084_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0085_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0086_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0094_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0096_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0098_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0106_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0109_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0110_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0112_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0113_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0114_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0115_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0116_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0120_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0122_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0123_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0124_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0130_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0133_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0134_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0135_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0137_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0138_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0139_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0142_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0143_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0146_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0155_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0157_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0158_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0161_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0164_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0165_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0166_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0169_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0170_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0176_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0177_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0179_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0180_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0181_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0184_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0185_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0186_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0188_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0195_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0197_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0199_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0200_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0201_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0203_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0204_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0205_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0206_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0207_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0208_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0210_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0212_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0216_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0217_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0220_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0221_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0223_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0226_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0228_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0229_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0233_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0234_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0237_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0238_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0240_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0241_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0243_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0244_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0247_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0254_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0255_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0256_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0259_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0260_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0262_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0263_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0266_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0267_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0268_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0269_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0270_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0271_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0272_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0273_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0274_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0278_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0279_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0280_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0284_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0286_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0287_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0288_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0289_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0290_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0291_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0292_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0293_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0298_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0299_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0300_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0301_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0303_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0304_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0307_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0308_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0309_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0312_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0315_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0316_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0317_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0322_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0323_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0326_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0329_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0330_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0332_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0335_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0337_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0338_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0339_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0341_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0342_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0343_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0345_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0351_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0352_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0354_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0355_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0356_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0357_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0358_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0362_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0363_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0365_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0366_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0367_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0369_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0371_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0372_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0373_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0374_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0378_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0380_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0381_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0382_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0388_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0390_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0398_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0399_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0400_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0401_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0402_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0404_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0405_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0411_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0418_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0422_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0423_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0424_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0425_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0426_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0428_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0430_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0432_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0433_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0438_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0440_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0441_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0443_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0445_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0446_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0447_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0449_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0451_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0452_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0453_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0454_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0455_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0456_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0457_MR1.nii.gz
+bet_output: brain
+bet_overlay: null
+bet_mask: true
+bet_skull: null
+bet_ngenerate: null
+bet_frac: 0.3
+bet_vert_frac: null
+bet_radius: null
+bet_cog: null
+bet_threshold: null
+bet_mesh: null
+bet_exclusive: null
+fast_output: tissue
+fast_nclass: 3
+fast_iterations: null
+fast_lowpass: null
+fast_image_type: '1'
+fast_fhard: null
+fast_segments: true
+fast_bias_field: null
+fast_bias_corrected_image: true
+fast_nobias: null
+fast_channels: null
+fast_initialization_iterations: null
+fast_mixel: null
+fast_fixed: null
+fast_hyper: null
+fast_manualseg: null  # {class: File, path: <your/file/path>}
+fast_probability_maps: null
+fast_priors: null
+flirt_reference:
+  class: File
+  path: ../additional_inputs/MNI152_T1_2mm.nii.gz
+flirt_output: gm_affine
+flirt_output_matrix: struct2mni_affine.mat
+flirt_dof: 12
+flirt_init_matrix: null  # {class: File, path: <your/file/path>}
+flirt_apply_xfm: null
+flirt_apply_isoxfm: null
+flirt_uses_qform: null
+flirt_rigid2D: null
+flirt_cost: corratio
+flirt_search_cost: null
+flirt_searchr_x: null
+flirt_searchr_y: null
+flirt_searchr_z: null
+flirt_no_search: null
+flirt_coarse_search: null
+flirt_fine_search: null
+flirt_interp: null
+flirt_sinc_width: null
+flirt_sinc_window: null
+flirt_in_weight: null  # {class: File, path: <your/file/path>}
+flirt_ref_weight: null  # {class: File, path: <your/file/path>}
+flirt_bins: null
+flirt_min_sampling: null
+flirt_no_clamp: null
+flirt_no_resample: null
+flirt_padding_size: null
+flirt_datatype: null
+flirt_verbose: null
+flirt_wm_seg: null  # {class: File, path: <your/file/path>}
+flirt_bbrslope: null
+flirt_bbrtype: null
+flirt_fieldmap: null  # {class: File, path: <your/file/path>}
+flirt_fieldmapmask: null  # {class: File, path: <your/file/path>}
+flirt_echospacing: null
+flirt_pedir: null
+flirt_schedule: null  # {class: File, path: <your/file/path>}
+fnirt_reference:
+  class: File
+  path: ../additional_inputs/MNI152_T1_2mm.nii.gz
+fnirt_inwarp: null  # {class: File, path: <your/file/path>}
+fnirt_intin: null  # {class: File, path: <your/file/path>}
+fnirt_config:
+  class: File
+  path: ../additional_inputs/T1_2_MNI152_2mm.cnf
+fnirt_refmask: null  # {class: File, path: <your/file/path>}
+fnirt_inmask: null  # {class: File, path: <your/file/path>}
+fnirt_cout: struct2mni_warp
+fnirt_iout: gm_nonlinear
+fnirt_fout: null
+fnirt_jout: jacobian
+fnirt_refout: null
+fnirt_intout: null
+fnirt_logout: null
+fnirt_warpres: null
+fnirt_splineorder: null
+fnirt_regmod: null
+fnirt_intmod: null
+fnirt_intorder: null
+fnirt_subsamp: null
+fnirt_miter: null
+fnirt_infwhm: null
+fnirt_reffwhm: null
+fnirt_lambda_: null
+fnirt_ssqlambda: null
+fnirt_jacrange: null
+fnirt_biasres: null
+fnirt_biaslambda: null
+fnirt_numprec: null
+fnirt_verbose: null
+fslmaths_1_output: gm_modulated
+fslmaths_1_abs: null
+fslmaths_1_bin: null
+fslmaths_1_binv: null
+fslmaths_1_recip: null
+fslmaths_1_sqrt: null
+fslmaths_1_sqr: null
+fslmaths_1_exp: null
+fslmaths_1_log: null
+fslmaths_1_nan: null
+fslmaths_1_nanm: null
+fslmaths_1_fillh: null
+fslmaths_1_fillh26: null
+fslmaths_1_edge: null
+fslmaths_1_add_value: null
+fslmaths_1_sub_value: null
+fslmaths_1_mul_value: null
+fslmaths_1_div_value: null
+fslmaths_1_rem_value: null
+fslmaths_1_thr: null
+fslmaths_1_thrp: null
+fslmaths_1_thrP: null
+fslmaths_1_uthr: null
+fslmaths_1_uthrp: null
+fslmaths_1_uthrP: null
+fslmaths_1_add_file: null  # {class: File, path: <your/file/path>}
+fslmaths_1_sub_file: null  # {class: File, path: <your/file/path>}
+fslmaths_1_div_file: null  # {class: File, path: <your/file/path>}
+fslmaths_1_mas: null  # {class: File, path: <your/file/path>}
+fslmaths_1_max_file: null  # {class: File, path: <your/file/path>}
+fslmaths_1_min_file: null  # {class: File, path: <your/file/path>}
+fslmaths_1_s: null
+fslmaths_1_kernel_type: null
+fslmaths_1_kernel_size: null
+fslmaths_1_dilM: null
+fslmaths_1_dilD: null
+fslmaths_1_dilF: null
+fslmaths_1_dilall: null
+fslmaths_1_ero: null
+fslmaths_1_eroF: null
+fslmaths_1_fmedian: null
+fslmaths_1_fmean: null
+fslmaths_1_fmeanu: null
+fslmaths_1_Tmean: null
+fslmaths_1_Tstd: null
+fslmaths_1_Tmax: null
+fslmaths_1_Tmaxn: null
+fslmaths_1_Tmin: null
+fslmaths_1_Tmedian: null
+fslmaths_1_Tar1: null
+fslmaths_1_bptf: null
+fslmaths_1_odt: null
+fslmaths_2_output: gm_smooth
+fslmaths_2_abs: null
+fslmaths_2_bin: null
+fslmaths_2_binv: null
+fslmaths_2_recip: null
+fslmaths_2_sqrt: null
+fslmaths_2_sqr: null
+fslmaths_2_exp: null
+fslmaths_2_log: null
+fslmaths_2_nan: null
+fslmaths_2_nanm: null
+fslmaths_2_fillh: null
+fslmaths_2_fillh26: null
+fslmaths_2_edge: null
+fslmaths_2_add_value: null
+fslmaths_2_sub_value: null
+fslmaths_2_mul_value: null
+fslmaths_2_div_value: null
+fslmaths_2_rem_value: null
+fslmaths_2_thr: null
+fslmaths_2_thrp: null
+fslmaths_2_thrP: null
+fslmaths_2_uthr: null
+fslmaths_2_uthrp: null
+fslmaths_2_uthrP: null
+fslmaths_2_add_file: null  # {class: File, path: <your/file/path>}
+fslmaths_2_sub_file: null  # {class: File, path: <your/file/path>}
+fslmaths_2_mul_file: null  # {class: File, path: <your/file/path>}
+fslmaths_2_div_file: null  # {class: File, path: <your/file/path>}
+fslmaths_2_mas: null  # {class: File, path: <your/file/path>}
+fslmaths_2_max_file: null  # {class: File, path: <your/file/path>}
+fslmaths_2_min_file: null  # {class: File, path: <your/file/path>}
+fslmaths_2_s: 3
+fslmaths_2_kernel_type: null
+fslmaths_2_kernel_size: null
+fslmaths_2_dilM: null
+fslmaths_2_dilD: null
+fslmaths_2_dilF: null
+fslmaths_2_dilall: null
+fslmaths_2_ero: null
+fslmaths_2_eroF: null
+fslmaths_2_fmedian: null
+fslmaths_2_fmean: null
+fslmaths_2_fmeanu: null
+fslmaths_2_Tmean: null
+fslmaths_2_Tstd: null
+fslmaths_2_Tmax: null
+fslmaths_2_Tmaxn: null
+fslmaths_2_Tmin: null
+fslmaths_2_Tmedian: null
+fslmaths_2_Tar1: null
+fslmaths_2_bptf: null
+fslmaths_2_odt: null
