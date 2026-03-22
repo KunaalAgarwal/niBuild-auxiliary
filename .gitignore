@@ -2,6 +2,7 @@ aux_env/
 .claude/
 
 validation/vbm_alzheimers/data
+validation/vbm_alzheimers/vbm-alzheimers-tutorial-full.md
 validation/vbm_alzheimers/vbm_alzheimers_crate/output/
 validation/vbm_alzheimers/vbm_alzheimers_crate/additional_inputs
 validation/vbm_alzheimers/vbm_alzheimers_crate/cache*/

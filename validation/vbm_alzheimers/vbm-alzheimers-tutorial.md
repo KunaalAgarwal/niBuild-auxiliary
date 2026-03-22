@@ -1,4 +1,4 @@
-# VBM Analysis in Alzheimer's Tutorial
+# Voxel Based Morphology (VBM) Preprocessing Workflow Tutorial
 
 This tutorial walks through building a voxel-based morphometry (VBM) pipeline using niBuild to detect gray matter differences between cognitively normal controls and individuals with Alzheimer's disease. Unlike the flanker fMRI tutorial (which uses BIDS-formatted input), this tutorial demonstrates how to use niBuild with **non-BIDS data** (providing input images directly as a file array). By the end, you will have a portable, reproducible workflow bundle that preprocesses structural mri (T1w) images. 
 
@@ -6,7 +6,7 @@ This tutorial walks through building a voxel-based morphometry (VBM) pipeline us
 
 VBM is a whole-brain, voxelwise technique for detecting regional differences in tissue composition (typically gray matter) between groups. The standard FSL-VBM pipeline (Good et al., 2001; Douaud et al., 2007) is one of the most widely used structural analysis methods in neuroimaging.
 
-Gray matter atrophy in Alzheimer's disease is among the most robust and well-characterized structural findings in clinical neuroimaging. Hippocampal volume loss is detectable even at the very mild dementia stage (CDR 0.5), with OASIS cross-sectional data showing statistically significant whole-brain volume differences between CDR 0 and CDR 0.5 groups (p < 0.01; Marcus et al., 2007). VBM meta-analyses consistently identify atrophy in medial temporal lobe structures (hippocampus, entorhinal cortex, amygdala), temporal neocortex, and posterior parietal regions (Li et al., 2021; Karas et al., 2004). This tutorial enables reproduction of that consensus finding using the OASIS-1 cross-sectional dataset.
+Gray matter atrophy in Alzheimer's disease is a well-characterized structural finding. Hippocampal volume loss is detectable even at the very mild dementia stage (CDR 0.5), with OASIS cross-sectional data showing statistically significant whole-brain volume differences between CDR 0 and CDR 0.5 groups (p < 0.01; Marcus et al., 2007). VBM meta-analyses consistently identify atrophy in medial temporal lobe structures (hippocampus, entorhinal cortex, amygdala), temporal neocortex, and posterior parietal regions (Li et al., 2021; Karas et al., 2004). This tutorial enables reproduction of that consensus finding using the OASIS-1 cross-sectional dataset.
 
 ## Prerequisites
 
@@ -52,7 +52,7 @@ The workflow chains seven FSL tools to implement the per-subject VBM preprocessi
 
 The smoothed per-subject gray matter maps are the final output of this pipeline. For optional group-level statistical comparison, see the note after Step 8.
 
-> **Note — Orientation:** The `prepare_data.py` script handles reorientation during NIfTI conversion, so the input images are already in standard RAS orientation. If you are using data from a different source, you may need to add an `fslreorient2std` step before BET to ensure consistent orientation for downstream registration.
+> **Image orientation:** The `prepare_data.py` script handles reorientation during NIfTI conversion, so the input images are already in standard RAS orientation. In general, you may need to add an `fslreorient2std` step before BET to ensure consistent orientation for downstream registration.
 
 ---
 
@@ -114,7 +114,7 @@ docker run --rm brainlife/fsl:6.0.4-patched2 \
   > additional_inputs/T1_2_MNI152_2mm.cnf
 ```
 
-> **Note on MNI templates:** FLIRT and applywarp use the **brain-extracted** template (`MNI152_T1_2mm_brain`) because their inputs are skull-stripped. FNIRT uses the **full-head** template (`MNI152_T1_2mm`) with a dilated brain mask (`MNI152_T1_2mm_brain_mask_dil`) as `refmask`. FNIRT benefits from the full-head image because it can use the skull boundary as an additional anatomical landmark for non-linear registration, while the dilated brain mask constrains the cost function to brain-relevant regions and prevents the warp field from being driven by non-brain structures.
+> **MNI templates:** FLIRT and applywarp use the **brain-extracted** template (`MNI152_T1_2mm_brain`) because their inputs are skull-stripped. FNIRT uses the **full-head** template (`MNI152_T1_2mm`) with a dilated brain mask (`MNI152_T1_2mm_brain_mask_dil`) as `refmask`. FNIRT benefits from the full-head image because it can use the skull boundary as an additional anatomical landmark for non-linear registration, while the dilated brain mask constrains the cost function to brain-relevant regions and prevents the warp field from being driven by non-brain structures.
 
 In your job YAML, these will appear as:
 
@@ -151,6 +151,8 @@ Drag **bet** from **Structural MRI > FSL > Bet (Brain Extraction)** onto the can
 
 In the BET parameter modal set the `input` parameter to scatter via pressing the circular arrow symbol. This allows for the array of inputs to efficiently be processed by the workflow.
 
+> **Scatter propagation:** Because the `t1w` Input provides a file array, scatter automatically propagates through BET, FAST, FLIRT, FNIRT, applywarp, and both fslmaths nodes. Each subject is processed independently and the per-subject smoothed GM maps are the final output.
+
 ---
 
 ## Step 4: Add Tissue Segmentation
@@ -169,7 +171,7 @@ Drag **fast** from **Structural MRI > FSL > Fast (Tissue Segmentation)** onto th
 |---|-------------|---------------|-------------|--------------|
 | 2 | BET | `brain_extraction` | FAST | `input` |
 
-FAST produces partial volume estimate (PVE) maps for each tissue class. The gray matter PVE map (`tissue_pve_1.nii.gz` by convention — FAST labels GM as class 1) is the key output for VBM.
+FAST produces partial volume estimate (PVE) maps for each tissue class. The gray matter PVE map (`tissue_pve_1.nii.gz` by convention FAST labels GM as class 1) is the key output for VBM.
 
 ---
 
@@ -177,7 +179,7 @@ FAST produces partial volume estimate (PVE) maps for each tissue class. The gray
 
 ### FLIRT (Affine Registration)
 
-Drag **flirt** from **Structural MRI > FSL > Flirt (Registration)** onto the canvas. Also drag an **Input** node from the I/O section — this will provide the MNI152 skull-stripped standard-space template.
+Drag **flirt** from **Structural MRI > FSL > Flirt (Registration)** onto the canvas.
 
 Double-click the Input node and set its label to `MNI152_brain`.
 
@@ -195,8 +197,6 @@ Double-click the FLIRT node and set:
 | 3 | BET | `brain_extraction` | FLIRT | `input` |
 | 4 | Input (`MNI152_brain`) | output | FLIRT | `reference` |
 
-> **Important:** FLIRT must receive the **brain-extracted T1** from BET, not the GM probability map from FAST. Both FLIRT and FNIRT should register the same image (the brain-extracted T1) to the MNI template. The affine matrix computed by FLIRT initializes FNIRT's non-linear registration — if FLIRT registers a different image type (e.g., a GM probability map with values 0–1) than what FNIRT receives (the full T1 with full intensity range), the affine initialization will be inappropriate and FNIRT may diverge, producing distorted warp fields with negative Jacobian determinants.
- 
 ### FNIRT (Non-linear Registration)
 
 Drag **fnirt** from **Structural MRI > FSL > Registration** onto the canvas. Double-click and set:
@@ -208,7 +208,7 @@ Drag **fnirt** from **Structural MRI > FSL > Registration** onto the canvas. Dou
 | `cout` | `struct2mni_warp` | Output warp coefficients (needed for applywarp) |
 | `jout` | `jacobian` | Output Jacobian determinant map — needed for modulation |
 
-> **Important — FNIRT config file:** FNIRT's default parameters are generic and can produce poorly regularized warp fields (extreme Jacobian values including negative determinants, which indicate warp folding). FSL ships a config file tuned specifically for T1-to-MNI152 registration that sets appropriate subsampling schedules, warp resolution, smoothing kernels, and regularization strength. You must extract this file from the FSL Docker image and provide it as an input:
+> **FNIRT config file:** FNIRT's default parameters are generic and can produce poorly regularized warp fields (extreme Jacobian values including negative determinants, which indicate warp folding). FSL ships a config file tuned specifically for T1-to-MNI152 registration that sets appropriate subsampling schedules, warp resolution, smoothing kernels, and regularization strength. You must extract this file from the FSL Docker image and provide it as an input:
 >
 > ```bash
 > docker run --rm brainlife/fsl:6.0.4-patched2 \
@@ -254,7 +254,7 @@ Drag **applywarp** from **Structural MRI > FSL > Registration** onto the canvas.
 
 > **Note:** applywarp uses the **brain-extracted** MNI template (`MNI152_brain`) as its reference, not the full-head template used by FNIRT. This ensures the output GM maps are defined in the brain-only MNI space.
 
-For the `input` parameter, since FAST outputs `segmented_files` as a File array containing all PVE maps, you need to filter for the GM map. Open the applywarp parameter modal, locate the `input` parameter, press the expression (f(x)) button, and paste: `self.filter(function(f) { return f.basename.indexOf('pve_1') !== -1; })[0]`, then press save.
+For the `input` parameter, since FAST outputs `segmented_files` as a File array containing all PVE maps, you need to filter for the GM map. Open the applywarp parameter modal, locate the `input` parameter, press the expression (f(x)) button, and paste: `self.filter(function(f) { return f.basename.indexOf('pve_1') !== -1; })[0]`, then exit the modal.
 
 ---
 
@@ -276,7 +276,7 @@ This node will receive the warped GM map from applywarp as its `input` and the J
 | 13 | applywarp | `warped_image` | fslmaths (modulation) | `input` |
 | 14 | FNIRT | `jacobian_map` | fslmaths (modulation) | `mul_file` |
 
-> **Operation ordering in fslmaths:** fslmaths processes flags left-to-right — the order of operations on the command line determines the order of execution. When you enable two or more operations on a single fslmaths node, the **Operation Order** panel appears in the parameter modal, allowing you to reorder them with arrow buttons. In this pipeline, each fslmaths node performs a single operation (modulation via `mul_file` or smoothing via `-s`), so operation ordering is not needed. If you were to consolidate both steps into a single node — multiplying by the Jacobian and then smoothing — you would use the Operation Order panel to ensure `-mul` executes before `-s`. Wired file inputs (like `mul_file`) automatically appear in the Operation Order panel when connected via edges.
+> **Operation ordering in fslmaths:** fslmaths processes flags left-to-right: the order of operations on the command line determines the order of execution. When you enable two or more operations on a single fslmaths node, the **Operation Order** panel appears in the parameter modal, allowing you to reorder them with arrow buttons. In this pipeline, each fslmaths node performs a single operation (modulation via `mul_file` or smoothing via `-s`), so operation ordering is not needed. If you were to consolidate both steps into a single node, multiplying by the Jacobian and then smoothing, you would use the Operation Order panel to ensure `-mul` executes before `-s`. Wired file inputs (like `mul_file`) automatically appear in the Operation Order panel when connected via edges.
 
 ---
 
@@ -301,8 +301,6 @@ Drag a second **fslmaths** onto the canvas. Double-click and set:
 
 To extend this pipeline for group comparison (e.g. Alzheimer's vs. controls), add **fslmerge** to concatenate all subjects' smoothed GM maps into a single 4D image, then **randomise** for non-parametric permutation testing. In this approach, all subjects from both groups are merged into one 4D stack. The design matrix (`design.mat`) encodes which volumes belong to which group, and randomise permutes group labels across the combined image to build a null distribution for significance testing. The `prepare_data.py` script generates the required design matrix and contrast files.
 
-> **Scatter propagation:** Because the `t1w` Input provides a file array, scatter automatically propagates through BET, FAST, FLIRT, FNIRT, applywarp, and both fslmaths nodes. Each subject is processed independently and the per-subject smoothed GM maps are the final output.
-
 ---
 
 ## Step 9: Pin Docker Versions
@@ -320,7 +318,7 @@ All FSL tools use the `brainlife/fsl` Docker image. If you select different vers
 
 ## Step 10: Name and Export
 
-1. In the top bar, set the **Output** name to `vbm_alzheimers` (or any name you prefer).
+1. In the top bar, set the **Output** name to `vbm_alzheimers` (or whatever you prefer).
 2. Click the **Generate Workflow** button in the actions bar.
 3. Your browser downloads `vbm_alzheimers.crate.zip`.
 
@@ -346,7 +344,7 @@ vbm_alzheimers.crate.zip/
 ├── run_singularity.sh
 ├── prefetch_images_singularity.sh
 ├── ro-crate-metadata.json
-└── README.md
+└── README.md                       # contains more information about running the workflow 
 ```
 
 ---
@@ -360,7 +358,7 @@ Unzip the bundle and edit the job file before running.
 Open `workflows/vbm_alzheimers_job.yml`. Replace placeholder paths with actual paths on your system:
 
 ```yaml
-# T1w input images — one entry per subject (235 total)
+# T1w input images: one entry per subject (235 total)
 t1w:
   - class: File
     path: /path/to/data/nifti/OAS1_0001_MR1.nii.gz
@@ -431,11 +429,8 @@ The `-v /var/run/docker.sock:/var/run/docker.sock` mount is required because cwl
 ```bash
 pip install cwltool
 cd vbm_alzheimers
-cwltool --parallel --cachedir cache \
-  workflows/vbm_alzheimers.cwl workflows/vbm_alzheimers_job.yml
+cwltool workflows/vbm_alzheimers.cwl workflows/vbm_alzheimers_job.yml
 ```
-
-> **Note:** `--parallel` enables concurrent execution of scattered subjects — without it, cwltool processes each subject sequentially even when scatter is specified. `--cachedir cache` caches completed step outputs so that if the workflow is interrupted, re-running it skips already-finished jobs.
 
 ### Option C: Run with Singularity (HPC)
 
@@ -457,28 +452,7 @@ singularity run \
 
 > **Note:** FNIRT is memory-intensive (~8 GB per subject). On an HPC cluster with Singularity, consider requesting sufficient memory and using the cluster's job scheduler to parallelize subjects.
 
----
-
-## Expected Outputs
-
-For each subject, the pipeline produces the following cached outputs:
-
-| File | Stage | Description |
-|------|-------|-------------|
-| `brain.nii.gz` | BET | Skull-stripped brain |
-| `brain_mask.nii.gz` | BET | Binary brain mask |
-| `tissue_pve_{0,1,2}.nii.gz` | FAST | Partial volume estimates for CSF, GM, WM |
-| `brain_affine.nii.gz` | FLIRT | Brain affine-registered to MNI |
-| `struct2mni_affine.mat` | FLIRT | Affine transformation matrix |
-| `struct2mni_warp.nii.gz` | FNIRT | Non-linear warp field |
-| `jacobian.nii.gz` | FNIRT | Jacobian determinant map |
-| `gm_mni.nii.gz` | applywarp | GM probability map in MNI space |
-| `gm_modulated.nii.gz` | fslmaths | Jacobian-modulated GM |
-| `gm_smooth.nii.gz` | fslmaths | Smoothed modulated GM (final output) |
-
-**What to look for:** Visually inspect the outputs at each stage to verify preprocessing quality. Check that BET preserves all brain tissue without residual skull, FAST produces distinct GM/WM/CSF probability maps, and the registered GM maps align with the MNI152 template anatomy. The `inspect_pipeline.ipynb` notebook in the `output/` directory provides automated visualization of each stage.
-
----
+--
 
 ## Tips
 
@@ -499,12 +473,9 @@ The design matrix generated by `prepare_data.py` includes demeaned age and sex a
 
 **CDR subgroup analyses:**
 The default analysis groups all CDR >= 0.5 subjects together. For more targeted analyses, you can modify `prepare_data.py` to compare:
-- CDR 0 vs. CDR 0.5 only — to detect the earliest structural changes
-- CDR 0 vs. CDR 1+ — to maximize effect size with clinically demented subjects
-- Three-group F-test (CDR 0 vs. 0.5 vs. 1+) — to test for a dose-response relationship with dementia severity
-
-**Multi-subject processing with scatter:**
-Because the `t1w` Input is a file array, scatter automatically parallelizes the per-subject preprocessing chain. Each subject is processed independently through all seven steps, producing one smoothed GM map per subject.
+- CDR 0 vs. CDR 0.5 only which detects the earliest structural changes
+- CDR 0 vs. CDR 1+ which maximizes effect size with Alzheimer's subjects
+- Three-group F-test (CDR 0 vs. 0.5 vs. 1+) which tests for a dose-response relationship with dementia severity
 
 **Save as a custom workflow:**
 To reuse this VBM pipeline in other projects, type a name in the **Name** field (top bar) and click **Save Workflow**. The pipeline appears under **My Workflows** in the left menu and can be dragged onto any future canvas as a single composite node.
