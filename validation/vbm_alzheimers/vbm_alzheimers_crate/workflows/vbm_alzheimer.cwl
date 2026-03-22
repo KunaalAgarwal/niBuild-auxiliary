@@ -429,6 +429,65 @@ inputs:
     type:
       - 'null'
       - boolean
+  applywarp_reference:
+    type: File
+  applywarp_output:
+    type: string
+  applywarp_premat:
+    type:
+      - 'null'
+      - File
+  applywarp_postmat:
+    type:
+      - 'null'
+      - File
+  applywarp_relwarp:
+    type:
+      - 'null'
+      - boolean
+  applywarp_abswarp:
+    type:
+      - 'null'
+      - boolean
+  applywarp_interp:
+    type:
+      - 'null'
+      - type: enum
+        symbols:
+          - nn
+          - trilinear
+          - sinc
+          - spline
+  applywarp_supersample:
+    type:
+      - 'null'
+      - boolean
+  applywarp_superlevel:
+    type:
+      - 'null'
+      - string
+  applywarp_mask:
+    type:
+      - 'null'
+      - File
+  applywarp_datatype:
+    type:
+      - 'null'
+      - type: enum
+        symbols:
+          - char
+          - short
+          - int
+          - float
+          - double
+  applywarp_padding_size:
+    type:
+      - 'null'
+      - int
+  applywarp_verbose:
+    type:
+      - 'null'
+      - boolean
   fslmaths_1_output:
     type: string
   fslmaths_1_abs:
@@ -953,11 +1012,7 @@ steps:
     run: ../cwl/fsl/flirt.cwl
     scatter: input
     in:
-      input:
-        source: fast/segmented_files
-        valueFrom: >-
-          $(self.filter(function(f) { return f.basename.indexOf('pve_1') !== -1;
-          })[0])
+      input: bet/brain_extraction
       reference: flirt_reference
       output: flirt_output
       output_matrix: flirt_output_matrix
@@ -1050,6 +1105,38 @@ steps:
     hints:
       DockerRequirement:
         dockerPull: brainlife/fsl:6.0.4-patched2
+  applywarp:
+    run: ../cwl/fsl/applywarp.cwl
+    scatter:
+      - warp
+      - input
+    scatterMethod: dotproduct
+    in:
+      input:
+        source: fast/segmented_files
+        valueFrom: >-
+          $(self.filter(function(f) { return f.basename.indexOf('pve_1') !== -1;
+          })[0])
+      reference: applywarp_reference
+      output: applywarp_output
+      warp: fnirt/warp_coefficients
+      premat: applywarp_premat
+      postmat: applywarp_postmat
+      relwarp: applywarp_relwarp
+      abswarp: applywarp_abswarp
+      interp: applywarp_interp
+      supersample: applywarp_supersample
+      superlevel: applywarp_superlevel
+      mask: applywarp_mask
+      datatype: applywarp_datatype
+      padding_size: applywarp_padding_size
+      verbose: applywarp_verbose
+    out:
+      - warped_image
+      - log
+    hints:
+      DockerRequirement:
+        dockerPull: brainlife/fsl:6.0.4-patched2
   fslmaths_1:
     run: ../cwl/fsl/fslmaths.cwl
     scatter:
@@ -1057,7 +1144,7 @@ steps:
       - mul_file
     scatterMethod: dotproduct
     in:
-      input: flirt/registered_image
+      input: applywarp/warped_image
       output: fslmaths_1_output
       abs: fslmaths_1_abs
       bin: fslmaths_1_bin

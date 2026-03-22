@@ -25,6 +25,7 @@ import sys
 from pathlib import Path
 
 import nibabel as nib
+import numpy as np
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 DATA_DIR = SCRIPT_DIR / "data"
@@ -63,9 +64,35 @@ def read_demographics(csv_path):
 
 
 def convert_analyze_to_nifti(hdr_path, output_path):
-    """Convert an Analyze .hdr/.img pair to NIfTI .nii.gz."""
+    """Convert an Analyze .hdr/.img pair to NIfTI .nii.gz.
+
+    Handles three issues with raw OASIS Analyze files:
+    1. Singleton 4th dimension (256x256x160x1 -> 256x256x160)
+    2. float64 data type -> float32 (FSL 5.0 compatibility)
+    3. Axis reordering via transpose(2,0,1) and manual RAS affine
+    """
     img = nib.load(str(hdr_path))
-    nib.save(img, str(output_path))
+    data = img.get_fdata()
+
+    # Squeeze singleton 4th dimension
+    if data.ndim == 4 and data.shape[3] == 1:
+        data = data[:, :, :, 0]
+
+    data = data.astype(np.float32)
+
+    # Reorder axes to match RAS convention
+    data = np.transpose(data, (2, 0, 1))
+
+    # Manually construct RAS affine for 1mm isotropic, centered
+    affine = np.eye(4)
+    affine[0, 3] = -(data.shape[0] - 1) / 2.0
+    affine[1, 3] = -(data.shape[1] - 1) / 2.0
+    affine[2, 3] = -(data.shape[2] - 1) / 2.0
+
+    new_img = nib.Nifti1Image(data, affine)
+    new_img.set_sform(affine, code=1)
+    new_img.set_qform(affine, code=1)
+    nib.save(new_img, str(output_path))
 
 
 def generate_design_mat(subjects_ordered, demographics):

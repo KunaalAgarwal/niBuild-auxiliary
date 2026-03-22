@@ -1,20 +1,20 @@
 bet_input:
   - class: File
-    path: ../../data/nifti/OAS1_0074_MR1.nii.gz
+    path: ../../data/nifti/OAS1_0001_MR1.nii.gz
   - class: File
-    path: ../../data/nifti/OAS1_0367_MR1.nii.gz
+    path: ../../data/nifti/OAS1_0002_MR1.nii.gz
   - class: File
-    path: ../../data/nifti/OAS1_0358_MR1.nii.gz
+    path: ../../data/nifti/OAS1_0010_MR1.nii.gz
   - class: File
-    path: ../../data/nifti/OAS1_0177_MR1.nii.gz
+    path: ../../data/nifti/OAS1_0011_MR1.nii.gz
   - class: File
-    path: ../../data/nifti/OAS1_0086_MR1.nii.gz
+    path: ../../data/nifti/OAS1_0018_MR1.nii.gz
 bet_output: brain
 bet_overlay: null
 bet_mask: true
 bet_skull: null
 bet_ngenerate: null
-bet_frac: 0.3
+bet_frac: 0.5
 bet_vert_frac: null
 bet_radius: null
 bet_cog: null
@@ -41,8 +41,8 @@ fast_probability_maps: null
 fast_priors: null
 flirt_reference:
   class: File
-  path: ../additional_inputs/MNI152_T1_2mm.nii.gz
-flirt_output: gm_affine
+  path: ../additional_inputs/MNI152_T1_2mm_brain.nii.gz
+flirt_output: brain_affine
 flirt_output_matrix: struct2mni_affine.mat
 flirt_dof: 12
 flirt_init_matrix: null  # {class: File, path: <your/file/path>}
@@ -86,7 +86,9 @@ fnirt_intin: null  # {class: File, path: <your/file/path>}
 fnirt_config:
   class: File
   path: ../additional_inputs/T1_2_MNI152_2mm.cnf
-fnirt_refmask: null  # {class: File, path: <your/file/path>}
+fnirt_refmask:
+  class: File
+  path: ../additional_inputs/MNI152_T1_2mm_brain_mask_dil.nii.gz
 fnirt_inmask: null  # {class: File, path: <your/file/path>}
 fnirt_cout: struct2mni_warp
 fnirt_iout: gm_nonlinear
@@ -111,6 +113,21 @@ fnirt_biasres: null
 fnirt_biaslambda: null
 fnirt_numprec: null
 fnirt_verbose: null
+applywarp_reference:
+  class: File
+  path: ../additional_inputs/MNI152_T1_2mm_brain.nii.gz
+applywarp_output: gm_mni
+applywarp_premat: null  # {class: File, path: <your/file/path>}
+applywarp_postmat: null  # {class: File, path: <your/file/path>}
+applywarp_relwarp: null
+applywarp_abswarp: null
+applywarp_interp: null
+applywarp_supersample: null
+applywarp_superlevel: null
+applywarp_mask: null  # {class: File, path: <your/file/path>}
+applywarp_datatype: null
+applywarp_padding_size: null
+applywarp_verbose: null
 fslmaths_1_output: gm_modulated
 fslmaths_1_abs: null
 fslmaths_1_bin: null
