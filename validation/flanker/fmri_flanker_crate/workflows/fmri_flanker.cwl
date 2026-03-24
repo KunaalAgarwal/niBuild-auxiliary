@@ -991,10 +991,6 @@ inputs:
     type:
       - 'null'
       - double
-  fslmaths_2_add_file:
-    type:
-      - 'null'
-      - File
   fslmaths_2_sub_file:
     type:
       - 'null'
@@ -1119,228 +1115,6 @@ inputs:
           - float
           - double
           - input
-  fslmaths_3_output:
-    type: string
-  fslmaths_3_abs:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_bin:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_binv:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_recip:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_sqrt:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_sqr:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_exp:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_log:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_nan:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_nanm:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_fillh:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_fillh26:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_edge:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_add_value:
-    type:
-      - 'null'
-      - double
-  fslmaths_3_sub_value:
-    type:
-      - 'null'
-      - double
-  fslmaths_3_mul_value:
-    type:
-      - 'null'
-      - double
-  fslmaths_3_div_value:
-    type:
-      - 'null'
-      - double
-  fslmaths_3_rem_value:
-    type:
-      - 'null'
-      - double
-  fslmaths_3_thr:
-    type:
-      - 'null'
-      - double
-  fslmaths_3_thrp:
-    type:
-      - 'null'
-      - double
-  fslmaths_3_thrP:
-    type:
-      - 'null'
-      - double
-  fslmaths_3_uthr:
-    type:
-      - 'null'
-      - double
-  fslmaths_3_uthrp:
-    type:
-      - 'null'
-      - double
-  fslmaths_3_uthrP:
-    type:
-      - 'null'
-      - double
-  fslmaths_3_sub_file:
-    type:
-      - 'null'
-      - File
-  fslmaths_3_mul_file:
-    type:
-      - 'null'
-      - File
-  fslmaths_3_div_file:
-    type:
-      - 'null'
-      - File
-  fslmaths_3_mas:
-    type:
-      - 'null'
-      - File
-  fslmaths_3_max_file:
-    type:
-      - 'null'
-      - File
-  fslmaths_3_min_file:
-    type:
-      - 'null'
-      - File
-  fslmaths_3_s:
-    type:
-      - 'null'
-      - double
-  fslmaths_3_kernel_type:
-    type:
-      - 'null'
-      - type: enum
-        symbols:
-          - 3D
-          - 2D
-          - box
-          - boxv
-          - boxv3
-          - gauss
-          - sphere
-          - file
-  fslmaths_3_kernel_size:
-    type:
-      - 'null'
-      - double
-  fslmaths_3_dilM:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_dilD:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_dilF:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_dilall:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_ero:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_eroF:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_fmedian:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_fmean:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_fmeanu:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_Tmean:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_Tstd:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_Tmax:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_Tmaxn:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_Tmin:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_Tmedian:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_Tar1:
-    type:
-      - 'null'
-      - boolean
-  fslmaths_3_bptf:
-    type:
-      - 'null'
-      - string
-  fslmaths_3_odt:
-    type:
-      - 'null'
-      - type: enum
-        symbols:
-          - char
-          - short
-          - int
-          - float
-          - double
-          - input
   applywarp_reference:
     type: File
   applywarp_output:
@@ -1434,7 +1208,7 @@ steps:
       - log
     hints:
       DockerRequirement:
-        dockerPull: brainlife/fsl:6.0.4-patched2
+        dockerPull: brainlife/fsl:6.0.4
   mcflirt:
     run: ../cwl/fsl/mcflirt.cwl
     scatter: input
@@ -1470,7 +1244,7 @@ steps:
       - log
     hints:
       DockerRequirement:
-        dockerPull: brainlife/fsl:6.0.4-patched2
+        dockerPull: brainlife/fsl:6.0.4
   flirt_1:
     run: ../cwl/fsl/flirt.cwl
     scatter: input
@@ -1519,7 +1293,7 @@ steps:
       - log
     hints:
       DockerRequirement:
-        dockerPull: brainlife/fsl:6.0.4-patched2
+        dockerPull: brainlife/fsl:6.0.4
   slicetimer:
     run: ../cwl/fsl/slicetimer.cwl
     scatter: input
@@ -1536,12 +1310,12 @@ steps:
       - log
     hints:
       DockerRequirement:
-        dockerPull: brainlife/fsl:6.0.4-patched2
+        dockerPull: brainlife/fsl:6.0.4
   flirt_2:
     run: ../cwl/fsl/flirt.cwl
     scatter:
-      - input
       - reference
+      - input
     scatterMethod: dotproduct
     in:
       input: mcflirt/mean_image
@@ -1588,7 +1362,7 @@ steps:
       - log
     hints:
       DockerRequirement:
-        dockerPull: brainlife/fsl:6.0.4-patched2
+        dockerPull: brainlife/fsl:6.0.4
   fnirt:
     run: ../cwl/fsl/fnirt.cwl
     scatter:
@@ -1636,7 +1410,7 @@ steps:
       - log
     hints:
       DockerRequirement:
-        dockerPull: brainlife/fsl:6.0.4-patched2
+        dockerPull: brainlife/fsl:6.0.4
   susan:
     run: ../cwl/fsl/susan.cwl
     scatter: input
@@ -1653,7 +1427,7 @@ steps:
       - log
     hints:
       DockerRequirement:
-        dockerPull: brainlife/fsl:6.0.4-patched2
+        dockerPull: brainlife/fsl:6.0.4
   fslmaths_1:
     run: ../cwl/fsl/fslmaths.cwl
     scatter: input
@@ -1717,10 +1491,13 @@ steps:
       - log
     hints:
       DockerRequirement:
-        dockerPull: brainlife/fsl:6.0.4-patched2
+        dockerPull: brainlife/fsl:6.0.4
   fslmaths_2:
-    run: ../cwl/fsl/fslmaths.cwl
-    scatter: input
+    run: ../cwl/fsl/fslmaths_fslmaths_2.cwl
+    scatter:
+      - add_file
+      - input
+    scatterMethod: dotproduct
     in:
       input: susan/smoothed_image
       output: fslmaths_2_output
@@ -1748,7 +1525,7 @@ steps:
       uthr: fslmaths_2_uthr
       uthrp: fslmaths_2_uthrp
       uthrP: fslmaths_2_uthrP
-      add_file: fslmaths_2_add_file
+      add_file: fslmaths_1/output_image
       sub_file: fslmaths_2_sub_file
       mul_file: fslmaths_2_mul_file
       div_file: fslmaths_2_div_file
@@ -1781,74 +1558,7 @@ steps:
       - log
     hints:
       DockerRequirement:
-        dockerPull: brainlife/fsl:latest
-  fslmaths_3:
-    run: ../cwl/fsl/fslmaths.cwl
-    scatter:
-      - input
-      - add_file
-    scatterMethod: dotproduct
-    in:
-      input: fslmaths_1/output_image
-      output: fslmaths_3_output
-      abs: fslmaths_3_abs
-      bin: fslmaths_3_bin
-      binv: fslmaths_3_binv
-      recip: fslmaths_3_recip
-      sqrt: fslmaths_3_sqrt
-      sqr: fslmaths_3_sqr
-      exp: fslmaths_3_exp
-      log: fslmaths_3_log
-      nan: fslmaths_3_nan
-      nanm: fslmaths_3_nanm
-      fillh: fslmaths_3_fillh
-      fillh26: fslmaths_3_fillh26
-      edge: fslmaths_3_edge
-      add_value: fslmaths_3_add_value
-      sub_value: fslmaths_3_sub_value
-      mul_value: fslmaths_3_mul_value
-      div_value: fslmaths_3_div_value
-      rem_value: fslmaths_3_rem_value
-      thr: fslmaths_3_thr
-      thrp: fslmaths_3_thrp
-      thrP: fslmaths_3_thrP
-      uthr: fslmaths_3_uthr
-      uthrp: fslmaths_3_uthrp
-      uthrP: fslmaths_3_uthrP
-      add_file: fslmaths_2/output_image
-      sub_file: fslmaths_3_sub_file
-      mul_file: fslmaths_3_mul_file
-      div_file: fslmaths_3_div_file
-      mas: fslmaths_3_mas
-      max_file: fslmaths_3_max_file
-      min_file: fslmaths_3_min_file
-      s: fslmaths_3_s
-      kernel_type: fslmaths_3_kernel_type
-      kernel_size: fslmaths_3_kernel_size
-      dilM: fslmaths_3_dilM
-      dilD: fslmaths_3_dilD
-      dilF: fslmaths_3_dilF
-      dilall: fslmaths_3_dilall
-      ero: fslmaths_3_ero
-      eroF: fslmaths_3_eroF
-      fmedian: fslmaths_3_fmedian
-      fmean: fslmaths_3_fmean
-      fmeanu: fslmaths_3_fmeanu
-      Tmean: fslmaths_3_Tmean
-      Tstd: fslmaths_3_Tstd
-      Tmax: fslmaths_3_Tmax
-      Tmaxn: fslmaths_3_Tmaxn
-      Tmin: fslmaths_3_Tmin
-      Tmedian: fslmaths_3_Tmedian
-      Tar1: fslmaths_3_Tar1
-      bptf: fslmaths_3_bptf
-      odt: fslmaths_3_odt
-    out:
-      - output_image
-      - log
-    hints:
-      DockerRequirement:
-        dockerPull: brainlife/fsl:latest
+        dockerPull: brainlife/fsl:6.0.4
   applywarp:
     run: ../cwl/fsl/applywarp.cwl
     scatter:
@@ -1857,7 +1567,7 @@ steps:
       - premat
     scatterMethod: dotproduct
     in:
-      input: fslmaths_3/output_image
+      input: fslmaths_2/output_image
       reference: applywarp_reference
       output: applywarp_output
       warp: fnirt/warp_coefficients
@@ -1877,6 +1587,6 @@ steps:
       - log
     hints:
       DockerRequirement:
-        dockerPull: brainlife/fsl:6.0.4-patched2
+        dockerPull: brainlife/fsl:6.0.4
 requirements:
   ScatterFeatureRequirement: {}

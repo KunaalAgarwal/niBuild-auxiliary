@@ -10,5 +10,5 @@ if [ -n "${DOCKER_PLATFORM:-}" ]; then
 fi
 
 echo "Pulling neuroimaging tool images..."
-docker pull $PLATFORM_FLAG brainlife/fsl:6.0.4-patched2
+docker pull $PLATFORM_FLAG brainlife/fsl:6.0.4
 echo "All images pulled successfully."

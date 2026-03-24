@@ -5,7 +5,7 @@ class: CommandLineTool
 baseCommand: fnirt
 hints:
   DockerRequirement:
-    dockerPull: brainlife/fsl:6.0.4-patched2
+    dockerPull: brainlife/fsl:6.0.4
 stdout: fnirt.log
 stderr: fnirt.log
 inputs:

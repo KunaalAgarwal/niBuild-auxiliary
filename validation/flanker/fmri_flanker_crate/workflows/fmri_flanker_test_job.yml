@@ -53,14 +53,14 @@ mcflirt_edge: null
 mcflirt_gdt: null
 flirt_1_reference:
   class: File
-  path: ../additional_inputs/MNI152_T1_2mm.nii.gz
+  path: ../additional_inputs/MNI152_T1_2mm_brain.nii.gz
 flirt_1_output: struct2mni_linear
 flirt_1_output_matrix: struct2mni.mat
 flirt_1_dof: 12
 flirt_1_init_matrix: null  # {class: File, path: <your/file/path>}
 flirt_1_apply_xfm: null
 flirt_1_apply_isoxfm: null
-flirt_1_uses_qform: null
+flirt_1_uses_qform: true
 flirt_1_rigid2D: null
 flirt_1_cost: corratio
 flirt_1_search_cost: null
@@ -141,7 +141,9 @@ fnirt_intin: null  # {class: File, path: <your/file/path>}
 fnirt_config:
   class: File
   path: ../additional_inputs/T1_2_MNI152_2mm.cnf
-fnirt_refmask: null  # {class: File, path: <your/file/path>}
+fnirt_refmask:
+  class: File
+  path: ../additional_inputs/MNI152_T1_2mm_brain_mask_dil.nii.gz
 fnirt_inmask: null  # {class: File, path: <your/file/path>}
 fnirt_cout: struct2mni_warp
 fnirt_iout: struct2mni
@@ -169,12 +171,12 @@ fnirt_verbose: null
 susan_brightness_threshold: 2000
 susan_fwhm: 5
 susan_output: bold_smooth
-susan_dimension: 3
-susan_use_median: 1
-susan_n_usans: 0
-fslmaths_1_output: bold_filtered
-fslmaths_1_abs: null
-fslmaths_1_bin: null
+susan_dimension: 3  # tool default
+susan_use_median: 1  # tool default
+susan_n_usans: 0  # tool default
+fslmaths_1_output: mean_func
+fslmaths_1_abs: false
+fslmaths_1_bin: false
 fslmaths_1_binv: null
 fslmaths_1_recip: null
 fslmaths_1_sqrt: null
@@ -216,18 +218,18 @@ fslmaths_1_eroF: null
 fslmaths_1_fmedian: null
 fslmaths_1_fmean: null
 fslmaths_1_fmeanu: null
-fslmaths_1_Tmean: null
+fslmaths_1_Tmean: true
 fslmaths_1_Tstd: null
 fslmaths_1_Tmax: null
 fslmaths_1_Tmaxn: null
 fslmaths_1_Tmin: null
 fslmaths_1_Tmedian: null
-fslmaths_1_Tar1: false
-fslmaths_1_bptf: 25 -1
+fslmaths_1_Tar1: null
+fslmaths_1_bptf: null
 fslmaths_1_odt: null
-fslmaths_2_output: mean_func
-fslmaths_2_abs: null
-fslmaths_2_bin: null
+fslmaths_2_output: bold_filtered
+fslmaths_2_abs: false
+fslmaths_2_bin: false
 fslmaths_2_binv: null
 fslmaths_2_recip: null
 fslmaths_2_sqrt: null
@@ -250,7 +252,6 @@ fslmaths_2_thrP: null
 fslmaths_2_uthr: null
 fslmaths_2_uthrp: null
 fslmaths_2_uthrP: null
-fslmaths_2_add_file: null  # {class: File, path: <your/file/path>}
 fslmaths_2_sub_file: null  # {class: File, path: <your/file/path>}
 fslmaths_2_mul_file: null  # {class: File, path: <your/file/path>}
 fslmaths_2_div_file: null  # {class: File, path: <your/file/path>}
@@ -269,67 +270,15 @@ fslmaths_2_eroF: null
 fslmaths_2_fmedian: null
 fslmaths_2_fmean: null
 fslmaths_2_fmeanu: null
-fslmaths_2_Tmean: true
+fslmaths_2_Tmean: null
 fslmaths_2_Tstd: null
 fslmaths_2_Tmax: null
 fslmaths_2_Tmaxn: null
 fslmaths_2_Tmin: null
 fslmaths_2_Tmedian: null
 fslmaths_2_Tar1: null
-fslmaths_2_bptf: null
+fslmaths_2_bptf: 25 -1
 fslmaths_2_odt: null
-fslmaths_3_output: bold_filtered
-fslmaths_3_abs: null
-fslmaths_3_bin: null
-fslmaths_3_binv: null
-fslmaths_3_recip: null
-fslmaths_3_sqrt: null
-fslmaths_3_sqr: null
-fslmaths_3_exp: null
-fslmaths_3_log: null
-fslmaths_3_nan: null
-fslmaths_3_nanm: null
-fslmaths_3_fillh: null
-fslmaths_3_fillh26: null
-fslmaths_3_edge: null
-fslmaths_3_add_value: null
-fslmaths_3_sub_value: null
-fslmaths_3_mul_value: null
-fslmaths_3_div_value: null
-fslmaths_3_rem_value: null
-fslmaths_3_thr: null
-fslmaths_3_thrp: null
-fslmaths_3_thrP: null
-fslmaths_3_uthr: null
-fslmaths_3_uthrp: null
-fslmaths_3_uthrP: null
-fslmaths_3_sub_file: null  # {class: File, path: <your/file/path>}
-fslmaths_3_mul_file: null  # {class: File, path: <your/file/path>}
-fslmaths_3_div_file: null  # {class: File, path: <your/file/path>}
-fslmaths_3_mas: null  # {class: File, path: <your/file/path>}
-fslmaths_3_max_file: null  # {class: File, path: <your/file/path>}
-fslmaths_3_min_file: null  # {class: File, path: <your/file/path>}
-fslmaths_3_s: null
-fslmaths_3_kernel_type: null
-fslmaths_3_kernel_size: null
-fslmaths_3_dilM: null
-fslmaths_3_dilD: null
-fslmaths_3_dilF: null
-fslmaths_3_dilall: null
-fslmaths_3_ero: null
-fslmaths_3_eroF: null
-fslmaths_3_fmedian: null
-fslmaths_3_fmean: null
-fslmaths_3_fmeanu: null
-fslmaths_3_Tmean: null
-fslmaths_3_Tstd: null
-fslmaths_3_Tmax: null
-fslmaths_3_Tmaxn: null
-fslmaths_3_Tmin: null
-fslmaths_3_Tmedian: null
-fslmaths_3_Tar1: null
-fslmaths_3_bptf: null
-fslmaths_3_odt: null
 applywarp_reference:
   class: File
   path: ../additional_inputs/MNI152_T1_2mm.nii.gz

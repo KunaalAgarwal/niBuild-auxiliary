@@ -13,6 +13,7 @@
       "suffix": "bold",
       "subjects": "all",
       "sessions": "all",
+      "task": "flanker",
       "include_events": true
     }
   }

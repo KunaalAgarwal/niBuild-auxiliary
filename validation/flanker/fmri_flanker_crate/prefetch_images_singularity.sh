@@ -4,7 +4,7 @@
 # Recommended on HPC compute nodes with limited internet access.
 set -euo pipefail
 echo "Pulling and converting Docker images to Singularity SIF format..."
-singularity pull --force brainlife_fsl_6.0.4-patched2.sif docker://brainlife/fsl:6.0.4-patched2
+singularity pull --force brainlife_fsl_6.0.4.sif docker://brainlife/fsl:6.0.4
 echo "All images converted to SIF successfully."
 echo ""
 echo "Note: cwltool --singularity will also auto-pull images at runtime."

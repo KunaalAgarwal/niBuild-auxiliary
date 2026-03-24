@@ -1,109 +1,5 @@
-t1w:
-  - {class: File, path: ../../ds000102/sub-01/anat/sub-01_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-01/anat/sub-01_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-02/anat/sub-02_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-02/anat/sub-02_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-03/anat/sub-03_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-03/anat/sub-03_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-04/anat/sub-04_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-04/anat/sub-04_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-05/anat/sub-05_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-05/anat/sub-05_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-06/anat/sub-06_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-06/anat/sub-06_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-07/anat/sub-07_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-07/anat/sub-07_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-08/anat/sub-08_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-08/anat/sub-08_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-09/anat/sub-09_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-09/anat/sub-09_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-10/anat/sub-10_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-10/anat/sub-10_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-11/anat/sub-11_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-11/anat/sub-11_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-12/anat/sub-12_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-12/anat/sub-12_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-13/anat/sub-13_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-13/anat/sub-13_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-14/anat/sub-14_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-14/anat/sub-14_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-15/anat/sub-15_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-15/anat/sub-15_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-16/anat/sub-16_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-16/anat/sub-16_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-17/anat/sub-17_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-17/anat/sub-17_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-18/anat/sub-18_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-18/anat/sub-18_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-19/anat/sub-19_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-19/anat/sub-19_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-20/anat/sub-20_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-20/anat/sub-20_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-21/anat/sub-21_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-21/anat/sub-21_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-22/anat/sub-22_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-22/anat/sub-22_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-23/anat/sub-23_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-23/anat/sub-23_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-24/anat/sub-24_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-24/anat/sub-24_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-25/anat/sub-25_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-25/anat/sub-25_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-26/anat/sub-26_T1w.nii.gz}
-  - {class: File, path: ../../ds000102/sub-26/anat/sub-26_T1w.nii.gz}
-bold:
-  - {class: File, path: ../../ds000102/sub-01/func/sub-01_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-01/func/sub-01_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-02/func/sub-02_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-02/func/sub-02_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-03/func/sub-03_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-03/func/sub-03_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-04/func/sub-04_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-04/func/sub-04_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-05/func/sub-05_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-05/func/sub-05_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-06/func/sub-06_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-06/func/sub-06_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-07/func/sub-07_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-07/func/sub-07_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-08/func/sub-08_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-08/func/sub-08_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-09/func/sub-09_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-09/func/sub-09_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-10/func/sub-10_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-10/func/sub-10_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-11/func/sub-11_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-11/func/sub-11_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-12/func/sub-12_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-12/func/sub-12_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-13/func/sub-13_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-13/func/sub-13_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-14/func/sub-14_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-14/func/sub-14_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-15/func/sub-15_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-15/func/sub-15_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-16/func/sub-16_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-16/func/sub-16_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-17/func/sub-17_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-17/func/sub-17_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-18/func/sub-18_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-18/func/sub-18_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-19/func/sub-19_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-19/func/sub-19_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-20/func/sub-20_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-20/func/sub-20_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-21/func/sub-21_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-21/func/sub-21_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-22/func/sub-22_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-22/func/sub-22_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-23/func/sub-23_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-23/func/sub-23_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-24/func/sub-24_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-24/func/sub-24_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-25/func/sub-25_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-25/func/sub-25_task-flanker_run-2_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-26/func/sub-26_task-flanker_run-1_bold.nii.gz}
-  - {class: File, path: ../../ds000102/sub-26/func/sub-26_task-flanker_run-2_bold.nii.gz}
+t1w: []  # [{class: File, path: <your/file/path>}]
+bold: []  # [{class: File, path: <your/file/path>}]
 bet_output: brain
 bet_overlay: null
 bet_mask: true
@@ -135,16 +31,14 @@ mcflirt_scaling: null
 mcflirt_rotation: null
 mcflirt_edge: null
 mcflirt_gdt: null
-flirt_1_reference:
-  class: File
-  path: ../additional_inputs/MNI152_T1_2mm.nii.gz
+flirt_1_reference: null  # {class: File, path: <your/file/path>}
 flirt_1_output: struct2mni_linear
 flirt_1_output_matrix: struct2mni.mat
 flirt_1_dof: 12
 flirt_1_init_matrix: null  # {class: File, path: <your/file/path>}
 flirt_1_apply_xfm: null
 flirt_1_apply_isoxfm: null
-flirt_1_uses_qform: null
+flirt_1_uses_qform: true
 flirt_1_rigid2D: null
 flirt_1_cost: corratio
 flirt_1_search_cost: null
@@ -217,14 +111,10 @@ flirt_2_fieldmapmask: null  # {class: File, path: <your/file/path>}
 flirt_2_echospacing: null
 flirt_2_pedir: null
 flirt_2_schedule: null  # {class: File, path: <your/file/path>}
-fnirt_reference:
-  class: File
-  path: ../additional_inputs/MNI152_T1_2mm.nii.gz
+fnirt_reference: null  # {class: File, path: <your/file/path>}
 fnirt_inwarp: null  # {class: File, path: <your/file/path>}
 fnirt_intin: null  # {class: File, path: <your/file/path>}
-fnirt_config:
-  class: File
-  path: ../additional_inputs/T1_2_MNI152_2mm.cnf
+fnirt_config: null  # {class: File, path: <your/file/path>}
 fnirt_refmask: null  # {class: File, path: <your/file/path>}
 fnirt_inmask: null  # {class: File, path: <your/file/path>}
 fnirt_cout: struct2mni_warp
@@ -253,12 +143,12 @@ fnirt_verbose: null
 susan_brightness_threshold: 2000
 susan_fwhm: 5
 susan_output: bold_smooth
-susan_dimension: 3
-susan_use_median: 1
-susan_n_usans: 0
-fslmaths_1_output: bold_filtered
-fslmaths_1_abs: null
-fslmaths_1_bin: null
+susan_dimension: 3  # tool default
+susan_use_median: 1  # tool default
+susan_n_usans: 0  # tool default
+fslmaths_1_output: mean_func
+fslmaths_1_abs: false
+fslmaths_1_bin: false
 fslmaths_1_binv: null
 fslmaths_1_recip: null
 fslmaths_1_sqrt: null
@@ -300,18 +190,18 @@ fslmaths_1_eroF: null
 fslmaths_1_fmedian: null
 fslmaths_1_fmean: null
 fslmaths_1_fmeanu: null
-fslmaths_1_Tmean: null
+fslmaths_1_Tmean: true
 fslmaths_1_Tstd: null
 fslmaths_1_Tmax: null
 fslmaths_1_Tmaxn: null
 fslmaths_1_Tmin: null
 fslmaths_1_Tmedian: null
-fslmaths_1_Tar1: false
-fslmaths_1_bptf: 25 -1
+fslmaths_1_Tar1: null
+fslmaths_1_bptf: null
 fslmaths_1_odt: null
-fslmaths_2_output: mean_func
-fslmaths_2_abs: null
-fslmaths_2_bin: null
+fslmaths_2_output: bold_filtered
+fslmaths_2_abs: false
+fslmaths_2_bin: false
 fslmaths_2_binv: null
 fslmaths_2_recip: null
 fslmaths_2_sqrt: null
@@ -334,7 +224,6 @@ fslmaths_2_thrP: null
 fslmaths_2_uthr: null
 fslmaths_2_uthrp: null
 fslmaths_2_uthrP: null
-fslmaths_2_add_file: null  # {class: File, path: <your/file/path>}
 fslmaths_2_sub_file: null  # {class: File, path: <your/file/path>}
 fslmaths_2_mul_file: null  # {class: File, path: <your/file/path>}
 fslmaths_2_div_file: null  # {class: File, path: <your/file/path>}
@@ -353,70 +242,16 @@ fslmaths_2_eroF: null
 fslmaths_2_fmedian: null
 fslmaths_2_fmean: null
 fslmaths_2_fmeanu: null
-fslmaths_2_Tmean: true
+fslmaths_2_Tmean: null
 fslmaths_2_Tstd: null
 fslmaths_2_Tmax: null
 fslmaths_2_Tmaxn: null
 fslmaths_2_Tmin: null
 fslmaths_2_Tmedian: null
 fslmaths_2_Tar1: null
-fslmaths_2_bptf: null
+fslmaths_2_bptf: 25 -1
 fslmaths_2_odt: null
-fslmaths_3_output: bold_filtered
-fslmaths_3_abs: null
-fslmaths_3_bin: null
-fslmaths_3_binv: null
-fslmaths_3_recip: null
-fslmaths_3_sqrt: null
-fslmaths_3_sqr: null
-fslmaths_3_exp: null
-fslmaths_3_log: null
-fslmaths_3_nan: null
-fslmaths_3_nanm: null
-fslmaths_3_fillh: null
-fslmaths_3_fillh26: null
-fslmaths_3_edge: null
-fslmaths_3_add_value: null
-fslmaths_3_sub_value: null
-fslmaths_3_mul_value: null
-fslmaths_3_div_value: null
-fslmaths_3_rem_value: null
-fslmaths_3_thr: null
-fslmaths_3_thrp: null
-fslmaths_3_thrP: null
-fslmaths_3_uthr: null
-fslmaths_3_uthrp: null
-fslmaths_3_uthrP: null
-fslmaths_3_sub_file: null  # {class: File, path: <your/file/path>}
-fslmaths_3_mul_file: null  # {class: File, path: <your/file/path>}
-fslmaths_3_div_file: null  # {class: File, path: <your/file/path>}
-fslmaths_3_mas: null  # {class: File, path: <your/file/path>}
-fslmaths_3_max_file: null  # {class: File, path: <your/file/path>}
-fslmaths_3_min_file: null  # {class: File, path: <your/file/path>}
-fslmaths_3_s: null
-fslmaths_3_kernel_type: null
-fslmaths_3_kernel_size: null
-fslmaths_3_dilM: null
-fslmaths_3_dilD: null
-fslmaths_3_dilF: null
-fslmaths_3_dilall: null
-fslmaths_3_ero: null
-fslmaths_3_eroF: null
-fslmaths_3_fmedian: null
-fslmaths_3_fmean: null
-fslmaths_3_fmeanu: null
-fslmaths_3_Tmean: null
-fslmaths_3_Tstd: null
-fslmaths_3_Tmax: null
-fslmaths_3_Tmaxn: null
-fslmaths_3_Tmin: null
-fslmaths_3_Tmedian: null
-fslmaths_3_Tar1: null
-fslmaths_3_bptf: null
-fslmaths_3_odt: null
-applywarp_reference:
-  class: File
-  path: ../additional_inputs/MNI152_T1_2mm.nii.gz
+applywarp_reference: null  # {class: File, path: <your/file/path>}
 applywarp_output: bold_mni
 applywarp_postmat: null  # {class: File, path: <your/file/path>}
 applywarp_relwarp: null

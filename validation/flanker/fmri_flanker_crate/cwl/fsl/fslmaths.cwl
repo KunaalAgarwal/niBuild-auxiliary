@@ -7,7 +7,7 @@ requirements:
   ShellCommandRequirement: {}
 hints:
   DockerRequirement:
-    dockerPull: brainlife/fsl:6.0.4-patched2
+    dockerPull: brainlife/fsl:6.0.4
 stdout: fslmaths.log
 stderr: fslmaths.log
 inputs:

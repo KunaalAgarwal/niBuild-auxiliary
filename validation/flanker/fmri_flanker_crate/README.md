@@ -67,19 +67,12 @@ These inputs must be supplied by editing the job file before running:
 - `fslmaths_1_mas` — File
 - `fslmaths_1_max_file` — File
 - `fslmaths_1_min_file` — File
-- `fslmaths_2_add_file` — File
 - `fslmaths_2_sub_file` — File
 - `fslmaths_2_mul_file` — File
 - `fslmaths_2_div_file` — File
 - `fslmaths_2_mas` — File
 - `fslmaths_2_max_file` — File
 - `fslmaths_2_min_file` — File
-- `fslmaths_3_sub_file` — File
-- `fslmaths_3_mul_file` — File
-- `fslmaths_3_div_file` — File
-- `fslmaths_3_mas` — File
-- `fslmaths_3_max_file` — File
-- `fslmaths_3_min_file` — File
 - `applywarp_reference` — File
 - `applywarp_postmat` — File
 - `applywarp_mask` — File
@@ -259,7 +252,7 @@ This workflow uses the following container images (hosted on Docker Hub).
 Both Docker and Singularity can pull these — Singularity uses the `docker://` URI prefix.
 
 ```bash
-docker pull brainlife/fsl:6.0.4-patched2
+docker pull brainlife/fsl:6.0.4
 ```
 
 ## Key Concepts

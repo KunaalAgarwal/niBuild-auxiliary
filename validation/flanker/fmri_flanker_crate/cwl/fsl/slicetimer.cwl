@@ -5,7 +5,7 @@ class: CommandLineTool
 baseCommand: slicetimer
 hints:
   DockerRequirement:
-    dockerPull: brainlife/fsl:6.0.4-patched2
+    dockerPull: brainlife/fsl:6.0.4
 stdout: slicetimer.log
 stderr: slicetimer.log
 inputs:

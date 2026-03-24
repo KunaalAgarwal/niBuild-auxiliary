@@ -5,7 +5,7 @@ class: CommandLineTool
 baseCommand: susan
 hints:
   DockerRequirement:
-    dockerPull: brainlife/fsl:6.0.4-patched2
+    dockerPull: brainlife/fsl:6.0.4
 stdout: susan.log
 stderr: susan.err.log
 inputs:

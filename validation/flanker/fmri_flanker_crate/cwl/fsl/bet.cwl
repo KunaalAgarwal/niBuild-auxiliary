@@ -5,7 +5,7 @@ class: CommandLineTool
 baseCommand: bet
 hints:
   DockerRequirement:
-    dockerPull: brainlife/fsl:6.0.4-patched2
+    dockerPull: brainlife/fsl:6.0.4
 stdout: $(inputs.output).log
 stderr: $(inputs.output).log
 inputs:
