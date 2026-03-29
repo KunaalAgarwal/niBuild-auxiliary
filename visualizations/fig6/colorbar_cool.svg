@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="35.1pt" height="90.36pt" viewBox="0 0 35.1 90.36" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-03-29T17:02:44.400707</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 90.36 
+L 35.1 90.36 
+L 35.1 0 
+L 0 0 
+z
+"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 3.6 86.76 
+L 31.5 86.76 
+L 31.5 3.6 
+L 3.6 3.6 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <image xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAACcAAABzCAYAAAAbvBvUAAABEklEQVR4nO2a223EAAzDFEvt9N24T/RG8BdhiMgABmXrcEge6eNXUCJZVCKNqARuzqKS1wMl3bmj5iIqgV/riErg5iwq6XBHzY2opCV8NFaLStDmHvJw1reopMOdNPemT1EJ2pzJw41+RCXduZM75w63I9GXqKSxLqm5LT2ILd25LQn75+sRlXD/UuvfHJcMOdaISxrrSXMmH4TFJfASfkQlaHMhm7O4BB2rybGOuAR9ECMugV/rIypB75zJL4OH/b7VohK0uZA/7nNj3VFzW3oQN3vO5CoJuYSnse6ouS09iJs9N+QqyZBLOGBz0+EumvM7uUoCNjcd7qI59yAuxjrk4dyduxjrdLgdPYgt3Tkt+QPUFRwlq0rZIwAAAABJRU5ErkJggg==" id="image9fd5168c63" transform="scale(1 -1) translate(0 -82.8)" x="3.6" y="-3.6" width="28.08" height="82.8"/>
+   <g id="matplotlib.axis_1"/>
+   <g id="matplotlib.axis_2"/>
+   <g id="LineCollection_1"/>
+   <g id="patch_3">
+    <path d="M 3.6 86.76 
+L 17.55 86.76 
+L 31.5 86.76 
+L 31.5 3.6 
+L 17.55 3.6 
+L 3.6 3.6 
+L 3.6 86.76 
+z
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+  </g>
+ </g>
+</svg>
