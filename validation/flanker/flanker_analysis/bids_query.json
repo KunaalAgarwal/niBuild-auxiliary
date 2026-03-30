@@ -1,0 +1,20 @@
+{
+  "bids_version": "1.0.0rc3",
+  "dataset_name": "Flanker task (event-related)",
+  "selections": {
+    "t1w": {
+      "datatype": "anat",
+      "suffix": "T1w",
+      "subjects": "all",
+      "sessions": "all"
+    },
+    "bold": {
+      "datatype": "func",
+      "suffix": "bold",
+      "subjects": "all",
+      "sessions": "all",
+      "task": "flanker",
+      "include_events": true
+    }
+  }
+}
