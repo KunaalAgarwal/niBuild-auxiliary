@@ -7,6 +7,11 @@ validation/vbm_alzheimers/vbm_alzheimers_crate/output/
 validation/vbm_alzheimers/vbm_alzheimers_crate/additional_inputs
 validation/vbm_alzheimers/vbm_alzheimers_crate/cache*/
 
+validation/vbm_alzheimers/output/
+validation/vbm_alzheimers/vbm_analysis/additional_inputs
+validation/vbm_alzheimers/vbm_analysis/additional_inputs
+validation/vbm_alzheimers/vbm_analysis/cache
+
 validation/flanker/ds000102
 validation/flanker/fmri_flanker_crate/*.log
 validation/flanker/fmri_flanker_crate/additional_inputs

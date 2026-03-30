@@ -1,0 +1,355 @@
+bet_input:
+  - class: File
+    path: ../../data/nifti/OAS1_0001_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0002_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0003_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0010_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0011_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0013_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0015_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0016_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0018_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0019_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0020_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0021_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0022_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0023_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0026_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0028_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0030_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0031_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0032_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0033_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0034_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0035_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0039_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0041_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0042_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0044_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0046_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0052_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0053_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0056_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0058_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0060_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0062_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0064_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0065_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0066_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0067_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0068_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0069_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0070_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0071_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0072_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0073_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0074_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0075_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0078_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0082_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0083_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0084_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0085_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0086_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0094_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0096_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0098_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0106_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0109_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0110_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0112_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0113_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0114_MR1.nii.gz
+  - class: File
+    path: ../../data/nifti/OAS1_0115_MR1.nii.gz
+bet_output: brain
+bet_overlay: null
+bet_mask: true
+bet_skull: null
+bet_ngenerate: null
+bet_frac: 0.5
+bet_vert_frac: null
+bet_radius: null
+bet_cog: null
+bet_threshold: null
+bet_mesh: null
+bet_exclusive: null
+fast_output: tissue
+fast_nclass: 3
+fast_iterations: null
+fast_lowpass: null
+fast_image_type: 1
+fast_fhard: null
+fast_segments: true
+fast_bias_field: null
+fast_bias_corrected_image: true
+fast_nobias: null
+fast_channels: null
+fast_initialization_iterations: null
+fast_mixel: null
+fast_fixed: null
+fast_hyper: null
+fast_manualseg: null  # {class: File, path: <your/file/path>}
+fast_probability_maps: null
+fast_priors: null
+flirt_reference:
+  class: File
+  path: ../additional_inputs/MNI152_T1_2mm_brain.nii.gz
+flirt_output: brain_affine
+flirt_output_matrix: struct2mni_affine.mat
+flirt_dof: 12
+flirt_init_matrix: null  # {class: File, path: <your/file/path>}
+flirt_apply_xfm: null
+flirt_apply_isoxfm: null
+flirt_uses_qform: null
+flirt_rigid2D: null
+flirt_cost: corratio
+flirt_search_cost: null
+flirt_searchr_x: null
+flirt_searchr_y: null
+flirt_searchr_z: null
+flirt_no_search: null
+flirt_coarse_search: null
+flirt_fine_search: null
+flirt_interp: null
+flirt_sinc_width: null
+flirt_sinc_window: null
+flirt_in_weight: null  # {class: File, path: <your/file/path>}
+flirt_ref_weight: null  # {class: File, path: <your/file/path>}
+flirt_bins: null
+flirt_min_sampling: null
+flirt_no_clamp: null
+flirt_no_resample: null
+flirt_padding_size: null
+flirt_datatype: null
+flirt_verbose: null
+flirt_wm_seg: null  # {class: File, path: <your/file/path>}
+flirt_bbrslope: null
+flirt_bbrtype: null
+flirt_fieldmap: null  # {class: File, path: <your/file/path>}
+flirt_fieldmapmask: null  # {class: File, path: <your/file/path>}
+flirt_echospacing: null
+flirt_pedir: null
+flirt_schedule: null  # {class: File, path: <your/file/path>}
+fnirt_reference:
+  class: File
+  path: ../additional_inputs/MNI152_T1_2mm.nii.gz
+fnirt_inwarp: null  # {class: File, path: <your/file/path>}
+fnirt_intin: null  # {class: File, path: <your/file/path>}
+fnirt_config:
+  class: File
+  path: ../additional_inputs/T1_2_MNI152_2mm.cnf
+fnirt_refmask:
+  class: File
+  path: ../additional_inputs/MNI152_T1_2mm_brain_mask_dil.nii.gz
+fnirt_inmask: null  # {class: File, path: <your/file/path>}
+fnirt_cout: struct2mni_warp
+fnirt_iout: gm_nonlinear
+fnirt_fout: null
+fnirt_jout: jacobian
+fnirt_refout: null
+fnirt_intout: null
+fnirt_logout: null
+fnirt_warpres: null
+fnirt_splineorder: null
+fnirt_regmod: null
+fnirt_intmod: null
+fnirt_intorder: null
+fnirt_subsamp: null
+fnirt_miter: null
+fnirt_infwhm: null
+fnirt_reffwhm: null
+fnirt_lambda_: null
+fnirt_ssqlambda: null
+fnirt_jacrange: null
+fnirt_biasres: null
+fnirt_biaslambda: null
+fnirt_numprec: null
+fnirt_verbose: null
+applywarp_reference:
+  class: File
+  path: ../additional_inputs/MNI152_T1_2mm_brain.nii.gz
+applywarp_output: gm_mni
+applywarp_premat: null  # {class: File, path: <your/file/path>}
+applywarp_postmat: null  # {class: File, path: <your/file/path>}
+applywarp_relwarp: null
+applywarp_abswarp: null
+applywarp_interp: null
+applywarp_supersample: null
+applywarp_superlevel: null
+applywarp_mask: null  # {class: File, path: <your/file/path>}
+applywarp_datatype: null
+applywarp_padding_size: null
+applywarp_verbose: null
+fslmaths_output: gm_smoothed
+fslmaths_abs: null
+fslmaths_bin: null
+fslmaths_binv: null
+fslmaths_recip: null
+fslmaths_sqrt: null
+fslmaths_sqr: null
+fslmaths_exp: null
+fslmaths_log: null
+fslmaths_sin: null
+fslmaths_cos: null
+fslmaths_tan: null
+fslmaths_asin: null
+fslmaths_acos: null
+fslmaths_atan: null
+fslmaths_nan: null
+fslmaths_nanm: null
+fslmaths_fillh: null
+fslmaths_fillh26: null
+fslmaths_edge: null
+fslmaths_index: null
+fslmaths_rand: null
+fslmaths_randn: null
+fslmaths_range: null
+fslmaths_seed: null
+fslmaths_add_value: null
+fslmaths_sub_value: null
+fslmaths_mul_value: null
+fslmaths_div_value: null
+fslmaths_rem_value: null
+fslmaths_thr: null
+fslmaths_thrp: null
+fslmaths_thrP: null
+fslmaths_uthr: null
+fslmaths_uthrp: null
+fslmaths_uthrP: null
+fslmaths_add_file: null  # {class: File, path: <your/file/path>}
+fslmaths_sub_file: null  # {class: File, path: <your/file/path>}
+fslmaths_div_file: null  # {class: File, path: <your/file/path>}
+fslmaths_mas: null  # {class: File, path: <your/file/path>}
+fslmaths_max_file: null  # {class: File, path: <your/file/path>}
+fslmaths_min_file: null  # {class: File, path: <your/file/path>}
+fslmaths_s: 3
+fslmaths_kernel_type: null
+fslmaths_kernel_size: null
+fslmaths_dilM: null
+fslmaths_dilD: null
+fslmaths_dilF: null
+fslmaths_dilall: null
+fslmaths_ero: null
+fslmaths_eroF: null
+fslmaths_fmedian: null
+fslmaths_fmean: null
+fslmaths_fmeanu: null
+fslmaths_subsamp2: null
+fslmaths_subsamp2offc: null
+fslmaths_Tmean: null
+fslmaths_Tstd: null
+fslmaths_Tmax: null
+fslmaths_Tmaxn: null
+fslmaths_Tmin: null
+fslmaths_Tmedian: null
+fslmaths_Tperc: null
+fslmaths_Tar1: null
+fslmaths_bptf: null
+fslmaths_inm: null
+fslmaths_ing: null
+fslmaths_pval: null
+fslmaths_pval0: null
+fslmaths_cpval: null
+fslmaths_ztop: null
+fslmaths_ptoz: null
+fslmaths_rank: null
+fslmaths_ranknorm: null
+fslmaths_tfce: null
+fslmaths_roi: null
+fslmaths_tensor_decomp: null
+fslmaths_odt: null
+fslmerge_dimension: t
+fslmerge_output: GM_mod_smooth_4D
+fslmerge_tr: null
+randomise_output: vbm
+randomise_design_mat:
+  class: File
+  path: ../additional_inputs/design.mat
+randomise_tcon:
+  class: File
+  path: ../additional_inputs/design.con
+randomise_fcon: null
+randomise_mask:
+  class: File
+  path: ../additional_inputs/MNI152_T1_2mm_brain_mask_dil.nii.gz
+randomise_num_perm: 5000
+randomise_seed: null
+randomise_one_sample_group_mean: null
+randomise_tfce: true
+randomise_tfce2D: null
+randomise_tfce_H: null
+randomise_tfce_E: null
+randomise_tfce_C: null
+randomise_c_thresh: null
+randomise_cm_thresh: null
+randomise_f_c_thresh: null
+randomise_f_cm_thresh: null
+randomise_demean: true
+randomise_vox_p_values: null
+randomise_f_only: null
+randomise_raw_stats_imgs: null
+randomise_p_vec_n_dist_files: null
+randomise_var_smooth: null
+randomise_x_block_labels: null  # {class: File, path: <your/file/path>}
+randomise_show_total_perms: null
+randomise_show_info_parallel_mode: null

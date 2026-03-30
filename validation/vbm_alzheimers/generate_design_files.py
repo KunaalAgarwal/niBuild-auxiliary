@@ -26,7 +26,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 NIFTI_DIR = SCRIPT_DIR / "data" / "nifti"
 CSV_PATH = SCRIPT_DIR / "data" / "oasis_cross-sectional.csv"
-OUTPUT_DIR = SCRIPT_DIR / "vbm_alzheimers_crate" / "additional_inputs"
+OUTPUT_DIR = SCRIPT_DIR / "vbm_analysis" / "additional_inputs"
 
 
 def get_nifti_subjects(nifti_dir):
