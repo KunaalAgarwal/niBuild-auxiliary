@@ -1,0 +1,4241 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for niBuild — a no-code, browser-based GUI for building neuroimaging analysis workflows.">
+      
+      
+      
+        <link rel="canonical" href="https://kunaalagarwal.github.io/niBuild-auxiliary/tutorials/flanker-fmri/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../vbm-alzheimers/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Flanker fMRI - niBuild Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#fmri-flanker-task-analysis-tutorial" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="niBuild Documentation" class="md-header__button md-logo" aria-label="niBuild Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            niBuild Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Flanker fMRI
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/KunaalAgarwal/niBuild" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    KunaalAgarwal/niBuild
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../construction/" class="md-tabs__link">
+          
+  
+  
+  Workflow Construction
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../execution/" class="md-tabs__link">
+          
+  
+  
+  Workflow Execution
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tools/" class="md-tabs__link">
+          
+  
+  
+  Tool Library
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Examples & Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../developer/" class="md-tabs__link">
+          
+  
+  
+  Developer Documentation
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="niBuild Documentation" class="md-nav__button md-logo" aria-label="niBuild Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    niBuild Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/KunaalAgarwal/niBuild" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    KunaalAgarwal/niBuild
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow Construction
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Workflow Construction
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../construction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../construction/cwl-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CWL Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../construction/tool-menu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tool Menu & Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../construction/building-workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building a Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../construction/connecting-nodes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connecting Nodes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../construction/configuring-parameters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuring Parameters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../construction/scatter-conditions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scatter, Conditions & Expressions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../construction/bids-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BIDS Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../construction/custom-workflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Workflows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../construction/cwl-preview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CWL Preview Panel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../construction/workspaces-export/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workspaces & Export
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow Execution
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Workflow Execution
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../execution/docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../execution/singularity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Singularity / HPC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../execution/cwltool-direct/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cwltool Direct
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../execution/bids-runtime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BIDS Runtime
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tool Library
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tool Library
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tool Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Structural MRI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Structural MRI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/structural-mri/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Structural MRI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional MRI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Functional MRI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/functional-mri/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional MRI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diffusion MRI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Diffusion MRI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/diffusion-mri/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diffusion MRI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arterial Spin Labeling
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Arterial Spin Labeling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/arterial-spin-labeling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arterial Spin Labeling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PET
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    PET
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/pet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PET
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multimodal
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Multimodal
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/multimodal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multimodal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utilities
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Utilities
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/utilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_9" id="__nav_3_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pipelines
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Pipelines
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/pipelines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pipelines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples & Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Examples & Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples &amp; Tutorials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flanker fMRI
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flanker fMRI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#downloading-the-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Downloading the Dataset
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pipeline-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pipeline Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-load-the-bids-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Load the BIDS Dataset
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-add-input-nodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Add Input Nodes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-preprocessing-brain-extraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Preprocessing — Brain Extraction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3: Preprocessing — Brain Extraction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bet-brain-extraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BET (Brain Extraction)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-preprocessing-functional-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Preprocessing — Functional Data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: Preprocessing — Functional Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mcflirt-motion-correction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MCFLIRT (Motion Correction)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slicetimer-slice-timing-correction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        slicetimer (Slice Timing Correction)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#susan-spatial-smoothing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SUSAN (Spatial Smoothing)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-preprocessing-temporal-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Preprocessing — Temporal Filtering
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5: Preprocessing — Temporal Filtering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fslmaths-high-pass-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fslmaths (High-Pass Filter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-preprocessing-compute-temporal-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Preprocessing — Compute Temporal Mean
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 6: Preprocessing — Compute Temporal Mean">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fslmaths-temporal-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fslmaths (Temporal Mean)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-7-preprocessing-restore-temporal-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7: Preprocessing — Restore Temporal Mean
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 7: Preprocessing — Restore Temporal Mean">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fslmaths-add-mean-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fslmaths (Add Mean Back)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-8-registration-structural-to-mni-linear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8: Registration — Structural to MNI (Linear)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 8: Registration — Structural to MNI (Linear)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flirt-12-dof-affine-structural-mni" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FLIRT (12-DOF Affine, Structural → MNI)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-9-registration-functional-to-structural" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9: Registration — Functional to Structural
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 9: Registration — Functional to Structural">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flirt-6-dof-rigid-functional-structural" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FLIRT (6-DOF Rigid, Functional → Structural)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-10-registration-structural-to-mni-nonlinear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 10: Registration — Structural to MNI (Nonlinear)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 10: Registration — Structural to MNI (Nonlinear)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fnirt-nonlinear-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FNIRT (Nonlinear Registration)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-11-transform-to-standard-space" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 11: Transform to Standard Space
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 11: Transform to Standard Space">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#applywarp-apply-combined-transform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        applywarp (Apply Combined Transform)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-12-pin-docker-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 12: Pin Docker Versions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-13-name-and-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 13: Name and Export
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-14-run-the-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 14: Run the Workflow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 14: Run the Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#edit-the-job-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Edit the job template
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-a-run-with-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A: Run with Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-run-with-cwltool-directly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B: Run with cwltool directly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-c-run-with-singularity-hpc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option C: Run with Singularity (HPC)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#expected-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expected Outputs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Expected Outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#per-subject-run-preprocessing-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per subject-run preprocessing outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tips
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vbm-alzheimers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VBM Alzheimer's
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Developer Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/local-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/adding-a-tool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding a Tool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/adding-a-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding a Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/testing-cwl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing CWL Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#downloading-the-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Downloading the Dataset
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pipeline-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pipeline Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-load-the-bids-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Load the BIDS Dataset
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-add-input-nodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Add Input Nodes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-preprocessing-brain-extraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Preprocessing — Brain Extraction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3: Preprocessing — Brain Extraction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bet-brain-extraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BET (Brain Extraction)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-preprocessing-functional-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Preprocessing — Functional Data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: Preprocessing — Functional Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mcflirt-motion-correction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MCFLIRT (Motion Correction)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slicetimer-slice-timing-correction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        slicetimer (Slice Timing Correction)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#susan-spatial-smoothing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SUSAN (Spatial Smoothing)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-preprocessing-temporal-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Preprocessing — Temporal Filtering
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5: Preprocessing — Temporal Filtering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fslmaths-high-pass-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fslmaths (High-Pass Filter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-preprocessing-compute-temporal-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Preprocessing — Compute Temporal Mean
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 6: Preprocessing — Compute Temporal Mean">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fslmaths-temporal-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fslmaths (Temporal Mean)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-7-preprocessing-restore-temporal-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7: Preprocessing — Restore Temporal Mean
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 7: Preprocessing — Restore Temporal Mean">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fslmaths-add-mean-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fslmaths (Add Mean Back)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-8-registration-structural-to-mni-linear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8: Registration — Structural to MNI (Linear)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 8: Registration — Structural to MNI (Linear)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flirt-12-dof-affine-structural-mni" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FLIRT (12-DOF Affine, Structural → MNI)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-9-registration-functional-to-structural" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9: Registration — Functional to Structural
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 9: Registration — Functional to Structural">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flirt-6-dof-rigid-functional-structural" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FLIRT (6-DOF Rigid, Functional → Structural)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-10-registration-structural-to-mni-nonlinear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 10: Registration — Structural to MNI (Nonlinear)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 10: Registration — Structural to MNI (Nonlinear)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fnirt-nonlinear-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FNIRT (Nonlinear Registration)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-11-transform-to-standard-space" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 11: Transform to Standard Space
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 11: Transform to Standard Space">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#applywarp-apply-combined-transform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        applywarp (Apply Combined Transform)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-12-pin-docker-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 12: Pin Docker Versions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-13-name-and-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 13: Name and Export
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-14-run-the-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 14: Run the Workflow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 14: Run the Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#edit-the-job-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Edit the job template
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-a-run-with-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A: Run with Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-run-with-cwltool-directly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B: Run with cwltool directly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-c-run-with-singularity-hpc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option C: Run with Singularity (HPC)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#expected-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expected Outputs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Expected Outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#per-subject-run-preprocessing-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per subject-run preprocessing outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tips
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="fmri-flanker-task-analysis-tutorial">fMRI Flanker Task Analysis Tutorial<a class="headerlink" href="#fmri-flanker-task-analysis-tutorial" title="Permanent link">&para;</a></h1>
+<p>This tutorial walks through building an fMRI preprocessing pipeline for the Eriksen flanker task using niBuild. By the end, you will have a portable, reproducible workflow bundle that preprocesses BOLD data and registers it to standard (MNI) space which is the same endpoint as fMRIPrep. Statistical analysis (first-level GLM, group-level inference) may be performed separately downstream.</p>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<ul>
+<li>A modern web browser (Chrome, Firefox, or Edge)</li>
+<li>Docker <strong>or</strong> Singularity/Apptainer installed on the machine where you will run the workflow</li>
+<li>A BIDS-formatted flanker task dataset (this tutorial uses <a href="https://openneuro.org/datasets/ds000102">ds000102</a> from OpenNeuro)</li>
+</ul>
+<h3 id="downloading-the-dataset">Downloading the Dataset<a class="headerlink" href="#downloading-the-dataset" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Option A: AWS S3 (no account required)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>aws<span class="w"> </span>s3<span class="w"> </span>sync<span class="w"> </span>--no-sign-request<span class="w"> </span>s3://openneuro.org/ds000102<span class="w"> </span>ds000102/
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Option B: DataLad</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>datalad<span class="w"> </span>install<span class="w"> </span>https://github.com/OpenNeuroDatasets/ds000102.git
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nb">cd</span><span class="w"> </span>ds000102
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>datalad<span class="w"> </span>get<span class="w"> </span>sub-*/anat/<span class="w"> </span>sub-*/func/
+</code></pre></div>
+<h2 id="pipeline-overview">Pipeline Overview<a class="headerlink" href="#pipeline-overview" title="Permanent link">&para;</a></h2>
+<p>The workflow chains eleven FSL tools into a complete preprocessing → registration pipeline. It includes high-pass temporal filtering (with mean restoration) to remove scanner drift, affine initialization for nonlinear registration, and processes both runs per subject. The pipeline ends at applywarp, producing MNI-space preprocessed BOLD — the same endpoint as fMRIPrep:</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Tool</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>BET</td>
+<td>Skull-strip the T1w structural image</td>
+</tr>
+<tr>
+<td>2</td>
+<td>MCFLIRT</td>
+<td>Correct head motion in the BOLD time series</td>
+</tr>
+<tr>
+<td>3</td>
+<td>slicetimer</td>
+<td>Correct inter-slice acquisition timing</td>
+</tr>
+<tr>
+<td>4</td>
+<td>SUSAN</td>
+<td>Spatially smooth the functional data</td>
+</tr>
+<tr>
+<td>5</td>
+<td>fslmaths (bptf)</td>
+<td>High-pass temporal filtering to remove scanner drift</td>
+</tr>
+<tr>
+<td>6</td>
+<td>fslmaths (Tmean)</td>
+<td>Compute temporal mean of smoothed BOLD (before filtering removes it)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>fslmaths (add mean)</td>
+<td>Add temporal mean back to filtered data (restores positive intensities)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>FLIRT (struct→MNI)</td>
+<td>12-DOF affine registration of structural to MNI (initializes FNIRT)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>FLIRT (func→struct)</td>
+<td>Register functional data to the structural image (linear, 6-DOF)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>FNIRT</td>
+<td>Register structural image to MNI152 template (nonlinear, with affine init)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>applywarp</td>
+<td>Apply combined func→struct→MNI transform to functional data</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-1-load-the-bids-dataset">Step 1: Load the BIDS Dataset<a class="headerlink" href="#step-1-load-the-bids-dataset" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Open niBuild in your browser.</li>
+<li>In the left-hand tool menu, expand the <strong>I/O</strong> section at the top.</li>
+<li>Drag the <strong>BIDS</strong> item onto the canvas. A file picker dialog will appear.</li>
+<li>Select the root directory of your BIDS dataset (the folder containing <code>dataset_description.json</code>).</li>
+</ol>
+<p>The BIDS modal opens with three areas:</p>
+<p><strong>Subject selection (left panel):</strong>
+- Check the subjects you want to process (e.g., <code>sub-01</code> through <code>sub-26</code>).
+- Use "Select all" to include the full cohort.</p>
+<p><strong>Data type selection (top-right chips):</strong>
+- Click the <strong>func</strong> chip and the <strong>anat</strong> chip so both are included.</p>
+<p><strong>Output group configuration (bottom-right):</strong></p>
+<p>Create two output groups by clicking the <strong>Add output</strong> button:</p>
+<table>
+<thead>
+<tr>
+<th>Output label</th>
+<th>Datatype</th>
+<th>Suffix</th>
+<th>Task filter</th>
+<th>Run filter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bold</code></td>
+<td>func</td>
+<td>bold</td>
+<td>flanker</td>
+<td>all (run-1 and run-2)</td>
+</tr>
+<tr>
+<td><code>t1w</code></td>
+<td>anat</td>
+<td>T1w</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>For the <code>bold</code> output, check <strong>Include events</strong> if you want the events TSV files bundled alongside the BOLD data. Make sure <strong>both runs</strong> are selected as ds000102 contains two runs per subject, and including both doubles the within-subject trial count from 24 to 48, substantially boosting statistical power.</p>
+<p>Click <strong>Save</strong>. The BIDS node now appears on the canvas with two output ports: <code>bold</code> and <code>t1w</code>. Scatter is automatically enabled because BIDS outputs are file arrays. The <code>bold</code> array will contain 52 files (26 subjects × 2 runs), and the <code>t1w</code> array will contain 52 entries (each subject's T1w is duplicated to match the bold array length).</p>
+<blockquote>
+<p><strong>Why T1w must be duplicated to match the BOLD array length:</strong>
+Several downstream steps use <code>dotproduct</code> scatter to pair functional and structural data element-by-element. For example, FLIRT (func→struct) scatters over both <code>mcflirt/mean_image</code> (52 functional files) and <code>bet/brain_extraction</code> (from the T1w array) simultaneously meaning the i-th functional file is paired with the i-th structural file. Similarly, applywarp scatters over functional data, FNIRT warp coefficients, and FLIRT transformation matrices together. CWL's <code>dotproduct</code> requires all scattered arrays to have the same length. Since there are 52 BOLD files (26 subjects × 2 runs) but only 26 unique T1w images, each T1w must appear twice so that the structural array (52) matches the functional array (52). When using <code>--cachedir</code>, cwltool detects duplicate T1w inputs and reuses cached BET/FLIRT/FNIRT outputs, so structural processing still only runs once per subject.</p>
+</blockquote>
+<hr />
+<h2 id="step-2-add-input-nodes">Step 2: Add Input Nodes<a class="headerlink" href="#step-2-add-input-nodes" title="Permanent link">&para;</a></h2>
+<p>In addition to BIDS data, the pipeline needs several external files. Drag <strong>Input</strong> nodes from the I/O section for each:</p>
+<table>
+<thead>
+<tr>
+<th>Input label</th>
+<th>Purpose</th>
+<th>File you will provide at runtime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MNI152</code></td>
+<td>Standard space template for registration</td>
+<td><code>$FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz</code></td>
+</tr>
+<tr>
+<td><code>fnirt_config</code></td>
+<td>FNIRT config for T1→MNI152 2mm registration</td>
+<td><code>$FSLDIR/etc/flirtsch/T1_2_MNI152_2mm.cnf</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-3-preprocessing-brain-extraction">Step 3: Preprocessing — Brain Extraction<a class="headerlink" href="#step-3-preprocessing-brain-extraction" title="Permanent link">&para;</a></h2>
+<h3 id="bet-brain-extraction">BET (Brain Extraction)<a class="headerlink" href="#bet-brain-extraction" title="Permanent link">&para;</a></h3>
+<p>Drag <strong>bet</strong> onto the canvas. Double-click the node to open its parameter modal and set:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>output</code></td>
+<td><code>brain</code></td>
+<td>Output filename stem</td>
+</tr>
+<tr>
+<td><code>frac</code></td>
+<td><code>0.5</code></td>
+<td>Fractional intensity threshold (default; lower values include more tissue)</td>
+</tr>
+<tr>
+<td><code>mask</code></td>
+<td><code>true</code></td>
+<td>Also generate a binary brain mask</td>
+</tr>
+</tbody>
+</table>
+<p>BET operates on the T1w structural image. The skull-stripped brain serves as the reference for functional-to-structural registration (FLIRT), as the input for structural-to-MNI registration (both linear FLIRT and nonlinear FNIRT).</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Source node</th>
+<th>Source output</th>
+<th>Target node</th>
+<th>Target input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>BIDS</td>
+<td><code>t1w</code></td>
+<td>BET</td>
+<td><code>input</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-4-preprocessing-functional-data">Step 4: Preprocessing — Functional Data<a class="headerlink" href="#step-4-preprocessing-functional-data" title="Permanent link">&para;</a></h2>
+<h3 id="mcflirt-motion-correction">MCFLIRT (Motion Correction)<a class="headerlink" href="#mcflirt-motion-correction" title="Permanent link">&para;</a></h3>
+<p>Drag <strong>mcflirt</strong> onto the canvas. Double-click and set:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>output</code></td>
+<td><code>bold_mc</code></td>
+<td>Output filename stem</td>
+</tr>
+<tr>
+<td><code>mean_vol</code></td>
+<td><code>true</code></td>
+<td>Register all volumes to the mean (robust for long runs)</td>
+</tr>
+<tr>
+<td><code>save_plots</code></td>
+<td><code>true</code></td>
+<td>Save motion parameter plots for QC</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Source node</th>
+<th>Source output</th>
+<th>Target node</th>
+<th>Target input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>BIDS</td>
+<td><code>bold</code></td>
+<td>MCFLIRT</td>
+<td><code>input</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="slicetimer-slice-timing-correction">slicetimer (Slice Timing Correction)<a class="headerlink" href="#slicetimer-slice-timing-correction" title="Permanent link">&para;</a></h3>
+<p>Drag <strong>slicetimer</strong> onto the canvas. Double-click and set:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>output</code></td>
+<td><code>bold_st</code></td>
+<td>Output filename stem</td>
+</tr>
+<tr>
+<td><code>slice_order</code></td>
+<td><code>interleaved</code></td>
+<td>ds000102 uses interleaved acquisition (select the interleaved variant)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Source node</th>
+<th>Source output</th>
+<th>Target node</th>
+<th>Target input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>MCFLIRT</td>
+<td><code>motion_corrected</code></td>
+<td>slicetimer</td>
+<td><code>input</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note:</strong> ds000102 uses interleaved slice acquisition. The dataset predates widespread BIDS sidecar metadata adoption, so <code>SliceTiming</code> may not appear in the BOLD sidecar JSON. For other datasets, check the <code>SliceTiming</code> field in <code>sub-XX_task-*_bold.json</code> or consult the acquisition protocol.</p>
+</blockquote>
+<h3 id="susan-spatial-smoothing">SUSAN (Spatial Smoothing)<a class="headerlink" href="#susan-spatial-smoothing" title="Permanent link">&para;</a></h3>
+<p>Drag <strong>susan</strong> onto the canvas. Double-click and set:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>brightness_threshold</code></td>
+<td><code>2000</code></td>
+<td>~10% of mean image intensity; above noise, below edge contrast</td>
+</tr>
+<tr>
+<td><code>fwhm</code></td>
+<td><code>5</code></td>
+<td>5 mm FWHM Gaussian kernel — standard for single-subject fMRI</td>
+</tr>
+<tr>
+<td><code>output</code></td>
+<td><code>bold_smooth</code></td>
+<td>Output filename stem</td>
+</tr>
+</tbody>
+</table>
+<p>The defaults for <code>dimension</code> (3), <code>use_median</code> (1), and <code>n_usans</code> (0) are appropriate.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Source node</th>
+<th>Source output</th>
+<th>Target node</th>
+<th>Target input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>slicetimer</td>
+<td><code>slice_time_corrected</code></td>
+<td>SUSAN</td>
+<td><code>input</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-5-preprocessing-temporal-filtering">Step 5: Preprocessing — Temporal Filtering<a class="headerlink" href="#step-5-preprocessing-temporal-filtering" title="Permanent link">&para;</a></h2>
+<h3 id="fslmaths-high-pass-filter">fslmaths (High-Pass Filter)<a class="headerlink" href="#fslmaths-high-pass-filter" title="Permanent link">&para;</a></h3>
+<p>Drag <strong>fslmaths</strong> onto the canvas. Double-click and set:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bptf</code></td>
+<td><code>25 -1</code></td>
+<td>High-pass filter with sigma = 25 volumes; no low-pass (-1)</td>
+</tr>
+<tr>
+<td><code>output</code></td>
+<td><code>bold_filtered_demeaned</code></td>
+<td>Output filename stem (demeaned — mean is restored in Step 7)</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>bptf</code> parameter performs bandpass temporal filtering. The two values are <code>hp_sigma</code> and <code>lp_sigma</code> in units of volumes (not seconds). The high-pass sigma is calculated as:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sigma = cutoff_period / (2 × TR) = 100 / (2 × 2) = 25 volumes
+</code></pre></div>
+<p>This applies a ~100s high-pass filter, which is the FSL default. Setting lp_sigma to <code>-1</code> disables low-pass filtering. High-pass filtering removes low-frequency scanner drift that inflates noise variance and reduces t/z-statistics. This is especially important for ds000102's slow event-related design (ITI = 8–14s), where task-related frequencies are relatively close to drift frequencies.</p>
+<blockquote>
+<p><strong>Important:</strong> <code>bptf</code> removes the temporal mean as part of the high-pass filter, leaving the data zero-centered. This is a problem for downstream tools like <code>film_gls</code>, which uses mean intensity to distinguish brain from background — zero-centered data causes ~50% of brain voxels to be randomly masked out. Steps 6 and 7 fix this by computing the temporal mean before filtering and adding it back afterward (the standard FSL FEAT approach).</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Source node</th>
+<th>Source output</th>
+<th>Target node</th>
+<th>Target input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>SUSAN</td>
+<td><code>smoothed_image</code></td>
+<td>fslmaths (bptf)</td>
+<td><code>input</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Operation ordering in fslmaths:</strong> fslmaths processes flags left-to-right — the order of operations on the command line determines the order of execution. When you enable two or more operations on a single fslmaths node, the <strong>Operation Order</strong> panel appears in the parameter modal, allowing you to reorder them with arrow buttons. In this pipeline, each fslmaths node performs a single operation (bptf, Tmean, or add_file), so operation ordering is not needed. If you were to consolidate steps — for example, combining <code>-thr 0.5</code> and <code>-bin</code> into one node — you would use the Operation Order panel to control whether thresholding or binarization happens first, as these produce different results. Wired file inputs (like <code>add_file</code>) automatically appear in the Operation Order panel when connected via edges.</p>
+</blockquote>
+<hr />
+<h2 id="step-6-preprocessing-compute-temporal-mean">Step 6: Preprocessing — Compute Temporal Mean<a class="headerlink" href="#step-6-preprocessing-compute-temporal-mean" title="Permanent link">&para;</a></h2>
+<h3 id="fslmaths-temporal-mean">fslmaths (Temporal Mean)<a class="headerlink" href="#fslmaths-temporal-mean" title="Permanent link">&para;</a></h3>
+<p>This step computes the temporal mean of the SUSAN output — i.e., the mean intensity at each voxel across all timepoints. This 3D volume captures the baseline signal level that <code>bptf</code> removes. It will be added back to the filtered data in Step 7.</p>
+<p>Drag <strong>fslmaths</strong> onto the canvas (this is a second, separate fslmaths instance). Double-click and set:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Tmean</code></td>
+<td><code>true</code></td>
+<td>Compute mean across the time dimension — produces a 3D volume</td>
+</tr>
+<tr>
+<td><code>output</code></td>
+<td><code>mean_func</code></td>
+<td>Output filename stem</td>
+</tr>
+</tbody>
+</table>
+<p>Steps 5 (bptf) and 6 (Tmean) both take the SUSAN output as input and can run in parallel.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Source node</th>
+<th>Source output</th>
+<th>Target node</th>
+<th>Target input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5b</td>
+<td>SUSAN</td>
+<td><code>smoothed_image</code></td>
+<td>fslmaths (Tmean)</td>
+<td><code>input</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-7-preprocessing-restore-temporal-mean">Step 7: Preprocessing — Restore Temporal Mean<a class="headerlink" href="#step-7-preprocessing-restore-temporal-mean" title="Permanent link">&para;</a></h2>
+<h3 id="fslmaths-add-mean-back">fslmaths (Add Mean Back)<a class="headerlink" href="#fslmaths-add-mean-back" title="Permanent link">&para;</a></h3>
+<p>This step adds the temporal mean (from Step 6) back to the high-pass filtered data (from Step 5), restoring positive intensity values while keeping the temporal filtering. This is the standard approach used by FSL's FEAT pipeline.</p>
+<p>Drag <strong>fslmaths</strong> onto the canvas (a third fslmaths instance). Double-click and set:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>add_file</code></td>
+<td><em>(wired from Step 6)</em></td>
+<td>Add the mean_func image to each volume of the filtered data</td>
+</tr>
+<tr>
+<td><code>output</code></td>
+<td><code>bold_filtered</code></td>
+<td>Output filename stem — this is the final filtered BOLD</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Source node</th>
+<th>Source output</th>
+<th>Target node</th>
+<th>Target input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5c</td>
+<td>fslmaths (bptf)</td>
+<td><code>output_image</code></td>
+<td>fslmaths (add mean)</td>
+<td><code>input</code></td>
+</tr>
+<tr>
+<td>5d</td>
+<td>fslmaths (Tmean)</td>
+<td><code>output_image</code></td>
+<td>fslmaths (add mean)</td>
+<td><code>add_file</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-8-registration-structural-to-mni-linear">Step 8: Registration — Structural to MNI (Linear)<a class="headerlink" href="#step-8-registration-structural-to-mni-linear" title="Permanent link">&para;</a></h2>
+<h3 id="flirt-12-dof-affine-structural-mni">FLIRT (12-DOF Affine, Structural → MNI)<a class="headerlink" href="#flirt-12-dof-affine-structural-mni" title="Permanent link">&para;</a></h3>
+<p>Drag a <strong>flirt</strong> node onto the canvas. This is a separate FLIRT step from the functional-to-structural registration in Step 9. Double-click and set:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>output</code></td>
+<td><code>struct2mni_linear</code></td>
+<td>Output filename stem</td>
+</tr>
+<tr>
+<td><code>output_matrix</code></td>
+<td><code>struct2mni.mat</code></td>
+<td>Save the 12-DOF affine matrix — used to initialize FNIRT</td>
+</tr>
+<tr>
+<td><code>dof</code></td>
+<td><code>12</code></td>
+<td>Full affine (translation + rotation + scaling + skew) for inter-subject registration</td>
+</tr>
+<tr>
+<td><code>cost</code></td>
+<td><code>corratio</code></td>
+<td>Correlation ratio — robust for T1-to-T1 registration</td>
+</tr>
+</tbody>
+</table>
+<p>This step computes a linear approximation of the structural-to-MNI mapping. The resulting affine matrix is passed to FNIRT as initialization, which helps FNIRT converge to a better nonlinear solution — particularly for subjects whose brains differ substantially from the template.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Source node</th>
+<th>Source output</th>
+<th>Target node</th>
+<th>Target input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6</td>
+<td>BET</td>
+<td><code>brain_extraction</code></td>
+<td>FLIRT (struct→MNI)</td>
+<td><code>input</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Input (<code>MNI152</code>)</td>
+<td>output</td>
+<td>FLIRT (struct→MNI)</td>
+<td><code>reference</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-9-registration-functional-to-structural">Step 9: Registration — Functional to Structural<a class="headerlink" href="#step-9-registration-functional-to-structural" title="Permanent link">&para;</a></h2>
+<h3 id="flirt-6-dof-rigid-functional-structural">FLIRT (6-DOF Rigid, Functional → Structural)<a class="headerlink" href="#flirt-6-dof-rigid-functional-structural" title="Permanent link">&para;</a></h3>
+<p>Drag another <strong>flirt</strong> node onto the canvas. Double-click and set:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>output</code></td>
+<td><code>func2struct</code></td>
+<td>Output filename stem</td>
+</tr>
+<tr>
+<td><code>dof</code></td>
+<td><code>6</code></td>
+<td>6-DOF rigid-body (functional-to-structural is intra-subject)</td>
+</tr>
+<tr>
+<td><code>output_matrix</code></td>
+<td><code>func2struct.mat</code></td>
+<td>Save the transformation matrix — needed by applywarp</td>
+</tr>
+<tr>
+<td><code>cost</code></td>
+<td><code>corratio</code></td>
+<td>Correlation ratio — robust for EPI-to-T1 registration</td>
+</tr>
+</tbody>
+</table>
+<p>FLIRT takes the mean functional image (from MCFLIRT) as <code>input</code> and the skull-stripped T1w (from BET) as <code>reference</code>. Using the mean BOLD — rather than the full 4D timeseries — provides a single representative volume with good tissue contrast for registration. MCFLIRT's mean image is unsmoothed and unfiltered, which preserves the tissue boundary detail needed for accurate EPI-to-T1 alignment. The SUSAN-smoothed and bptf-filtered version would have reduced edge contrast, degrading registration quality.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Source node</th>
+<th>Source output</th>
+<th>Target node</th>
+<th>Target input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>MCFLIRT</td>
+<td><code>mean_image</code></td>
+<td>FLIRT (func→struct)</td>
+<td><code>input</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td>BET</td>
+<td><code>brain_extraction</code></td>
+<td>FLIRT (func→struct)</td>
+<td><code>reference</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-10-registration-structural-to-mni-nonlinear">Step 10: Registration — Structural to MNI (Nonlinear)<a class="headerlink" href="#step-10-registration-structural-to-mni-nonlinear" title="Permanent link">&para;</a></h2>
+<h3 id="fnirt-nonlinear-registration">FNIRT (Nonlinear Registration)<a class="headerlink" href="#fnirt-nonlinear-registration" title="Permanent link">&para;</a></h3>
+<p>Drag <strong>fnirt</strong> onto the canvas. Double-click and set:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>config</code></td>
+<td><code>T1_2_MNI152_2mm.cnf</code></td>
+<td>FSL standard config for T1→MNI152 2mm; sets optimized warp resolution, subsampling, regularization, and intensity model</td>
+</tr>
+<tr>
+<td><code>cout</code></td>
+<td><code>struct2mni_warp</code></td>
+<td>Output warp coefficients filename</td>
+</tr>
+<tr>
+<td><code>iout</code></td>
+<td><code>struct2mni</code></td>
+<td>Warped output image filename</td>
+</tr>
+</tbody>
+</table>
+<p>FNIRT takes the skull-stripped T1w (from BET) as <code>input</code>, the MNI152 template as <code>reference</code>, and the 12-DOF affine matrix from Step 8 as <code>affine</code> initialization. The <code>config</code> parameter points to FSL's standard configuration file for T1-to-MNI152 2mm registration. It overrides FNIRT's generic defaults with settings tuned for this specific registration: 10mm→2mm warp resolution schedule, appropriate subsampling levels, and regularization that balances anatomical detail against overfitting. Without it, FNIRT uses conservative defaults that may under-warp cortical folds.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Source node</th>
+<th>Source output</th>
+<th>Target node</th>
+<th>Target input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>BET</td>
+<td><code>brain_extraction</code></td>
+<td>FNIRT</td>
+<td><code>input</code></td>
+</tr>
+<tr>
+<td>11</td>
+<td>Input (<code>MNI152</code>)</td>
+<td>output</td>
+<td>FNIRT</td>
+<td><code>reference</code></td>
+</tr>
+<tr>
+<td>12</td>
+<td>FLIRT (struct→MNI)</td>
+<td><code>transformation_matrix</code></td>
+<td>FNIRT</td>
+<td><code>affine</code></td>
+</tr>
+<tr>
+<td>13</td>
+<td>Input (<code>fnirt_config</code>)</td>
+<td>output</td>
+<td>FNIRT</td>
+<td><code>config</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>FLIRT (struct→MNI) is from Step 8.</p>
+</blockquote>
+<hr />
+<h2 id="step-11-transform-to-standard-space">Step 11: Transform to Standard Space<a class="headerlink" href="#step-11-transform-to-standard-space" title="Permanent link">&para;</a></h2>
+<h3 id="applywarp-apply-combined-transform">applywarp (Apply Combined Transform)<a class="headerlink" href="#applywarp-apply-combined-transform" title="Permanent link">&para;</a></h3>
+<p>Drag <strong>applywarp</strong> onto the canvas. Double-click and set:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>output</code></td>
+<td><code>bold_mni</code></td>
+<td>Output filename — functional data in MNI space</td>
+</tr>
+<tr>
+<td><code>interp</code></td>
+<td><code>spline</code></td>
+<td>Spline interpolation preserves signal for functional data</td>
+</tr>
+</tbody>
+</table>
+<p>applywarp combines the linear (FLIRT) and nonlinear (FNIRT) transforms in a single resampling step, avoiding double interpolation:</p>
+<ul>
+<li><code>input</code>: Temporally filtered BOLD with mean restored (from fslmaths add mean, Step 7)</li>
+<li><code>reference</code>: MNI152 template</li>
+<li><code>warp</code>: Warp field from FNIRT (Step 10)</li>
+<li><code>premat</code>: Transformation matrix from FLIRT func→struct (Step 9, <code>func2struct.mat</code>)</li>
+</ul>
+<p>This brings all subjects' functional data into the same standard space, which is required for group-level analysis.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Source node</th>
+<th>Source output</th>
+<th>Target node</th>
+<th>Target input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>14</td>
+<td>fslmaths (add mean)</td>
+<td><code>output_image</code></td>
+<td>applywarp</td>
+<td><code>input</code></td>
+</tr>
+<tr>
+<td>15</td>
+<td>Input (<code>MNI152</code>)</td>
+<td>output</td>
+<td>applywarp</td>
+<td><code>reference</code></td>
+</tr>
+<tr>
+<td>16</td>
+<td>FNIRT</td>
+<td><code>warp_coefficients</code></td>
+<td>applywarp</td>
+<td><code>warp</code></td>
+</tr>
+<tr>
+<td>17</td>
+<td>FLIRT (func→struct)</td>
+<td><code>transformation_matrix</code></td>
+<td>applywarp</td>
+<td><code>premat</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Optional: First-Level and Group-Level Statistics</strong></p>
+<p>To extend this pipeline for task activation analysis (e.g., incongruent &gt; congruent contrast), add film_gls for per-subject-run first-level GLMs — each subject-run receives its own design matrix encoding congruent and incongruent trial onsets convolved with the hemodynamic response function, plus a contrast file defining the comparison of interest. The per-subject-run COPEs (contrast of parameter estimates) and VARCOPEs are then gathered via fslmerge into 4D volumes, and flameo performs group-level mixed-effects analysis (FLAME1) across subjects. Because ds000102 uses pseudorandom trial ordering, each subject-run requires its own design matrix generated from the BIDS events.tsv files. The group design uses a single-column mean model with a <code>.grp</code> file encoding the repeated-measures structure (2 runs per subject).</p>
+<hr />
+<blockquote>
+<p><strong>Scatter propagation:</strong> Because the BIDS node has scatter enabled, scatter automatically propagates downstream through all connected nodes from BET through applywarp. Each subject-run is preprocessed independently. When using <code>--cachedir</code> with cwltool, duplicate T1w processing (BET, FLIRT struct→MNI, FNIRT) is automatically cached — the second run reuses the first run's structural results.</p>
+</blockquote>
+<hr />
+<h2 id="step-12-pin-docker-versions">Step 12: Pin Docker Versions<a class="headerlink" href="#step-12-pin-docker-versions" title="Permanent link">&para;</a></h2>
+<p>For reproducibility, pin a specific FSL version rather than using <code>latest</code>.</p>
+<ol>
+<li>Double-click any FSL node (e.g., BET).</li>
+<li>In the parameter modal, find the <strong>Docker version</strong> dropdown.</li>
+<li>Select a version such as <code>6.0.5</code> or <code>6.0.4-patched2</code>.</li>
+<li>Repeat for each FSL node, or set them all to the same version.</li>
+</ol>
+<p>All FSL tools use the <code>brainlife/fsl</code> Docker image, so they share the same version tag.</p>
+<hr />
+<h2 id="step-13-name-and-export">Step 13: Name and Export<a class="headerlink" href="#step-13-name-and-export" title="Permanent link">&para;</a></h2>
+<ol>
+<li>In the top bar, set the <strong>Output</strong> name to <code>flanker_preproc</code> (or any name you prefer).</li>
+<li>Click the <strong>Generate Workflow</strong> button in the actions bar.</li>
+<li>Your browser downloads <code>flanker_preproc.crate.zip</code>.</li>
+</ol>
+<p>The ZIP contains:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>flanker_preproc.crate.zip/
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── workflows/
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   ├── flanker_preproc.cwl           # Main CWL workflow
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   └── flanker_preproc_job.yml       # Job template with your parameter values
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>├── cwl/
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   └── fsl/
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│       ├── bet.cwl
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>│       ├── mcflirt.cwl
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│       ├── slicetimer.cwl
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>│       ├── susan.cwl
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>│       ├── fslmaths.cwl
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>│       ├── flirt.cwl
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>│       ├── fnirt.cwl
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>│       └── applywarp.cwl
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>├── Dockerfile
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>├── run.sh
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>├── prefetch_images.sh
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>├── Singularity.def
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>├── run_singularity.sh
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>├── prefetch_images_singularity.sh
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>├── bids_query.json                   # BIDS selection parameters
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>├── resolve_bids.py                   # BIDS path resolver script
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>├── ro-crate-metadata.json            # JSON-LD metadata
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>└── README.md                         # Execution instructions
+</code></pre></div>
+<hr />
+<h2 id="step-14-run-the-workflow">Step 14: Run the Workflow<a class="headerlink" href="#step-14-run-the-workflow" title="Permanent link">&para;</a></h2>
+<p>Unzip the bundle and edit the job file before running.</p>
+<h3 id="edit-the-job-template">Edit the job template<a class="headerlink" href="#edit-the-job-template" title="Permanent link">&para;</a></h3>
+<p>Open <code>workflows/flanker_preproc_job.yml</code>. Replace placeholder paths with actual paths on your system:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># BIDS-resolved inputs (filled by resolve_bids.py or manually)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># 52 entries: 26 subjects × 2 runs (run-1 first, then run-2)</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">bold</span><span class="p">:</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="c1"># --- run-1 ---</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">File</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/sub-01/func/sub-01_task-flanker_run-1_bold.nii.gz</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">File</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/sub-02/func/sub-02_task-flanker_run-1_bold.nii.gz</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="c1"># ... (sub-03 through sub-26 run-1)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="c1"># --- run-2 ---</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">File</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/sub-01/func/sub-01_task-flanker_run-2_bold.nii.gz</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">File</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/sub-02/func/sub-02_task-flanker_run-2_bold.nii.gz</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span><span class="c1"># ... (sub-03 through sub-26 run-2)</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="c1"># T1w images: each subject&#39;s T1w is listed twice (once per run) so that</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="c1"># the t1w array length (52) matches the bold array length (52). This is</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="c1"># required because dotproduct scatter pairs arrays element-by-element —</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="c1"># the i-th bold file must align with the i-th t1w file.</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="nt">t1w</span><span class="p">:</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">File</span><span class="w">                              </span><span class="c1"># sub-01, run-1</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/sub-01/anat/sub-01_T1w.nii.gz</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">File</span><span class="w">                              </span><span class="c1"># sub-01, run-2 (same T1w)</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/sub-01/anat/sub-01_T1w.nii.gz</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">File</span><span class="w">                              </span><span class="c1"># sub-02, run-1</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/sub-02/anat/sub-02_T1w.nii.gz</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">File</span><span class="w">                              </span><span class="c1"># sub-02, run-2 (same T1w)</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/sub-02/anat/sub-02_T1w.nii.gz</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="w">  </span><span class="c1"># ... (sub-03 through sub-26, each listed twice)</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a>
+<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a><span class="c1"># FNIRT config for T1→MNI152 2mm</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a><span class="nt">fnirt_config</span><span class="p">:</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a><span class="w">  </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">File</span>
+<a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a><span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/additional_inputs/T1_2_MNI152_2mm.cnf</span>
+<a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a>
+<a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a><span class="c1"># MNI template (used by FLIRT, FNIRT, applywarp)</span>
+<a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a><span class="nt">fnirt_reference</span><span class="p">:</span>
+<a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a><span class="w">  </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">File</span>
+<a id="__codelineno-3-40" name="__codelineno-3-40" href="#__codelineno-3-40"></a><span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/additional_inputs/MNI152_T1_2mm.nii.gz</span>
+<a id="__codelineno-3-41" name="__codelineno-3-41" href="#__codelineno-3-41"></a><span class="nt">flirt_struct2mni_reference</span><span class="p">:</span>
+<a id="__codelineno-3-42" name="__codelineno-3-42" href="#__codelineno-3-42"></a><span class="w">  </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">File</span>
+<a id="__codelineno-3-43" name="__codelineno-3-43" href="#__codelineno-3-43"></a><span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/additional_inputs/MNI152_T1_2mm.nii.gz</span>
+<a id="__codelineno-3-44" name="__codelineno-3-44" href="#__codelineno-3-44"></a><span class="nt">applywarp_reference</span><span class="p">:</span>
+<a id="__codelineno-3-45" name="__codelineno-3-45" href="#__codelineno-3-45"></a><span class="w">  </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">File</span>
+<a id="__codelineno-3-46" name="__codelineno-3-46" href="#__codelineno-3-46"></a><span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/additional_inputs/MNI152_T1_2mm.nii.gz</span>
+<a id="__codelineno-3-47" name="__codelineno-3-47" href="#__codelineno-3-47"></a>
+<a id="__codelineno-3-48" name="__codelineno-3-48" href="#__codelineno-3-48"></a><span class="c1"># Tool parameters (pre-filled from your canvas configuration)</span>
+<a id="__codelineno-3-49" name="__codelineno-3-49" href="#__codelineno-3-49"></a><span class="nt">bet_output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">brain</span>
+<a id="__codelineno-3-50" name="__codelineno-3-50" href="#__codelineno-3-50"></a><span class="nt">bet_frac</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
+<a id="__codelineno-3-51" name="__codelineno-3-51" href="#__codelineno-3-51"></a><span class="nt">mcflirt_output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bold_mc</span>
+<a id="__codelineno-3-52" name="__codelineno-3-52" href="#__codelineno-3-52"></a><span class="nt">fslmaths_bptf</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;25</span><span class="nv"> </span><span class="s">-1&quot;</span>
+<a id="__codelineno-3-53" name="__codelineno-3-53" href="#__codelineno-3-53"></a><span class="nt">fslmaths_output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bold_filtered_demeaned</span>
+<a id="__codelineno-3-54" name="__codelineno-3-54" href="#__codelineno-3-54"></a><span class="c1"># fslmaths (Tmean) — compute temporal mean before filtering</span>
+<a id="__codelineno-3-55" name="__codelineno-3-55" href="#__codelineno-3-55"></a><span class="nt">fslmaths_2_Tmean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-3-56" name="__codelineno-3-56" href="#__codelineno-3-56"></a><span class="nt">fslmaths_2_output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mean_func</span>
+<a id="__codelineno-3-57" name="__codelineno-3-57" href="#__codelineno-3-57"></a><span class="c1"># fslmaths (add mean) — restore temporal mean after filtering</span>
+<a id="__codelineno-3-58" name="__codelineno-3-58" href="#__codelineno-3-58"></a><span class="nt">fslmaths_3_output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bold_filtered</span>
+<a id="__codelineno-3-59" name="__codelineno-3-59" href="#__codelineno-3-59"></a><span class="c1"># add_file is wired from fslmaths_2 output via canvas connection</span>
+<a id="__codelineno-3-60" name="__codelineno-3-60" href="#__codelineno-3-60"></a><span class="nt">flirt_struct2mni_output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">struct2mni_linear</span>
+<a id="__codelineno-3-61" name="__codelineno-3-61" href="#__codelineno-3-61"></a><span class="nt">flirt_struct2mni_output_matrix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">struct2mni.mat</span>
+<a id="__codelineno-3-62" name="__codelineno-3-62" href="#__codelineno-3-62"></a><span class="nt">flirt_struct2mni_dof</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12</span>
+<a id="__codelineno-3-63" name="__codelineno-3-63" href="#__codelineno-3-63"></a><span class="nt">flirt_struct2mni_cost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">corratio</span>
+<a id="__codelineno-3-64" name="__codelineno-3-64" href="#__codelineno-3-64"></a><span class="c1"># ... remaining parameters</span>
+</code></pre></div>
+<p>If you used BIDS data, you can run <code>resolve_bids.py</code> to auto-populate file paths:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>resolve_bids.py<span class="w"> </span>/path/to/bids/dataset
+</code></pre></div>
+<h3 id="option-a-run-with-docker">Option A: Run with Docker<a class="headerlink" href="#option-a-run-with-docker" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">cd</span><span class="w"> </span>flanker_preproc
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># Optional: pre-pull FSL images</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>bash<span class="w"> </span>prefetch_images.sh
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># Build the orchestration container</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>flanker-preproc<span class="w"> </span>.
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="c1"># Run</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span>-v<span class="w"> </span>/var/run/docker.sock:/var/run/docker.sock<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span>-v<span class="w"> </span>/path/to/data:/data<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">  </span>-v<span class="w"> </span>/path/to/output:/output<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">  </span>flanker-preproc
+</code></pre></div>
+<p>The <code>-v /var/run/docker.sock:/var/run/docker.sock</code> mount is required because cwltool inside the container launches per-tool Docker containers (Docker-in-Docker pattern).</p>
+<h3 id="option-b-run-with-cwltool-directly">Option B: Run with cwltool directly<a class="headerlink" href="#option-b-run-with-cwltool-directly" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>pip<span class="w"> </span>install<span class="w"> </span>cwltool
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">cd</span><span class="w"> </span>flanker_preproc
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>cwltool<span class="w"> </span>--parallel<span class="w"> </span>--cachedir<span class="w"> </span>cache<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>workflows/flanker_preproc.cwl<span class="w"> </span>workflows/flanker_preproc_job.yml
+</code></pre></div>
+<blockquote>
+<p><strong>Note:</strong> <code>--parallel</code> enables concurrent execution of scattered subject-runs — without it, cwltool processes each sequentially even when scatter is specified. <code>--cachedir cache</code> caches completed step outputs so that if the workflow is interrupted, re-running it skips already-finished jobs. With both runs included, caching also avoids redundant BET/FLIRT/FNIRT computation on duplicate T1w inputs.</p>
+</blockquote>
+<p>This requires Docker to be running, as cwltool pulls the <code>brainlife/fsl</code> image to execute each step.</p>
+<h3 id="option-c-run-with-singularity-hpc">Option C: Run with Singularity (HPC)<a class="headerlink" href="#option-c-run-with-singularity-hpc" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nb">cd</span><span class="w"> </span>flanker_preproc
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># Convert Docker images to SIF</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>bash<span class="w"> </span>prefetch_images_singularity.sh
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># Build the orchestration container</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>singularity<span class="w"> </span>build<span class="w"> </span>flanker-preproc.sif<span class="w"> </span>Singularity.def
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="c1"># Run</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>singularity<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">  </span>--bind<span class="w"> </span>/path/to/data:/data<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">  </span>--bind<span class="w"> </span>/path/to/output:/output<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">  </span>flanker-preproc.sif
+</code></pre></div>
+<hr />
+<h2 id="expected-outputs">Expected Outputs<a class="headerlink" href="#expected-outputs" title="Permanent link">&para;</a></h2>
+<h3 id="per-subject-run-preprocessing-outputs">Per subject-run preprocessing outputs<a class="headerlink" href="#per-subject-run-preprocessing-outputs" title="Permanent link">&para;</a></h3>
+<p>The pipeline produces MNI-space preprocessed BOLD for each subject-run (52 total). Key intermediate and final outputs:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Step</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>brain.nii.gz</code></td>
+<td>BET</td>
+<td>Skull-stripped T1w structural</td>
+</tr>
+<tr>
+<td><code>brain_mask.nii.gz</code></td>
+<td>BET</td>
+<td>Binary brain mask</td>
+</tr>
+<tr>
+<td><code>bold_mc.nii.gz</code></td>
+<td>MCFLIRT</td>
+<td>Motion-corrected 4D BOLD</td>
+</tr>
+<tr>
+<td><code>bold_mc.par</code></td>
+<td>MCFLIRT</td>
+<td>6-DOF motion parameters (3 rot + 3 trans)</td>
+</tr>
+<tr>
+<td><code>bold_st.nii.gz</code></td>
+<td>slicetimer</td>
+<td>Slice-timing corrected BOLD</td>
+</tr>
+<tr>
+<td><code>bold_smooth.nii.gz</code></td>
+<td>SUSAN</td>
+<td>Spatially smoothed BOLD</td>
+</tr>
+<tr>
+<td><code>bold_filtered.nii.gz</code></td>
+<td>fslmaths</td>
+<td>High-pass filtered BOLD with mean restored</td>
+</tr>
+<tr>
+<td><code>struct2mni_linear.nii.gz</code></td>
+<td>FLIRT</td>
+<td>Linearly registered structural</td>
+</tr>
+<tr>
+<td><code>func2struct.mat</code></td>
+<td>FLIRT</td>
+<td>Functional-to-structural transform</td>
+</tr>
+<tr>
+<td><code>struct2mni_warp.nii.gz</code></td>
+<td>FNIRT</td>
+<td>Nonlinear warp field</td>
+</tr>
+<tr>
+<td><code>bold_mni.nii.gz</code></td>
+<td>applywarp</td>
+<td><strong>Final output — preprocessed BOLD in MNI space</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The <code>bold_mni.nii.gz</code> files are ready for downstream statistical analysis (e.g., first-level GLM via film_gls/FEAT, or connectivity analysis).</p>
+<p>You can view these outputs overlaid on the MNI152 template in FSLeyes, MRIcroGL, or any NIfTI viewer.</p>
+<hr />
+<h2 id="tips">Tips<a class="headerlink" href="#tips" title="Permanent link">&para;</a></h2>
+<p><strong>Multi-subject processing with scatter:</strong>
+Because BIDS outputs are arrays (one file per subject-run), scatter automatically parallelizes the entire pipeline across subject-runs. Each subject-run is preprocessed independently through BET to applywarp.</p>
+<p><strong>Temporal filtering and mean restoration:</strong>
+<code>fslmaths -bptf</code> removes the temporal mean as part of high-pass filtering, leaving the data zero-centered. This is a common pitfall; FSL's FEAT handles it automatically by computing <code>-Tmean</code> before filtering and <code>-add</code>ing it back afterward. The pipeline includes three fslmaths steps (Steps 5–7) to replicate this pattern: compute the temporal mean, apply the high-pass filter, then add the mean back.</p>
+<p><strong>Caching duplicate structural processing:</strong>
+Because T1w images are duplicated to match the BOLD array length (see Step 1), BET, FLIRT struct→MNI, and FNIRT would each run twice per subject — once for each run — producing identical outputs. When using <code>--cachedir</code>, cwltool detects that the same T1w file appears twice in the array and reuses the cached outputs. This means structural processing only runs once per subject, not once per run. Without <code>--cachedir</code>, the duplicate processing still produces correct results but wastes compute.</p>
+<p><strong>Save as a custom workflow:</strong>
+To reuse this pipeline in other projects, type a name in the <strong>Name</strong> field (top bar) and click <strong>Save Workflow</strong>. The pipeline appears under <strong>My Workflows</strong> in the left menu and can be dragged onto any future canvas as a single composite node.</p>
+<p><strong>Use the CWL Preview panel:</strong>
+Before exporting, open the CWL Preview panel to inspect the generated CWL and job YAML in real time. This helps catch wiring mistakes or missing parameters before you download the bundle.</p>
+<p><strong>Motion QC:</strong>
+Before proceeding to downstream analysis, inspect the motion parameter plots from MCFLIRT. Consider excluding subjects with excessive motion (e.g., &gt; 3mm translation or &gt; 3° rotation). In a production pipeline, you would add a QC step here — niBuild includes MRIQC as a single-node option for automated quality assessment.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/KunaalAgarwal/niBuild" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
