@@ -1,4 +1,4 @@
-aux_env/
+auxenv/
 .claude/
 
 validation/vbm_alzheimers/data
