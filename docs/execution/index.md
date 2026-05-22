@@ -1,69 +1,95 @@
-# Workflow Execution
+# Execution & Output
 
-Each workflow exported from niBuild is a self-contained `.crate.zip` bundle with everything needed to run the pipeline on any machine.
+Every workflow you export from niBuild is a self-contained `.crate.zip` bundle — everything needed to run the pipeline on any machine, with niBuild no longer involved.
 
-## Bundle Contents
+## What's in the bundle
 
 | File | Purpose |
 |---|---|
-| `workflows/<name>.cwl` | Main CWL workflow file |
-| `workflows/<name>_job.yml` | Job file with pre-configured parameters |
-| `cwl/` | Individual tool CWL definitions |
-| `Dockerfile` | Recipe for building the Docker orchestration container |
-| `run.sh` | Entrypoint script for Docker execution |
-| `prefetch_images.sh` | Pre-pull tool Docker images (optional) |
-| `Singularity.def` | Recipe for building the Singularity/Apptainer container |
-| `run_singularity.sh` | Entrypoint script for Singularity execution |
-| `prefetch_images_singularity.sh` | Convert Docker images to SIF files (optional) |
-| `ro-crate-metadata.json` | [Workflow RO-Crate](https://w3id.org/workflowhub/workflow-ro-crate/1.0) metadata (JSON-LD) |
+| `workflows/<name>.cwl` | The CWL workflow |
+| `workflows/<name>_job.yml` | Job template, pre-filled with your parameter values |
+| `cwl/<library>/<tool>.cwl` | Individual tool definitions, with pinned Docker versions |
+| `Dockerfile` + `run.sh` | One-command execution via Docker |
+| `Singularity.def` + `run_singularity.sh` | Execution on HPC with Singularity / Apptainer |
+| `prefetch_images*.sh` | Optional — pre-pull tool images (Docker) or convert them to SIF (Singularity) |
+| `additional_inputs/` | Bundled Standard Template files (MNI152, fsaverage, atlases) |
+| `bids_query.json` + `resolve_bids.py` | BIDS path resolver — present only when the workflow has a BIDS node |
+| `ro-crate-metadata.json` | FAIR metadata (JSON-LD), conforming to the [Workflow RO-Crate](https://w3id.org/workflowhub/workflow-ro-crate/1.0) profile for sharing on [WorkflowHub](https://workflowhub.eu/) |
 | `README.md` | Setup and execution instructions |
 
-## Two-Layer Container Architecture
+## Two-layer containers
 
-niBuild workflows use a **two-layer container architecture**:
+A running workflow uses two layers of containers:
 
-1. **Tool containers** (e.g. `brainlife/fsl:6.0.5`) — Pre-built images hosted on Docker Hub containing neuroimaging software (FSL, AFNI, ANTs, FreeSurfer, etc.). Each CWL tool definition references its required container image. You do not build these yourself.
+- **Tool containers** (`brainlife/fsl`, `antsx/ants`, …) — pre-built images on Docker Hub holding the neuroimaging software. You never build these; each tool's CWL references the one it needs.
+- **Orchestration container** (built from `Dockerfile` / `Singularity.def`) — holds [cwltool](https://github.com/common-workflow-language/cwltool), the CWL engine, which reads the workflow and launches the tool containers step by step.
 
-2. **Orchestration container** (built from `Dockerfile` or `Singularity.def`) — Contains [cwltool](https://github.com/common-workflow-language/cwltool), the CWL execution engine, along with your workflow and job files. When run, cwltool reads the CWL workflow and launches the appropriate tool containers to execute each processing step.
+You can also skip the orchestration container and run cwltool directly.
 
-You can also skip the orchestration container entirely and run cwltool directly on your machine.
+## Edit the job file
 
-## Runtime File Inputs
-
-Before running, you must edit the job file (`workflows/<name>_job.yml`) to supply paths to your actual data files. Scalar parameters (thresholds, flags, etc.) are already pre-configured from your niBuild settings.
-
-File inputs are marked with comments showing the expected structure:
+Before running, open `workflows/<name>_job.yml` and replace the file-path placeholders with paths to your data. Scalar parameters (thresholds, flags) are already filled in from your canvas configuration.
 
 ```yaml
 input_image: null  # {class: File, path: <your/file/path>}
 subject_list: []   # [{class: File, path: <your/file/path>}]
 ```
 
-## Execution Options
+## Run it
 
-| Method | Prerequisites | Best For |
-|---|---|---|
-| [Docker](docker.md) | Docker only | Local workstations, simplest setup |
-| [cwltool Direct](cwltool-direct.md) | Python + cwltool + Docker | Development, debugging |
-| [Singularity / HPC](singularity.md) | Singularity/Apptainer + cwltool | HPC clusters, shared environments |
-| [BIDS Runtime](bids-runtime.md) | Python 3.6+ | Auto-resolving inputs from BIDS datasets |
+Pick whichever runtime fits your environment.
 
-## Key Concepts
+### Docker
 
-| Term | Description |
-|---|---|
-| **Container image** | A packaged filesystem with an OS and software pre-installed — a "frozen environment" you can run anywhere |
-| **Dockerfile / Singularity.def** | Text recipes for building container images. `docker build` and `singularity build` read these to produce images |
-| **Volume mount** (`-v` / `--bind`) | Makes a directory on your host machine accessible inside the container |
-| **cwltool** | The CWL execution engine — reads the workflow CWL and launches tool containers for each step |
-| **Docker-in-Docker** | The orchestration container uses the Docker socket (`/var/run/docker.sock`) to launch tool containers |
+Only Docker is required — the orchestration container brings cwltool.
 
-## RO-Crate Metadata
+```bash
+unzip my_pipeline.crate.zip -d my_workflow && cd my_workflow
+docker build -t my-pipeline .
+docker run --rm \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v /path/to/data:/data \
+  -v /path/to/output:/output \
+  my-pipeline
+```
 
-Exported bundles conform to the [Workflow RO-Crate 1.0](https://w3id.org/workflowhub/workflow-ro-crate/1.0) profile. The `ro-crate-metadata.json` file describes all workflow components in JSON-LD format, enabling discovery and reuse through platforms like [WorkflowHub](https://workflowhub.eu/).
+The Docker-socket mount lets cwltool inside the container launch the tool containers; use `/data/...` paths in the job file to match the data mount.
 
-## Resources
+### cwltool directly
 
-- [CWL User Guide](https://www.commonwl.org/user_guide/)
-- [cwltool Documentation](https://github.com/common-workflow-language/cwltool)
-- [RO-Crate Specification](https://www.researchobject.org/ro-crate/)
+Skip the orchestration container and run the engine yourself. Needs Python, `cwltool` (`pip install cwltool`), and Docker for the tool containers.
+
+```bash
+cwltool --outdir ./results workflows/<name>.cwl workflows/<name>_job.yml
+```
+
+On Windows, run this inside WSL — CWL needs a Unix environment.
+
+### Singularity / HPC
+
+[Singularity / Apptainer](https://apptainer.org/) needs no root access, so it suits shared clusters. cwltool reads the same tool definitions but pulls and runs them with Singularity:
+
+```bash
+cwltool --singularity --outdir ./results \
+  workflows/<name>.cwl workflows/<name>_job.yml
+```
+
+On compute nodes with limited internet, run `bash prefetch_images_singularity.sh` on a login node first to pre-build the SIF images.
+
+### BIDS datasets
+
+If the workflow has a BIDS node, `resolve_bids.py` fills the job file's input paths straight from a BIDS dataset — no manual path editing. Point it at the dataset root with an **absolute path**:
+
+```bash
+./run.sh --bids /absolute/path/to/bids/dataset
+```
+
+It reads the existing job file first, so your configured scalar parameters are preserved. For the cwltool-direct path, run `resolve_bids.py` first to produce a merged job file, then pass that to cwltool.
+
+## Validating
+
+To check a workflow before running it:
+
+```bash
+cwltool --validate workflows/<name>.cwl
+```

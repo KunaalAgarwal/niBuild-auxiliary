@@ -278,8 +278,8 @@ All FSL tools use the `brainlife/fsl` Docker image. If you select different vers
 
 ## Step 9: Name and Export
 
-1. In the top bar, set the **Output** name to `vbm_alzheimers` (or any name you prefer).
-2. Click the **Generate Workflow** button in the actions bar.
+1. Double-click the workspace tab and rename it `vbm_alzheimers` (or any name you prefer) — the export filename is taken from the workspace name.
+2. Click **Generate** in the top bar.
 3. Your browser downloads `vbm_alzheimers.crate.zip`.
 
 The ZIP contains:
@@ -458,8 +458,8 @@ The default analysis groups all CDR >= 0.5 subjects together. For more targeted 
 **Multi-subject processing with scatter:**
 Because the `t1w` Input is a file array, scatter automatically parallelizes the per-subject preprocessing chain. Each subject is processed independently through all six steps, producing one smoothed GM map per subject.
 
-**Save as a custom workflow:**
-To reuse this VBM pipeline in other projects, type a name in the **Name** field (top bar) and click **Save Workflow**. The pipeline appears under **My Workflows** in the left menu and can be dragged onto any future canvas as a single composite node.
+**Save it for reuse:**
+To reuse this VBM pipeline in other projects, click **Save as Workflow** in the top bar and confirm a name. It appears under **My Workflows** in the tool menu; dragging it onto a future canvas expands it back into all its nodes and edges, ready to edit. To instead drop it as a single collapsed node that hides its internals, use **Save as Custom Node** — it then appears under **Custom Nodes**.
 
 **Use the CWL Preview panel:**
 Before exporting, open the CWL Preview panel to inspect the generated CWL and job YAML in real time. This helps catch wiring mistakes or missing parameters before you download the bundle.

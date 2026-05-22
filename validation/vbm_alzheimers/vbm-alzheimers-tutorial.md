@@ -65,10 +65,10 @@ This tutorial demonstrates niBuild's direct file input approach which is useful 
 3. Drag an **Input** node onto the canvas. Double-click to open its configuration.
 4. Set the label to `t1w`.
 
-When you export and run the workflow, you will populate this input in the job YAML file with the paths to your NIfTI images:
+When you export and run the workflow, you will populate this input in the job YAML file with the paths to your NIfTI images. niBuild keys each job input by the tool input it feeds (`<tool>_<param>`), not by the node label — the `t1w` Input node connects to BET, so it appears as `bet_input`:
 
 ```yaml
-t1w:
+bet_input:
   - class: File
     path: /path/to/data/nifti/OAS1_0001_MR1.nii.gz
   - class: File
@@ -116,16 +116,19 @@ docker run --rm brainlife/fsl:6.0.4-patched2 \
 
 > **MNI templates:** FLIRT and applywarp use the **brain-extracted** template (`MNI152_T1_2mm_brain`) because their inputs are skull-stripped. FNIRT uses the **full-head** template (`MNI152_T1_2mm`) with a dilated brain mask (`MNI152_T1_2mm_brain_mask_dil`) as `refmask`. FNIRT benefits from the full-head image because it can use the skull boundary as an additional anatomical landmark for non-linear registration, while the dilated brain mask constrains the cost function to brain-relevant regions and prevents the warp field from being driven by non-brain structures.
 
-In your job YAML, these will appear as:
+In your job YAML, each input is keyed by the tool input it feeds (`<tool>_<param>`), not by the Input node label. The `MNI152_brain` node is wired to both FLIRT and applywarp, so it appears under two keys — `flirt_reference` and `applywarp_reference` — pointing at the same file:
 
 ```yaml
-MNI152_brain:
+flirt_reference:
   class: File
   path: additional_inputs/MNI152_T1_2mm_brain.nii.gz
-MNI152_head:
+applywarp_reference:
+  class: File
+  path: additional_inputs/MNI152_T1_2mm_brain.nii.gz
+fnirt_reference:
   class: File
   path: additional_inputs/MNI152_T1_2mm.nii.gz
-MNI152_brain_mask_dil:
+fnirt_refmask:
   class: File
   path: additional_inputs/MNI152_T1_2mm_brain_mask_dil.nii.gz
 fnirt_config:
@@ -187,7 +190,7 @@ Double-click the FLIRT node and set:
 
 | Parameter | Value | Why |
 |-----------|-------|-----|
-| `output` | `brain_affine` | Output filename stem |
+| `output` | `gm_affine` | Output filename stem |
 | `dof` | `12` | 12-DOF affine registration — standard for structural-to-standard |
 | `output_matrix` | `struct2mni_affine.mat` | Save the affine matrix for FNIRT initialization |
 | `cost` | `corratio` | Correlation ratio — robust for T1-to-T1 registration |
@@ -359,7 +362,7 @@ Open `workflows/vbm_alzheimers_job.yml`. Replace placeholder paths with actual p
 
 ```yaml
 # T1w input images: one entry per subject (235 total)
-t1w:
+bet_input:
   - class: File
     path: /path/to/data/nifti/OAS1_0001_MR1.nii.gz
   - class: File
@@ -396,7 +399,7 @@ fast_nclass: 3
 You can generate the `t1w` file list programmatically:
 
 ```bash
-echo "t1w:" > t1w_list.yml
+echo "bet_input:" > t1w_list.yml
 for f in /path/to/data/nifti/OAS1_*_MR1.nii.gz; do
   echo "  - class: File" >> t1w_list.yml
   echo "    path: $f" >> t1w_list.yml
