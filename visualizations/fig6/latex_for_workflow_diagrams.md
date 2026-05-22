@@ -140,8 +140,8 @@ Notes:
   \node[tool] (fm1)      at (19.2,0)   {fslmaths\\{\footnotesize modulation}};
   \node[tool] (fm2)      at (22.4,0)   {fslmaths\\{\footnotesize smoothing}};
   \node[tool] (merge)    at (25.6,0)   {fslmerge};
-  \node[tool] (rand)     at (28.8,0)   {randomise};
-  \node[io]   (out)      at (32,0)     {Output\\{\footnotesize group statistics}};
+  \node[tool] (rand)     at (25.6,-2.2) {randomise};
+  \node[io]   (out)      at (25.6,-4.4) {Output\\{\footnotesize group statistics}};
 
   % -- tissue segmentation branch --
   \node[tool] (fast)     at (11.2,2.6) {FAST};
